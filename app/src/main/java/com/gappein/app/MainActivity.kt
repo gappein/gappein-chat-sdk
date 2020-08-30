@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.gappein.sdk.Gappein
 import com.gappein.sdk.client.ChatClient
 import com.gappein.sdk.model.User
+import com.gappein.sdk.ui.MessageListActivity
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
@@ -43,9 +44,11 @@ class MainActivity : AppCompatActivity() {
             }, {
 
             })
-        ChatClient.instance().getMessages("[0987654321, 1234567890]") {
-            Log.d("Dsfsdf", it.toString())
-        }
+//        ChatClient.instance().getMessages() {
+//            Log.d("Dsfsdf", it.toString())
+//        }
+//
+        startActivity(MessageListActivity.buildIntent(this,"[0987654321, 1234567890]"))
 
     }
 

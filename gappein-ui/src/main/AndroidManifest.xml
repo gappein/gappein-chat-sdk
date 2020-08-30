@@ -3,7 +3,9 @@
     package="com.gappein.sdk.ui">
 
     <application>
-        <activity android:name=".MessageListActivity"></activity>
+        <activity
+            android:name=".MessageListActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
     </application>
 
 </manifest>

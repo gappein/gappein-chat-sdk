@@ -11,7 +11,7 @@
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="wrap_content"
         android:background="#16132B"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -46,7 +46,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/toolbar3"
-                tools:text="Himanshu Singh" />
+                android:text="Himanshu Singh" />
 
         </LinearLayout>
 
@@ -54,7 +54,7 @@
 
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/reyclerview_message_list"
+        android:id="@+id/recyclerViewMessages"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/edittext_chatbox"
@@ -91,9 +91,9 @@
         android:layout_margin="8dp"
         android:layout_marginEnd="156dp"
         android:background="@drawable/ic_send"
-        app:layout_constraintBottom_toBottomOf="@+id/reyclerview_message_list"
+        app:layout_constraintBottom_toBottomOf="@+id/recyclerViewMessages"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/reyclerview_message_list" />
+        app:layout_constraintTop_toBottomOf="@+id/recyclerViewMessages" />
 
 
 
