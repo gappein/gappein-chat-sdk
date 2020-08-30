@@ -3,6 +3,7 @@ package com.gappein.sdk.impl
 import androidx.lifecycle.MutableLiveData
 import com.gappein.sdk.client.ChatClient
 import com.gappein.sdk.listener.InitConnectionListener
+import com.gappein.sdk.model.Message
 import com.gappein.sdk.model.User
 import com.gappein.sdk.util.db.FirebaseDbManager
 import com.gappein.sdk.util.storage.FirebaseStorageManager
@@ -21,8 +22,15 @@ class ChatClientImpl(
         }, {
             listener?.onError(it.localizedMessage ?: "User already present")
         })
+
     }
 
     override fun getCurrentUser() = currentUser
+
+    override fun sendMessage(message: Message, onSuccess: () -> Unit, onError: () -> Unit) {
+        firebaseDbManager.sendMessage(message, {
+        }, {
+        })
+    }
 
 }

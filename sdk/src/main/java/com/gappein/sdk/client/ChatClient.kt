@@ -3,6 +3,7 @@ package com.gappein.sdk.client
 import androidx.lifecycle.LiveData
 import com.gappein.sdk.impl.ChatClientImpl
 import com.gappein.sdk.listener.InitConnectionListener
+import com.gappein.sdk.model.Message
 import com.gappein.sdk.model.User
 import com.gappein.sdk.util.db.FirebaseDbManager
 import com.gappein.sdk.util.storage.FirebaseStorageManager
@@ -38,5 +39,11 @@ interface ChatClient {
     fun setUser(user: User, token: String, listener: InitConnectionListener? = null)
 
     fun getCurrentUser(): LiveData<User>
+
+    fun sendMessage(
+        message: Message,
+        onSuccess: () -> Unit,
+        onError: () -> Unit
+    )
 
 }

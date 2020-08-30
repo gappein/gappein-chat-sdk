@@ -1,5 +1,6 @@
 package com.gappein.sdk.util.db
 
+import com.gappein.sdk.model.Message
 import com.gappein.sdk.model.User
 
 interface FirebaseDbManager {
@@ -11,10 +12,8 @@ interface FirebaseDbManager {
     )
 
     fun sendMessage(
-        user: User,
-        message: String,
-        isUrl: Boolean = false,
-        onSuccess: () -> Boolean,
-        onError: () -> Boolean
+        message: Message,
+        onSuccess: () -> Unit,
+        onError: () -> Unit
     )
 }

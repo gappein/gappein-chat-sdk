@@ -1,15 +1,18 @@
 package com.gappein.sdk.util.db
 
+import com.gappein.sdk.model.Message
 import com.gappein.sdk.model.User
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.firestore.FirebaseFirestore
+
 
 class FirebaseDbManagerImpl : FirebaseDbManager {
 
-    private val database: FirebaseDatabase = FirebaseDatabase.getInstance()
+    private val database: FirebaseFirestore = FirebaseFirestore.getInstance()
 
     companion object {
-        private const val USER_DB = "users"
-        private const val MESSAGES_DB = "messages"
+        private const val SPLITTER = "/"
+        private const val USER_COLLECTION = "users"
+        private const val MESSAGES_COLLECTION = "messages"
     }
 
     override fun createUser(
@@ -17,20 +20,26 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
         onSuccess: (User) -> Unit,
         onError: (Exception) -> Unit
     ) {
-        val userPath = USER_DB + "/" + user.token
-        database.getReference(userPath).setValue(user)
+
+        database.collection(USER_COLLECTION).document(user.token)
+            .set(user)
             .addOnSuccessListener { onSuccess(user) }
             .addOnFailureListener { onError(it) }
-    }
 
+    }
 
     override fun sendMessage(
-        user: User,
-        message: String,
-        isUrl: Boolean,
-        onSuccess: () -> Boolean,
-        onError: () -> Boolean
+        message: Message,
+        onSuccess: () -> Unit,
+        onError: () -> Unit
     ) {
+        val userList = listOf(message.sender, message.receiver)
+        val messagePath = userList.sorted().toString()
+        database.collection(MESSAGES_COLLECTION).document(messagePath)
+            .set(message)
+            .addOnSuccessListener { onSuccess() }
+            .addOnFailureListener { onError() }
 
     }
+
 }
