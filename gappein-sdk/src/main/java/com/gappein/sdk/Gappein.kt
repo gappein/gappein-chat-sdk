@@ -10,6 +10,14 @@ import com.gappein.sdk.data.storage.FirebaseStorageManagerImpl
 
 interface Gappein {
 
+    companion object {
+
+        private var instance: Gappein? = null
+
+        @JvmStatic
+        fun getInstance(): Gappein = instance ?: throw IllegalStateException("Gappein.Builder::build() must be called before obtaining Gappein instance")
+    }
+
     fun currentUser(): User
 
     fun setUser(user: User, token: String, onSuccess: (User) -> Unit, onError: (Exception) -> Unit)
@@ -22,13 +30,5 @@ interface Gappein {
         fun build(): Gappein =  GappeinImpl(ChatClient.Builder(firebaseStorageManager, firebaseDbManager).build()).apply {
                 instance = this
         }
-    }
-
-    companion object {
-
-        private var instance: Gappein? = null
-
-        @JvmStatic
-        fun getInstance(): Gappein = instance ?: throw IllegalStateException("Gappein.Builder::build() must be called before obtaining Gappein instance")
     }
 }

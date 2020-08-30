@@ -8,35 +8,22 @@ import java.io.File
 
 class FirebaseStorageManagerImpl : FirebaseStorageManager {
 
-    private val manager = FirebaseStorage.getInstance()
-    private val storageReference = manager.reference
-
-
     companion object {
         private const val IMAGES = "images"
     }
 
-    override fun uploadUserImage(
-        user: User,
-        file: File,
-        onSuccess: (User) -> Unit,
-        onError: (Exception) -> Unit
-    ) {
+    private val manager = FirebaseStorage.getInstance()
+    private val storageReference = manager.reference
+
+    override fun uploadUserImage(user: User, file: File, onSuccess: (User) -> Unit, onError: (Exception) -> Unit) {
         manager.uploadUserImage(
             user,
             file,
-            { onSuccess(User(user.token, user.createdAt, it.toString(), user.name)) },
+            { onSuccess(User(user.token, user.createdAt, it, user.name)) },
             { onError(it) })
     }
 
-    override fun uploadMessageImage(
-        file: Uri,
-        receiver: User,
-        sender: User,
-        onSuccess: (String) -> Unit,
-        onProgress: (Int) -> Unit,
-        onError: (Exception) -> Unit
-    ) {
+    override fun uploadMessageImage(file: Uri, receiver: User, sender: User, onSuccess: (String) -> Unit, onProgress: (Int) -> Unit, onError: (Exception) -> Unit) {
         val userList = listOf(sender.token, receiver.token)
         val messagePath = userList.sorted().toString()
         val imagePath = "$IMAGES/$messagePath"
