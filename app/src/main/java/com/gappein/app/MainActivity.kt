@@ -3,8 +3,8 @@ package com.gappein.app
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.gappein.sdk.Gappein
+import com.gappein.sdk.client.ChannelClient
 import com.gappein.sdk.client.ChatClient
-import com.gappein.sdk.model.Message
 import com.gappein.sdk.model.User
 import java.util.*
 
@@ -24,12 +24,10 @@ class MainActivity : AppCompatActivity() {
         )
 
         ChatClient.instance().sendMessage(
-            Message(
-                message = "dfsdfsfs",
-                sender = "sdfsdfsd",
-                receiver = "akaash",
-                isUrl = false
-            ),
+            "dskjfndjksnfkjsn",
+            {}, {})
+        ChatClient.instance().sendMessage(
+            "dskjfndjksnfkjsn111",
             {}, {})
 
     }

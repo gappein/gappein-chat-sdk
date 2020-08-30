@@ -1,22 +1,23 @@
 package com.gappein.sdk.impl
 
-import androidx.lifecycle.MutableLiveData
+import android.webkit.URLUtil
 import com.gappein.sdk.client.ChatClient
 import com.gappein.sdk.listener.InitConnectionListener
 import com.gappein.sdk.model.Message
 import com.gappein.sdk.model.User
 import com.gappein.sdk.util.db.FirebaseDbManager
 import com.gappein.sdk.util.storage.FirebaseStorageManager
+import java.util.*
 
 class ChatClientImpl(
     private val firebaseStorageManager: FirebaseStorageManager,
     private val firebaseDbManager: FirebaseDbManager
 ) : ChatClient {
 
-    private val currentUser = MutableLiveData<User>()
+    private var currentUser = User()
 
     override fun setUser(user: User, token: String, listener: InitConnectionListener?) {
-        currentUser.postValue(user)
+        currentUser = (user)
         firebaseDbManager.createUser(user, {
             listener?.onSuccess(InitConnectionListener.ConnectionData(it, token))
         }, {
@@ -25,10 +26,18 @@ class ChatClientImpl(
 
     }
 
-    override fun getCurrentUser() = currentUser
+    override fun getUser() = currentUser
 
-    override fun sendMessage(message: Message, onSuccess: () -> Unit, onError: () -> Unit) {
-        firebaseDbManager.sendMessage(message, {
+    override fun sendMessage(message: String, onSuccess: () -> Unit, onError: () -> Unit) {
+        val _message = Message(
+            timeStamp = Calendar.getInstance().time,
+            message = message,
+            isUrl = URLUtil.isValidUrl(message),
+            receiver = getUser().token,
+            sender = getUser().token
+        )
+
+        firebaseDbManager.sendMessage(_message, {
         }, {
         })
     }

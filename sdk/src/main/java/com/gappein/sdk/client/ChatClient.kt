@@ -38,10 +38,10 @@ interface ChatClient {
 
     fun setUser(user: User, token: String, listener: InitConnectionListener? = null)
 
-    fun getCurrentUser(): LiveData<User>
+    fun getUser(): User
 
     fun sendMessage(
-        message: Message,
+        message: String,
         onSuccess: () -> Unit,
         onError: () -> Unit
     )

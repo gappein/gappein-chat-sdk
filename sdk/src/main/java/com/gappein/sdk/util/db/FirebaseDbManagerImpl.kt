@@ -10,9 +10,9 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
     private val database: FirebaseFirestore = FirebaseFirestore.getInstance()
 
     companion object {
-        private const val SPLITTER = "/"
         private const val USER_COLLECTION = "users"
         private const val MESSAGES_COLLECTION = "messages"
+        private const val CHAT_COLLECTION = "chat"
     }
 
     override fun createUser(
@@ -21,7 +21,8 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
         onError: (Exception) -> Unit
     ) {
 
-        database.collection(USER_COLLECTION).document(user.token)
+        database.collection(USER_COLLECTION)
+            .document(user.token)
             .set(user)
             .addOnSuccessListener { onSuccess(user) }
             .addOnFailureListener { onError(it) }
@@ -35,7 +36,11 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
     ) {
         val userList = listOf(message.sender, message.receiver)
         val messagePath = userList.sorted().toString()
-        database.collection(MESSAGES_COLLECTION).document(messagePath)
+
+        database.collection(MESSAGES_COLLECTION)
+            .document(messagePath)
+            .collection(CHAT_COLLECTION)
+            .document()
             .set(message)
             .addOnSuccessListener { onSuccess() }
             .addOnFailureListener { onError() }
