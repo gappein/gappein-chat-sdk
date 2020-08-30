@@ -9,3 +9,6 @@ data class Channel(
     val sender: User,
     val receiver: User
 )
+data class ChatChanel(val userId: MutableList<String>) {
+    constructor():this(mutableListOf())
+}

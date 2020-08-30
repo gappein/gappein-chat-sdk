@@ -1,6 +1,7 @@
 package com.gappein.app
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.gappein.sdk.Gappein
 import com.gappein.sdk.client.ChannelClient
@@ -30,6 +31,22 @@ class MainActivity : AppCompatActivity() {
                 name = "Himanshu"
             ), token = "sdfsdfsd"
         )
+        Gappein.getInstance().setUser(
+            User(
+                token = "01010101",
+                createdAt = Date(),
+                profileImageUrl = "001",
+                name = "Himanshu000"
+            ), token = "sdfsdfs000d"
+        )
+        Gappein.getInstance().setUser(
+            User(
+                token = "1111",
+                createdAt = Date(),
+                profileImageUrl = "1111",
+                name = "1111"
+            ), token = "111"
+        )
 
         ChatClient.instance().sendMessage(
             "dskjfndjksnfkjsn",
@@ -39,7 +56,13 @@ class MainActivity : AppCompatActivity() {
             "https://firebasestorage.googleapis.com/v0/b/chatsdk-demo-8b9a6.appspot.com/o/0.jpeg?alt=media&token=4a2821a4-7c5c-4dc8-91f0-e8cc031dc66d",
             "akaash",
             {}, {})
-
+        ChatClient.instance().sendMessage(
+            "https://firebasestorage.googleapis.com/v0/b/chatsdk-demo-8b9a6.appspot.com/o/0.jpeg?alt=media&token=4a2821a4-7c5c-4dc8-91f0-e8cc031dc66d",
+            "akaash",
+            {}, {})
+        ChatClient.instance().openOrCreateChannel("akaash", {
+            Log.d("DSfsdf",it)
+        })
         ChannelClient.Builder().build()
 
     }

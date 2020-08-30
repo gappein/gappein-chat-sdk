@@ -54,4 +54,6 @@ interface ChatClient {
         onError: (Exception) -> Unit
     )
 
+    fun openOrCreateChannel(participantUserToken: String, onComplete: (channelId: String) -> Unit)
+
 }

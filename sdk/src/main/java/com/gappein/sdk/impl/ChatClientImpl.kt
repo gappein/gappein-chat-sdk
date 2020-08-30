@@ -64,4 +64,11 @@ class ChatClientImpl(
             onError(it)
         })
     }
+
+    override fun openOrCreateChannel(
+        participantUserToken: String,
+        onComplete: (channelId: String) -> Unit
+    ) {
+        dbManager.getOrCreateNewChatChannels(participantUserToken, onComplete)
+    }
 }
