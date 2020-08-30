@@ -18,8 +18,6 @@ interface FirebaseDbManager {
         onError: (Exception) -> Unit
     )
 
-    fun getChannels(user: User, onError: (Exception) -> Unit): List<Channel>
-
     fun getUserByToken(token: String, onSuccess: (User) -> Unit, onError: (Exception) -> Unit)
 
     fun getOrCreateNewChatChannels(

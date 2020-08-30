@@ -72,10 +72,6 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
             .addOnFailureListener { onError(it) }
     }
 
-    override fun getChannels(user: User, onError: (Exception) -> Unit): List<Channel> {
-        return emptyList()
-    }
-
     override fun getUserByToken(
         token: String,
         onSuccess: (User) -> Unit,

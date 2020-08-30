@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.gappein.sdk.Gappein
-import com.gappein.sdk.client.ChannelClient
 import com.gappein.sdk.client.ChatClient
 import com.gappein.sdk.model.User
 import java.util.*
@@ -60,13 +59,12 @@ class MainActivity : AppCompatActivity() {
             "https://firebasestorage.googleapis.com/v0/b/chatsdk-demo-8b9a6.appspot.com/o/0.jpeg?alt=media&token=4a2821a4-7c5c-4dc8-91f0-e8cc031dc66d",
             "akaash",
             {}, {})
-        ChatClient.instance().openOrCreateChannel("Himanshu", {
+        ChatClient.instance().openOrCreateChannel("jghvhvhgv", {
             Log.d("DSfsdf", it)
         })
         ChatClient.instance().getAllChannels {
 
         }
-        ChannelClient.Builder().build()
 
     }
 }
