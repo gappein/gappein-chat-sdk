@@ -34,33 +34,46 @@ class ChatClientImpl(
         onSuccess: () -> Unit,
         onError: (Exception) -> Unit
     ) {
-        val currentUser = getUser().token
+        getUserByToken(receiver, {
 
-        val _message = Message(
-            timeStamp = Calendar.getInstance().time,
-            message = message,
-            isUrl = URLUtil.isValidUrl(message),
-            receiver = receiver,
-            sender = currentUser
-        )
+            val _message = Message(
+                timeStamp = Calendar.getInstance().time,
+                message = message,
+                isUrl = URLUtil.isValidUrl(message),
+                receiver = it,
+                sender = getUser()
+            )
 
-        dbManager.sendMessage(_message, onSuccess, onError)
+            dbManager.sendMessageByToken(_message, getUser(), it, onSuccess, onError)
+
+        }, {
+
+        })
+
     }
 
     override fun sendMessage(
         fileUri: Uri,
-        receiver: String,
+        receiver: User,
         onSuccess: () -> Unit,
         onProgress: (Int) -> Unit,
         onError: (Exception) -> Unit
     ) {
-        storageManager.uploadMessageImage(fileUri, receiver, getUser().token, {
-            sendMessage(it, receiver, {}, {})
+        storageManager.uploadMessageImage(fileUri, receiver, getUser(), {
+            sendMessage(it, receiver.token, {}, {})
         }, {
             onProgress(it)
         }, {
             onError(it)
         })
+    }
+
+    override fun getUserByToken(
+        token: String,
+        onSuccess: (User) -> Unit,
+        onError: (Exception) -> Unit
+    ) {
+        dbManager.getUserByToken(token, onSuccess, onError)
     }
 
     override fun openOrCreateChannel(

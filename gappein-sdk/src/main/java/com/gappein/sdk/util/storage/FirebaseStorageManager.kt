@@ -10,8 +10,8 @@ interface FirebaseStorageManager {
 
     fun uploadMessageImage(
         file: Uri,
-        receiver: String,
-        sender: String,
+        receiver: User,
+        sender: User,
         onSuccess: (String) -> Unit,
         onProgress: (Int) -> Unit,
         onError: (Exception) -> Unit

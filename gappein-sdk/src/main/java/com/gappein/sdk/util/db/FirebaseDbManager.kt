@@ -1,6 +1,5 @@
 package com.gappein.sdk.util.db
 
-import com.gappein.sdk.model.Channel
 import com.gappein.sdk.model.Message
 import com.gappein.sdk.model.User
 
@@ -26,4 +25,11 @@ interface FirebaseDbManager {
     )
 
     fun getAllChannel(onSuccess: (List<String>) -> Unit)
+
+    fun sendMessageByToken(
+        message: Message,
+        sender: User,
+        receiver: User,
+        onSuccess: () -> Unit, onError: (Exception) -> Unit
+    )
 }

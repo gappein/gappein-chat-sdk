@@ -1,6 +1,5 @@
 package com.gappein.sdk.util.db
 
-import android.util.Log
 import com.gappein.sdk.client.ChatClient
 import com.gappein.sdk.model.ChatChanel
 import com.gappein.sdk.model.Message
@@ -20,7 +19,6 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
     companion object {
         private const val USER_COLLECTION = "users"
         private const val MESSAGES_COLLECTION = "messages"
-        private const val CHAT_COLLECTION = "chat"
         private const val CHANNEL_COLLECTION = "channel"
         private const val CHANNEL_ID = "channelId"
     }
@@ -46,9 +44,9 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
         onError: (Exception) -> Unit
     ) {
 
-        val userList = listOf(message.sender, message.receiver)
+        val userList = listOf(message.sender.token, message.receiver.token)
         val channelId = userList.sorted().toString()
-        Log.d("SDfsf",channelId)
+
         channelReference.document(channelId)
             .collection(MESSAGES_COLLECTION)
             .add(message)
@@ -130,5 +128,13 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
             }
             onSuccess(result)
         }
+    }
+
+    override fun sendMessageByToken(
+        message: Message, sender: User,
+        receiver: User, onSuccess: () -> Unit, onError: (Exception) -> Unit
+    ) {
+        sendMessage(message, onSuccess, onError)
+
     }
 }

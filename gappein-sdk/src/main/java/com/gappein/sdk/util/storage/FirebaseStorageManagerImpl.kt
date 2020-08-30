@@ -31,13 +31,13 @@ class FirebaseStorageManagerImpl : FirebaseStorageManager {
 
     override fun uploadMessageImage(
         file: Uri,
-        receiver: String,
-        sender: String,
+        receiver: User,
+        sender: User,
         onSuccess: (String) -> Unit,
         onProgress: (Int) -> Unit,
         onError: (Exception) -> Unit
     ) {
-        val userList = listOf(sender, receiver)
+        val userList = listOf(sender.token, receiver.token)
         val messagePath = userList.sorted().toString()
         val imagePath = "$IMAGES/$messagePath"
         val reference = storageReference.child(imagePath)
