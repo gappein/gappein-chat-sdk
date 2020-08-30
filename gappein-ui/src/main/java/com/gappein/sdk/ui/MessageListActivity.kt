@@ -5,6 +5,10 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
 import com.gappein.sdk.client.ChatClient
 import com.gappein.sdk.model.User
 import com.gappein.sdk.ui.adapter.MessageListAdapter
@@ -49,6 +53,10 @@ class MessageListActivity : AppCompatActivity() {
 
     private fun setupUI() {
         titleToolbar.text = receiver.name
+        Glide.with(this)
+            .load("https://in.bmscdn.com/iedb/artist/images/website/poster/large/shah-rukh-khan-2092-12-09-2017-02-10-43.jpg")
+            .apply(RequestOptions().transforms(CenterCrop(), RoundedCorners(32)))
+            .into(avatarImageView)
     }
 
     private fun setupClickListener() {

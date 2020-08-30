@@ -49,7 +49,14 @@
                 tools:text="Himanshu Singh" />
 
         </LinearLayout>
-
+        <ImageView
+            android:layout_width="wrap_content"
+            android:id="@+id/avatarImageView"
+            android:background="@drawable/curved_circle"
+            android:src="@drawable/sent_message_background"
+            android:layout_gravity="end"
+            android:layout_margin="4dp"
+            android:layout_height="wrap_content"/>
     </androidx.appcompat.widget.Toolbar>
 
 
