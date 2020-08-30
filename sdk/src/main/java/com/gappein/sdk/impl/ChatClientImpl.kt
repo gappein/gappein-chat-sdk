@@ -33,7 +33,7 @@ class ChatClientImpl(
         message: String,
         receiver: String,
         onSuccess: () -> Unit,
-        onError: () -> Unit
+        onError: (Exception) -> Unit
     ) {
 
         val _message = Message(
@@ -44,9 +44,7 @@ class ChatClientImpl(
             sender = getUser().token
         )
 
-        dbManager.sendMessage(_message, {
-        }, {
-        })
+        dbManager.sendMessage(_message, onSuccess, onError)
     }
 
     override fun sendMessage(

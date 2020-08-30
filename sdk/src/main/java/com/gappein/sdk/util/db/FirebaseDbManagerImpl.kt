@@ -1,9 +1,11 @@
 package com.gappein.sdk.util.db
 
+import android.util.Log
 import com.gappein.sdk.client.ChatClient
 import com.gappein.sdk.model.ChatChanel
 import com.gappein.sdk.model.Message
 import com.gappein.sdk.model.User
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.QuerySnapshot
@@ -46,7 +48,7 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
 
         val userList = listOf(message.sender, message.receiver)
         val channelId = userList.sorted().toString()
-
+        Log.d("SDfsf",channelId)
         channelReference.document(channelId)
             .collection(MESSAGES_COLLECTION)
             .add(message)
@@ -77,12 +79,13 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
         participantUserToken: String,
         onComplete: (channelId: String) -> Unit
     ) {
+
         val userChannelReference = channelReference.document(participantUserToken)
-        val myToken = ChatClient.instance().getUser().token
+        val currentUserToken = ChatClient.instance().getUser().token
         val currentUserReference = userReference.document(ChatClient.instance().getUser().token)
-        val userReference = userReference.document(participantUserToken)
-        val userList = listOf(participantUserToken, myToken)
-        val messagePath = userList.sorted().toString()
+        val participantUserReference = userReference.document(participantUserToken)
+        val userList = listOf(participantUserToken, currentUserToken)
+        val messageId = userList.sorted().toString()
 
         userChannelReference.get()
             .addOnSuccessListener {
@@ -90,21 +93,21 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
                     onComplete(it[CHANNEL_ID] as String)
                     return@addOnSuccessListener
                 }
-                val currentUserToken = ChatClient.instance().getUser().token
-                val newChannel = channelReference.document(messagePath)
-                newChannel.set(ChatChanel(mutableListOf(currentUserToken, participantUserToken)))
+                channelReference.document(messageId)
+                    .set(ChatChanel(mutableListOf(currentUserToken, participantUserToken)))
 
-                currentUserReference
-                    .collection(CHANNEL_COLLECTION)
-                    .document(participantUserToken)
-                    .set(mapOf(CHANNEL_ID to messagePath))
+                addChannelsToUser(currentUserReference, participantUserToken, messageId)
 
-                userReference
-                    .collection(CHANNEL_COLLECTION)
-                    .document(currentUserToken)
-                    .set(mapOf(CHANNEL_ID to messagePath))
-                onComplete(messagePath)
+                addChannelsToUser(participantUserReference, currentUserToken, messageId)
             }
+    }
+
+
+    private fun addChannelsToUser(reference: DocumentReference, token: String, messageId: String) {
+        reference
+            .collection(CHANNEL_COLLECTION)
+            .document(token)
+            .set(mapOf(CHANNEL_ID to messageId))
     }
 
     override fun getAllChannel(onSuccess: (List<String>) -> Unit) {

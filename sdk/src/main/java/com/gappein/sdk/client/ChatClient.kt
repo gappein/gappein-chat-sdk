@@ -44,7 +44,7 @@ interface ChatClient {
         message: String,
         receiver: String,
         onSuccess: () -> Unit,
-        onError: () -> Unit
+        onError: (Exception) -> Unit
     )
 
     fun sendMessage(
