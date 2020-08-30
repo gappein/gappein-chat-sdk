@@ -49,7 +49,11 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
             .addOnFailureListener { onError(it) }
     }
 
-    override fun getUserByToken(token: String, onSuccess: (User) -> Unit, onError: (Exception) -> Unit) {
+    override fun getUserByToken(
+        token: String,
+        onSuccess: (User) -> Unit,
+        onError: (Exception) -> Unit
+    ) {
         userReference
             .get()
             .addOnSuccessListener { result ->
@@ -64,7 +68,10 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
             }
     }
 
-    override fun getOrCreateNewChatChannels(participantUserToken: String, onComplete: (channelId: String) -> Unit) {
+    override fun getOrCreateNewChatChannels(
+        participantUserToken: String,
+        onComplete: (channelId: String) -> Unit
+    ) {
 
         val userChannelReference = channelReference.document(participantUserToken)
         val currentUser = ChatClient.instance().getUser()
@@ -120,7 +127,31 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
         }
     }
 
-    override fun sendMessageByToken(message: Message, sender: User, receiver: User, onSuccess: () -> Unit, onError: (Exception) -> Unit) {
+    override fun sendMessageByToken(
+        message: Message,
+        sender: User,
+        receiver: User,
+        onSuccess: () -> Unit,
+        onError: (Exception) -> Unit
+    ) {
         sendMessage(message, onSuccess, onError)
+    }
+
+    override fun getMessages(channelId: String, onSuccess: (List<Message>) -> Unit) {
+        val messages = mutableListOf<Message>()
+        channelReference.document(channelId)
+            .collection(MESSAGES_COLLECTION)
+            .addSnapshotListener { querySnapshot: QuerySnapshot?, error: FirebaseFirestoreException? ->
+                querySnapshot?.documents?.forEach {
+                    try {
+                        val message: Message? = it.toObject(Message::class.java)
+                        if (message != null) {
+                            messages.add(message)
+                        }
+                    } catch (e: Exception) {
+                    }
+                }
+                onSuccess(messages)
+            }
     }
 }
