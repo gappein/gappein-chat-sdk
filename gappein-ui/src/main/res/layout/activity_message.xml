@@ -11,7 +11,7 @@
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="48dp"
         android:background="#16132B"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -52,16 +52,19 @@
 
     </androidx.appcompat.widget.Toolbar>
 
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/reyclerview_message_list"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/edittext_chatbox"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"/>
-
-
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintVertical_bias="0.0"
+        tools:itemCount="200"
+        tools:listitem="@layout/item_received_message" />
 
     <EditText
         android:id="@+id/edittext_chatbox"
@@ -69,7 +72,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_weight="1"
-        android:background="@drawable/curved_rounded"
+        android:background="@drawable/rect_background"
         android:maxLines="6"
         android:padding="16dp"
         android:minHeight="60dp"
@@ -92,20 +95,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/reyclerview_message_list" />
 
-    <ImageButton
-        android:id="@+id/buttonAttachment"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:backgroundTint="@android:color/darker_gray"
-        android:layout_margin="4dp"
-        android:visibility="gone"
-        android:layout_gravity="center_vertical|center_horizontal"
-        android:src="@drawable/ic_clip_outline"
-        android:padding="12dp"
-        android:background="@drawable/curved_circle"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        />
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
