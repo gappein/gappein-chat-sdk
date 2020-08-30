@@ -14,7 +14,7 @@ interface ChatClient {
         private var instance: ChatClient? = null
 
         @JvmStatic
-        fun instance(): ChatClient = instance ?: throw IllegalStateException("Gappein.Builder::build() must be called before obtaining Gappein instance")
+        fun getInstance(): ChatClient = instance ?: throw IllegalStateException("Gappein.Builder::build() must be called before obtaining Gappein instance")
 
     }
 

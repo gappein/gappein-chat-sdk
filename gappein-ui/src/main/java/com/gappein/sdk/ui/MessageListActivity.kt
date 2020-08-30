@@ -63,7 +63,7 @@ class MessageListActivity : AppCompatActivity() {
         buttonSend.setOnClickListener {
             val message = edittext_chatbox.text.toString()
             if (message.isNotEmpty()) {
-                ChatClient.instance().sendMessage(message, receiver.token, {
+                ChatClient.getInstance().sendMessage(message, receiver.token, {
                     edittext_chatbox.text.clear()
                 }, {
 
@@ -81,7 +81,7 @@ class MessageListActivity : AppCompatActivity() {
     }
 
     private fun fetchMessage() {
-        ChatClient.instance().getMessages(channelId) {
+        ChatClient.getInstance().getMessages(channelId) {
             adapter.addAll(it)
         }
     }

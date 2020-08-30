@@ -19,15 +19,8 @@ interface Gappein {
         private val firebaseDbManager: FirebaseDbManager = FirebaseDbManagerImpl()
         private val firebaseStorageManager: FirebaseStorageManager = FirebaseStorageManagerImpl()
 
-        fun build(): Gappein {
-            return GappeinImpl(
-                ChatClient.Builder(
-                    firebaseStorageManager,
-                    firebaseDbManager
-                ).build()
-            ).apply {
+        fun build(): Gappein =  GappeinImpl(ChatClient.Builder(firebaseStorageManager, firebaseDbManager).build()).apply {
                 instance = this
-            }
         }
     }
 
@@ -36,7 +29,6 @@ interface Gappein {
         private var instance: Gappein? = null
 
         @JvmStatic
-        fun getInstance(): Gappein = instance
-            ?: throw IllegalStateException("Gappein.Builder::build() must be called before obtaining Gappein instance")
+        fun getInstance(): Gappein = instance ?: throw IllegalStateException("Gappein.Builder::build() must be called before obtaining Gappein instance")
     }
 }

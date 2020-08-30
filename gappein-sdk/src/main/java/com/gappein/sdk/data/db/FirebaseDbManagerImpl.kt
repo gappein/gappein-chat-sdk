@@ -1,6 +1,5 @@
 package com.gappein.sdk.data.db
 
-import android.util.Log
 import com.gappein.sdk.client.ChatClient
 import com.gappein.sdk.model.ChannelUsers
 import com.gappein.sdk.model.Message
@@ -52,11 +51,7 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
             .addOnFailureListener { onError(it) }
     }
 
-    override fun getUserByToken(
-        token: String,
-        onSuccess: (User) -> Unit,
-        onError: (Exception) -> Unit
-    ) {
+    override fun getUserByToken(token: String, onSuccess: (User) -> Unit, onError: (Exception) -> Unit) {
         userReference
             .get()
             .addOnSuccessListener { result ->
@@ -71,13 +66,10 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
             }
     }
 
-    override fun getOrCreateNewChatChannels(
-        participantUserToken: String,
-        onComplete: (channelId: String) -> Unit
-    ) {
+    override fun getOrCreateNewChatChannels(participantUserToken: String, onComplete: (channelId: String) -> Unit) {
 
         val userChannelReference = channelReference.document(participantUserToken)
-        val currentUser = ChatClient.instance().getUser()
+        val currentUser = ChatClient.getInstance().getUser()
         val currentUserToken = currentUser.token
         val currentUserReference = userReference.document(currentUserToken)
         val participantUserReference = userReference.document(participantUserToken)
@@ -114,7 +106,7 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
 
     override fun getAllChannel(onSuccess: (List<String>) -> Unit) {
 
-        val currentUserId = ChatClient.instance().getUser().token
+        val currentUserId = ChatClient.getInstance().getUser().token
         val result = mutableListOf<String>()
 
         channelReference.addSnapshotListener { querySnapshot: QuerySnapshot?, error: FirebaseFirestoreException? ->
@@ -130,13 +122,7 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
         }
     }
 
-    override fun sendMessageByToken(
-        message: Message,
-        sender: User,
-        receiver: User,
-        onSuccess: () -> Unit,
-        onError: (Exception) -> Unit
-    ) {
+    override fun sendMessageByToken(message: Message, sender: User, receiver: User, onSuccess: () -> Unit, onError: (Exception) -> Unit) {
         sendMessage(message, onSuccess, onError)
     }
 
