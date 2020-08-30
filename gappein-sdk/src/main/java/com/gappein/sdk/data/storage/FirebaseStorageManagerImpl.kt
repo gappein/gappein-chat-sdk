@@ -1,8 +1,8 @@
-package com.gappein.sdk.util.storage
+package com.gappein.sdk.data.storage
 
 import android.net.Uri
 import com.gappein.sdk.model.User
-import com.gappein.sdk.util.uploadUserImage
+import com.gappein.sdk.data.uploadUserImage
 import com.google.firebase.storage.FirebaseStorage
 import java.io.File
 

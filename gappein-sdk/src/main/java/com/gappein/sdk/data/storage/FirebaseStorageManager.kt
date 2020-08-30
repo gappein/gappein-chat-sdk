@@ -1,4 +1,4 @@
-package com.gappein.sdk.util.storage
+package com.gappein.sdk.data.storage
 
 import android.net.Uri
 import com.gappein.sdk.model.User

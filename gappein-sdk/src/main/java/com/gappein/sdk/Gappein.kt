@@ -3,10 +3,10 @@ package com.gappein.sdk
 import com.gappein.sdk.client.ChatClient
 import com.gappein.sdk.impl.GappeinImpl
 import com.gappein.sdk.model.User
-import com.gappein.sdk.util.db.FirebaseDbManager
-import com.gappein.sdk.util.db.FirebaseDbManagerImpl
-import com.gappein.sdk.util.storage.FirebaseStorageManager
-import com.gappein.sdk.util.storage.FirebaseStorageManagerImpl
+import com.gappein.sdk.data.db.FirebaseDbManager
+import com.gappein.sdk.data.db.FirebaseDbManagerImpl
+import com.gappein.sdk.data.storage.FirebaseStorageManager
+import com.gappein.sdk.data.storage.FirebaseStorageManagerImpl
 
 interface Gappein {
 

@@ -3,8 +3,8 @@ package com.gappein.sdk.client
 import android.net.Uri
 import com.gappein.sdk.impl.ChatClientImpl
 import com.gappein.sdk.model.User
-import com.gappein.sdk.util.db.FirebaseDbManager
-import com.gappein.sdk.util.storage.FirebaseStorageManager
+import com.gappein.sdk.data.db.FirebaseDbManager
+import com.gappein.sdk.data.storage.FirebaseStorageManager
 
 interface ChatClient {
 

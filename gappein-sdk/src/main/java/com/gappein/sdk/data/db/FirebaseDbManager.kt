@@ -1,4 +1,4 @@
-package com.gappein.sdk.util.db
+package com.gappein.sdk.data.db
 
 import com.gappein.sdk.model.Message
 import com.gappein.sdk.model.User

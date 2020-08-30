@@ -1,4 +1,4 @@
-package com.gappein.sdk.util.db
+package com.gappein.sdk.data.db
 
 import com.gappein.sdk.client.ChatClient
 import com.gappein.sdk.model.ChannelUsers

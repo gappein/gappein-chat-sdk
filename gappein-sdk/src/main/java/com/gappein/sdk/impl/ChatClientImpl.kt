@@ -5,8 +5,8 @@ import android.webkit.URLUtil
 import com.gappein.sdk.client.ChatClient
 import com.gappein.sdk.model.Message
 import com.gappein.sdk.model.User
-import com.gappein.sdk.util.db.FirebaseDbManager
-import com.gappein.sdk.util.storage.FirebaseStorageManager
+import com.gappein.sdk.data.db.FirebaseDbManager
+import com.gappein.sdk.data.storage.FirebaseStorageManager
 import java.util.*
 
 class ChatClientImpl(private val storageManager: FirebaseStorageManager, private val dbManager: FirebaseDbManager) : ChatClient {
