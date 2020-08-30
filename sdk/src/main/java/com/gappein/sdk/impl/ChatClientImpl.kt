@@ -24,7 +24,6 @@ class ChatClientImpl(
         }, {
             listener?.onError(it.localizedMessage ?: "User already present")
         })
-
     }
 
     override fun getUser() = currentUser
@@ -35,13 +34,14 @@ class ChatClientImpl(
         onSuccess: () -> Unit,
         onError: (Exception) -> Unit
     ) {
+        val currentUser = getUser().token
 
         val _message = Message(
             timeStamp = Calendar.getInstance().time,
             message = message,
             isUrl = URLUtil.isValidUrl(message),
             receiver = receiver,
-            sender = getUser().token
+            sender = currentUser
         )
 
         dbManager.sendMessage(_message, onSuccess, onError)

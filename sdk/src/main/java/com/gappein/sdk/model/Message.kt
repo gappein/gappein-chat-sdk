@@ -8,4 +8,4 @@ data class Message(
         val sender: String,
         val receiver: String,
         var isUrl: Boolean = false
-    )
+)

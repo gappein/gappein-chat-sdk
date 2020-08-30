@@ -81,8 +81,9 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
     ) {
 
         val userChannelReference = channelReference.document(participantUserToken)
-        val currentUserToken = ChatClient.instance().getUser().token
-        val currentUserReference = userReference.document(ChatClient.instance().getUser().token)
+        val currentUser = ChatClient.instance().getUser()
+        val currentUserToken = currentUser.token
+        val currentUserReference = userReference.document(currentUserToken)
         val participantUserReference = userReference.document(participantUserToken)
         val userList = listOf(participantUserToken, currentUserToken)
         val messageId = userList.sorted().toString()
@@ -93,9 +94,14 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
                     onComplete(it[CHANNEL_ID] as String)
                     return@addOnSuccessListener
                 }
-                channelReference.document(messageId)
-                    .set(ChatChanel(mutableListOf(currentUserToken, participantUserToken)))
+                getUserByToken(participantUserToken, {
+                    channelReference.document(messageId)
+                        .set(ChatChanel(currentUser, it))
 
+                }, {
+
+                })
+//
                 addChannelsToUser(currentUserReference, participantUserToken, messageId)
 
                 addChannelsToUser(participantUserReference, currentUserToken, messageId)
