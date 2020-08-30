@@ -1,7 +1,6 @@
 package com.gappein.sdk.util.db
 
 import com.gappein.sdk.client.ChatClient
-import com.gappein.sdk.model.Channel
 import com.gappein.sdk.model.ChatChanel
 import com.gappein.sdk.model.Message
 import com.gappein.sdk.model.User
@@ -15,7 +14,6 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
     private val database: FirebaseFirestore = FirebaseFirestore.getInstance()
     private val channelReference = database.collection(CHANNEL_COLLECTION)
     private val userReference = database.collection(USER_COLLECTION)
-    private val messageReference = database.collection(MESSAGES_COLLECTION)
 
     companion object {
         private const val USER_COLLECTION = "users"
@@ -47,27 +45,11 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
     ) {
 
         val userList = listOf(message.sender, message.receiver)
-        val messagePath = userList.sorted().toString()
+        val channelId = userList.sorted().toString()
 
-        messageReference
-            .document(messagePath)
-            .collection(CHAT_COLLECTION)
-            .document()
-            .set(message)
-            .addOnSuccessListener { onSuccess() }
-            .addOnFailureListener { onError(it) }
-
-    }
-
-    private fun addReceiver(
-        receiver: String,
-        sender: String,
-        onSuccess: () -> Unit,
-        onError: (Exception) -> Unit,
-    ) {
-        database.collection(sender)
-            .document(receiver)
-            .set(receiver)
+        channelReference.document(channelId)
+            .collection(MESSAGES_COLLECTION)
+            .add(message)
             .addOnSuccessListener { onSuccess() }
             .addOnFailureListener { onError(it) }
     }
