@@ -50,7 +50,8 @@ interface ChatClient {
         fileUri: Uri,
         receiver: String,
         onSuccess: () -> Unit,
-        onError: () -> Unit
+        onProgress: (Int) -> Unit,
+        onError: (Exception) -> Unit
     )
 
 }

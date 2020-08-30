@@ -1,6 +1,6 @@
 package com.gappein.sdk.util.db
 
-import android.net.Uri
+import com.gappein.sdk.model.Channel
 import com.gappein.sdk.model.Message
 import com.gappein.sdk.model.User
 import com.google.firebase.firestore.FirebaseFirestore
@@ -16,11 +16,7 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
         private const val CHAT_COLLECTION = "chat"
     }
 
-    override fun createUser(
-        user: User,
-        onSuccess: (User) -> Unit,
-        onError: (Exception) -> Unit
-    ) {
+    override fun createUser(user: User, onSuccess: (User) -> Unit, onError: (Exception) -> Unit) {
 
         database.collection(USER_COLLECTION)
             .document(user.token)
@@ -30,11 +26,7 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
 
     }
 
-    override fun sendMessage(
-        message: Message,
-        onSuccess: () -> Unit,
-        onError: () -> Unit
-    ) {
+    override fun sendMessage(message: Message, onSuccess: () -> Unit, onError: () -> Unit) {
         val userList = listOf(message.sender, message.receiver)
         val messagePath = userList.sorted().toString()
 
@@ -46,6 +38,12 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
             .addOnSuccessListener { onSuccess() }
             .addOnFailureListener { onError() }
 
+    }
+
+    override fun getChannels(user: User, onError: (Exception) -> Unit): List<Channel> {
+        database.collection(MESSAGES_COLLECTION)
+            .document()
+        return emptyList()
     }
 
 

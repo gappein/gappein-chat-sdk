@@ -1,6 +1,5 @@
 package com.gappein.sdk
 
-import androidx.lifecycle.LiveData
 import com.gappein.sdk.client.ChatClient
 import com.gappein.sdk.impl.GappeinImpl
 import com.gappein.sdk.listener.InitConnectionListener

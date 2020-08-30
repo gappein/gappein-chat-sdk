@@ -1,6 +1,6 @@
 package com.gappein.sdk.model
 
-data class Room(
+data class Channel(
     val name: String,
     val id: String,
     val lastMessage: String,

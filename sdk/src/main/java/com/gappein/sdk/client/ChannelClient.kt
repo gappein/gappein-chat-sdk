@@ -1,7 +1,10 @@
 package com.gappein.sdk.client
 
 import com.gappein.sdk.impl.ChannelClientImpl
+import com.gappein.sdk.model.Channel
 import com.gappein.sdk.model.User
+import com.gappein.sdk.util.db.FirebaseDbManager
+import com.gappein.sdk.util.db.FirebaseDbManagerImpl
 
 interface ChannelClient {
 
@@ -16,21 +19,18 @@ interface ChannelClient {
         }
     }
 
-    class Builder(
-        private val receiver: User,
-        private val sender: User
-    ) {
+    class Builder {
+        private val dbManager: FirebaseDbManager by lazy { FirebaseDbManagerImpl() }
 
         fun build(): ChannelClient {
-            return ChannelClientImpl(
-                receiver,
-                sender
-            ).apply {
+            return ChannelClientImpl(dbManager).apply {
                 instance = this
             }
         }
     }
 
     fun setUsers(receiver: User, sender: User)
+
+    fun getChannels(): List<Channel>
 
 }

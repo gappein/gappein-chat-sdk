@@ -53,14 +53,15 @@ class ChatClientImpl(
         fileUri: Uri,
         receiver: String,
         onSuccess: () -> Unit,
-        onError: () -> Unit
+        onProgress: (Int) -> Unit,
+        onError: (Exception) -> Unit
     ) {
         storageManager.uploadMessageImage(fileUri, receiver, getUser().token, {
             sendMessage(it, receiver, {}, {})
         }, {
-
-        },{
-
+            onProgress(it)
+        }, {
+            onError(it)
         })
     }
 }

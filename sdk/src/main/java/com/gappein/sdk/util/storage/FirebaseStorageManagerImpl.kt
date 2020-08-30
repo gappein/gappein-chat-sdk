@@ -9,9 +9,11 @@ import java.io.File
 class FirebaseStorageManagerImpl : FirebaseStorageManager {
 
     private val manager = FirebaseStorage.getInstance()
+    private val storageReference = manager.reference
+
 
     companion object {
-        private val IMAGES = "images"
+        private const val IMAGES = "images"
     }
 
     override fun uploadUserImage(
@@ -35,14 +37,13 @@ class FirebaseStorageManagerImpl : FirebaseStorageManager {
         onProgress: (Int) -> Unit,
         onError: (Exception) -> Unit
     ) {
-        val storageReference = manager.reference
         val userList = listOf(sender, receiver)
         val messagePath = userList.sorted().toString()
         val imagePath = "$IMAGES/$messagePath"
-        val ref = storageReference.child(imagePath)
-        ref.putFile(file)
+        val reference = storageReference.child(imagePath)
+        reference.putFile(file)
             .addOnSuccessListener {
-                ref.downloadUrl.addOnSuccessListener {
+                reference.downloadUrl.addOnSuccessListener {
                     onSuccess(it.toString())
                 }
             }
