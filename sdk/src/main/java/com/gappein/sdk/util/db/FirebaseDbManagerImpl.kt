@@ -6,6 +6,8 @@ import com.gappein.sdk.model.ChatChanel
 import com.gappein.sdk.model.Message
 import com.gappein.sdk.model.User
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.FirebaseFirestoreException
+import com.google.firebase.firestore.QuerySnapshot
 
 
 class FirebaseDbManagerImpl : FirebaseDbManager {
@@ -125,5 +127,21 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
                     .set(mapOf(CHANNEL_ID to messagePath))
                 onComplete(messagePath)
             }
+    }
+
+    override fun getAllChannel(onSuccess: (List<String>) -> Unit) {
+        val currentUserId = ChatClient.instance().getUser().token
+        val result = mutableListOf<String>()
+        channelReference.addSnapshotListener { querySnapshot: QuerySnapshot?, error: FirebaseFirestoreException? ->
+            if (error != null) {
+                return@addSnapshotListener
+            }
+            querySnapshot?.documents?.forEach {
+                if (it.id.contains(currentUserId)) {
+                    result.add(it.id)
+                }
+            }
+            onSuccess(result)
+        }
     }
 }

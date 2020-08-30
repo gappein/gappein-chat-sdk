@@ -71,4 +71,8 @@ class ChatClientImpl(
     ) {
         dbManager.getOrCreateNewChatChannels(participantUserToken, onComplete)
     }
+
+    override fun getAllChannels(onSuccess: (List<String>) -> Unit) {
+        dbManager.getAllChannel(onSuccess)
+    }
 }

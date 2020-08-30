@@ -6,6 +6,7 @@ import com.gappein.sdk.listener.InitConnectionListener
 import com.gappein.sdk.model.User
 import com.gappein.sdk.util.db.FirebaseDbManager
 import com.gappein.sdk.util.storage.FirebaseStorageManager
+import com.google.gson.JsonObject
 
 interface ChatClient {
 
@@ -55,5 +56,7 @@ interface ChatClient {
     )
 
     fun openOrCreateChannel(participantUserToken: String, onComplete: (channelId: String) -> Unit)
+
+    fun getAllChannels(onSuccess: (List<String>) -> Unit)
 
 }
