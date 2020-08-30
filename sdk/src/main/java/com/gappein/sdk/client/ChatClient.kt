@@ -1,5 +1,6 @@
 package com.gappein.sdk.client
 
+import android.net.Uri
 import com.gappein.sdk.impl.ChatClientImpl
 import com.gappein.sdk.listener.InitConnectionListener
 import com.gappein.sdk.model.User
@@ -40,6 +41,14 @@ interface ChatClient {
 
     fun sendMessage(
         message: String,
+        receiver: String,
+        onSuccess: () -> Unit,
+        onError: () -> Unit
+    )
+
+    fun sendMessage(
+        fileUri: Uri,
+        receiver: String,
         onSuccess: () -> Unit,
         onError: () -> Unit
     )

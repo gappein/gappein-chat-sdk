@@ -1,5 +1,6 @@
 package com.gappein.sdk.util.db
 
+import android.net.Uri
 import com.gappein.sdk.model.Message
 import com.gappein.sdk.model.User
 

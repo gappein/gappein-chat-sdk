@@ -1,5 +1,6 @@
 package com.gappein.sdk.impl
 
+import android.net.Uri
 import android.webkit.URLUtil
 import com.gappein.sdk.client.ChatClient
 import com.gappein.sdk.listener.InitConnectionListener
@@ -28,13 +29,18 @@ class ChatClientImpl(
 
     override fun getUser() = currentUser
 
-    override fun sendMessage(message: String, onSuccess: () -> Unit, onError: () -> Unit) {
+    override fun sendMessage(
+        message: String,
+        receiver: String,
+        onSuccess: () -> Unit,
+        onError: () -> Unit
+    ) {
 
         val _message = Message(
             timeStamp = Calendar.getInstance().time,
             message = message,
             isUrl = URLUtil.isValidUrl(message),
-            receiver = getUser().token,
+            receiver = receiver,
             sender = getUser().token
         )
 
@@ -43,4 +49,18 @@ class ChatClientImpl(
         })
     }
 
+    override fun sendMessage(
+        fileUri: Uri,
+        receiver: String,
+        onSuccess: () -> Unit,
+        onError: () -> Unit
+    ) {
+        storageManager.uploadMessageImage(fileUri, receiver, getUser().token, {
+            sendMessage(it, receiver, {}, {})
+        }, {
+
+        },{
+
+        })
+    }
 }
