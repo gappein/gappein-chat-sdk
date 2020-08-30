@@ -37,18 +37,20 @@ class MainActivity : AppCompatActivity() {
 //        ChatClient.instance().openOrCreateChannel("0987654321") {
 //
 //        }
-        ChatClient.instance().sendMessage(
-            "https://firebasestorage.googleapis.com/v0/b/chatsdk-demo-8b9a6.appspot.com/o/0.jpeg?alt=media&token=4a2821a4-7c5c-4dc8-91f0-e8cc031dc66d",
-            "0987654321", {
-
-            }, {
-
-            })
+//        ChatClient.instance().sendMessage(
+//            "https://firebasestorage.googleapis.com/v0/b/chatsdk-demo-8b9a6.appspot.com/o/0.jpeg?alt=media&token=4a2821a4-7c5c-4dc8-91f0-e8cc031dc66d",
+//            "0987654321", {
+//
+//            }, {
+//
+//            })
 //        ChatClient.instance().getMessages() {
 //            Log.d("Dsfsdf", it.toString())
 //        }
 //
-        startActivity(MessageListActivity.buildIntent(this,"[0987654321, 1234567890]"))
+        startActivity(MessageListActivity.buildIntent(this,"[0987654321, 1234567890]",
+            User("0987654321",Date(),"dsfsdfs","Niharika")
+        ))
 
     }
 

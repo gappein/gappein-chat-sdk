@@ -1,7 +1,10 @@
 package com.gappein.sdk.model
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
 import java.util.*
 
+@Parcelize
 data class User(
 
     val token: String = "",
@@ -11,4 +14,4 @@ data class User(
     val profileImageUrl: String = "",
 
     val name: String = ""
-)
+) : Parcelable

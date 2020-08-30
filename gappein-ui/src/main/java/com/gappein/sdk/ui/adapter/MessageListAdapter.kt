@@ -22,8 +22,11 @@ class MessageListAdapter(private var messages: ArrayList<Message> = ArrayList<Me
     override fun getItemCount() = messages.count()
 
     fun addAll(it: List<Message>) {
-        messages.addAll(it)
-        notifyDataSetChanged()
+        messages.run {
+            clear()
+            addAll(it.reversed())
+        }
+        notifyItemChanged(it.size-1)
     }
 
 }
