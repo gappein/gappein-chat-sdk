@@ -3,7 +3,7 @@
     package="com.gappein.sdk.ui">
 
     <application>
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".MessageListActivity"></activity>
     </application>
 
 </manifest>

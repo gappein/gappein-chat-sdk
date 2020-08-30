@@ -103,8 +103,10 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
     }
 
     override fun getAllChannel(onSuccess: (List<String>) -> Unit) {
+
         val currentUserId = ChatClient.instance().getUser().token
         val result = mutableListOf<String>()
+
         channelReference.addSnapshotListener { querySnapshot: QuerySnapshot?, error: FirebaseFirestoreException? ->
             if (error != null) {
                 return@addSnapshotListener

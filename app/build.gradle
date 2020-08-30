@@ -35,6 +35,7 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     implementation project(':gappein-sdk')
+    implementation project(':gappein-ui')
     implementation 'com.google.firebase:firebase-analytics:17.5.0'
 
 }
