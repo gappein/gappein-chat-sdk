@@ -1,7 +1,7 @@
 package com.gappein.sdk.util.db
 
 import com.gappein.sdk.client.ChatClient
-import com.gappein.sdk.model.ChatChanel
+import com.gappein.sdk.model.ChannelUsers
 import com.gappein.sdk.model.Message
 import com.gappein.sdk.model.User
 import com.google.firebase.firestore.DocumentReference
@@ -35,14 +35,9 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
                         .addOnFailureListener { onError(it) }
                 }
             }
-
     }
 
-    override fun sendMessage(
-        message: Message,
-        onSuccess: () -> Unit,
-        onError: (Exception) -> Unit
-    ) {
+    override fun sendMessage(message: Message, onSuccess: () -> Unit, onError: (Exception) -> Unit) {
 
         val userList = listOf(message.sender.token, message.receiver.token)
         val channelId = userList.sorted().toString()
@@ -54,11 +49,7 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
             .addOnFailureListener { onError(it) }
     }
 
-    override fun getUserByToken(
-        token: String,
-        onSuccess: (User) -> Unit,
-        onError: (Exception) -> Unit
-    ) {
+    override fun getUserByToken(token: String, onSuccess: (User) -> Unit, onError: (Exception) -> Unit) {
         userReference
             .get()
             .addOnSuccessListener { result ->
@@ -73,16 +64,14 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
             }
     }
 
-    override fun getOrCreateNewChatChannels(
-        participantUserToken: String,
-        onComplete: (channelId: String) -> Unit
-    ) {
+    override fun getOrCreateNewChatChannels(participantUserToken: String, onComplete: (channelId: String) -> Unit) {
 
         val userChannelReference = channelReference.document(participantUserToken)
         val currentUser = ChatClient.instance().getUser()
         val currentUserToken = currentUser.token
         val currentUserReference = userReference.document(currentUserToken)
         val participantUserReference = userReference.document(participantUserToken)
+
         val userList = listOf(participantUserToken, currentUserToken)
         val messageId = userList.sorted().toString()
 
@@ -94,12 +83,11 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
                 }
                 getUserByToken(participantUserToken, {
                     channelReference.document(messageId)
-                        .set(ChatChanel(currentUser, it))
+                        .set(ChannelUsers(currentUser, it))
 
                 }, {
 
                 })
-//
                 addChannelsToUser(currentUserReference, participantUserToken, messageId)
 
                 addChannelsToUser(participantUserReference, currentUserToken, messageId)
@@ -130,11 +118,7 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
         }
     }
 
-    override fun sendMessageByToken(
-        message: Message, sender: User,
-        receiver: User, onSuccess: () -> Unit, onError: (Exception) -> Unit
-    ) {
+    override fun sendMessageByToken(message: Message, sender: User, receiver: User, onSuccess: () -> Unit, onError: (Exception) -> Unit) {
         sendMessage(message, onSuccess, onError)
-
     }
 }

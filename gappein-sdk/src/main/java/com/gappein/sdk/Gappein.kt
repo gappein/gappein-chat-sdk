@@ -2,7 +2,6 @@ package com.gappein.sdk
 
 import com.gappein.sdk.client.ChatClient
 import com.gappein.sdk.impl.GappeinImpl
-import com.gappein.sdk.listener.InitConnectionListener
 import com.gappein.sdk.model.User
 import com.gappein.sdk.util.db.FirebaseDbManager
 import com.gappein.sdk.util.db.FirebaseDbManagerImpl
@@ -13,11 +12,7 @@ interface Gappein {
 
     fun currentUser(): User
 
-    fun setUser(
-        user: User,
-        token: String,
-        callbacks: InitConnectionListener = object : InitConnectionListener() {}
-    )
+    fun setUser(user: User, token: String, onSuccess: (User) -> Unit, onError: (Exception) -> Unit)
 
     class Builder {
 

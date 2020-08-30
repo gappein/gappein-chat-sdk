@@ -3,7 +3,6 @@ package com.gappein.sdk.impl
 import android.net.Uri
 import android.webkit.URLUtil
 import com.gappein.sdk.client.ChatClient
-import com.gappein.sdk.listener.InitConnectionListener
 import com.gappein.sdk.model.Message
 import com.gappein.sdk.model.User
 import com.gappein.sdk.util.db.FirebaseDbManager
@@ -14,12 +13,12 @@ class ChatClientImpl(private val storageManager: FirebaseStorageManager, private
 
     private var currentUser = User()
 
-    override fun setUser(user: User, token: String, listener: InitConnectionListener?) {
-        currentUser = (user)
+    override fun setUser(user: User, token: String, onSuccess: (User) -> Unit, onError: (Exception) -> Unit) {
         dbManager.createUser(user, {
-            listener?.onSuccess(InitConnectionListener.ConnectionData(it, token))
+            currentUser = (user)
+            onSuccess(it)
         }, {
-            listener?.onError(it.localizedMessage ?: "User already present")
+            onError(it)
         })
     }
 

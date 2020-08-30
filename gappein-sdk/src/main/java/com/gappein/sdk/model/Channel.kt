@@ -10,4 +10,3 @@ data class Channel(
     val receiver: User
 )
 
-data class ChatChanel(val userOne: User, val userTwo: User)
