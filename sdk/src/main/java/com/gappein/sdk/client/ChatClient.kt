@@ -1,9 +1,7 @@
 package com.gappein.sdk.client
 
-import androidx.lifecycle.LiveData
 import com.gappein.sdk.impl.ChatClientImpl
 import com.gappein.sdk.listener.InitConnectionListener
-import com.gappein.sdk.model.Message
 import com.gappein.sdk.model.User
 import com.gappein.sdk.util.db.FirebaseDbManager
 import com.gappein.sdk.util.storage.FirebaseStorageManager

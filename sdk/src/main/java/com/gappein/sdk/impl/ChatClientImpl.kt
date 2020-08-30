@@ -10,15 +10,15 @@ import com.gappein.sdk.util.storage.FirebaseStorageManager
 import java.util.*
 
 class ChatClientImpl(
-    private val firebaseStorageManager: FirebaseStorageManager,
-    private val firebaseDbManager: FirebaseDbManager
+    private val storageManager: FirebaseStorageManager,
+    private val dbManager: FirebaseDbManager
 ) : ChatClient {
 
     private var currentUser = User()
 
     override fun setUser(user: User, token: String, listener: InitConnectionListener?) {
         currentUser = (user)
-        firebaseDbManager.createUser(user, {
+        dbManager.createUser(user, {
             listener?.onSuccess(InitConnectionListener.ConnectionData(it, token))
         }, {
             listener?.onError(it.localizedMessage ?: "User already present")
@@ -29,6 +29,7 @@ class ChatClientImpl(
     override fun getUser() = currentUser
 
     override fun sendMessage(message: String, onSuccess: () -> Unit, onError: () -> Unit) {
+
         val _message = Message(
             timeStamp = Calendar.getInstance().time,
             message = message,
@@ -37,7 +38,7 @@ class ChatClientImpl(
             sender = getUser().token
         )
 
-        firebaseDbManager.sendMessage(_message, {
+        dbManager.sendMessage(_message, {
         }, {
         })
     }

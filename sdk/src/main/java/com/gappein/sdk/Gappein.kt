@@ -12,7 +12,7 @@ import com.gappein.sdk.util.storage.FirebaseStorageManagerImpl
 
 interface Gappein {
 
-    fun currentUser(): LiveData<User>
+    fun currentUser(): User
 
     fun setUser(
         user: User,
