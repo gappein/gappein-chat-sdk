@@ -40,7 +40,7 @@ interface ChatClient {
     fun getUser(): User
 
     fun sendMessage(
-        message: String,
+        messageText: String,
         receiver: String,
         onSuccess: () -> Unit,
         onError: (Exception) -> Unit
@@ -48,7 +48,7 @@ interface ChatClient {
 
     fun sendMessage(
         fileUri: Uri,
-        receiver: User,
+        receiver: String,
         onSuccess: () -> Unit,
         onProgress: (Int) -> Unit,
         onError: (Exception) -> Unit
