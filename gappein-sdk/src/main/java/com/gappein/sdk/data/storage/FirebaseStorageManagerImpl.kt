@@ -10,7 +10,6 @@ class FirebaseStorageManagerImpl : FirebaseStorageManager {
 
     companion object {
         private const val IMAGES = "images"
-        private const val EXTENSION = ".jpg"
     }
 
     private val manager = FirebaseStorage.getInstance()
@@ -26,7 +25,7 @@ class FirebaseStorageManagerImpl : FirebaseStorageManager {
 
     override fun uploadMessageImage(file: Uri, receiver: User, sender: User, onSuccess: (String) -> Unit, onProgress: (Int) -> Unit, onError: (Exception) -> Unit) {
         val userList = listOf(sender.token, receiver.token)
-        val messagePath = "${userList.sorted()}${System.currentTimeMillis()}$EXTENSION"
+        val messagePath = "${userList.sorted()}${System.currentTimeMillis()}"
         val imagePath = "$IMAGES/$messagePath"
         val reference = storageReference.child(imagePath)
         reference.putFile(file)

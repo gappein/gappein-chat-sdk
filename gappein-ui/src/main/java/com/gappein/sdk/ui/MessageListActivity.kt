@@ -76,7 +76,7 @@ class MessageListActivity : AppCompatActivity(), ImagePicker.ItemClickListener {
     private fun setupUI() {
         titleToolbar.text = receiver.name
         Glide.with(this)
-            .load("https://in.bmscdn.com/iedb/artist/images/website/poster/large/shah-rukh-khan-2092-12-09-2017-02-10-43.jpg")
+            .load(receiver.profileImageUrl)
             .apply(RequestOptions().transforms(CenterCrop(), RoundedCorners(32)))
             .into(avatarImageView)
 
