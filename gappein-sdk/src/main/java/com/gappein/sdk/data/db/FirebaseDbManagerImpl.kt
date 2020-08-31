@@ -143,20 +143,16 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
     }
 
     override fun getMessages(channelId: String, onSuccess: (List<Message>) -> Unit) {
-        val messages = mutableListOf<Message>()
         channelReference.document(channelId)
             .collection(MESSAGES_COLLECTION)
             .addSnapshotListener { querySnapshot: QuerySnapshot?, error: FirebaseFirestoreException? ->
-                querySnapshot?.documents?.forEach {
-                    try {
-                        val message: Message? = it.toObject(Message::class.java)
-                        if (message != null) {
-                            messages.add(message)
-                        }
-                    } catch (e: Exception) {
-                    }
-                }
-                onSuccess(messages)
+                onSuccess(
+                    querySnapshot?.documents
+                        ?.map {
+                            return@map it.toObject(Message::class.java)
+
+                        } as List<Message>
+                )
             }
     }
 

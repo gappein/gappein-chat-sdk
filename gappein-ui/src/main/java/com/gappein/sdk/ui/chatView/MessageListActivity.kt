@@ -115,7 +115,9 @@ class MessageListActivity : AppCompatActivity(), ImagePicker.ItemClickListener {
                 clear()
                 addAll(it)
                 adapter.addAll(this)
-                recyclerViewMessages.smoothScrollToPosition(this.size - 1)
+                if (this.isNotEmpty()) {
+                    recyclerViewMessages.smoothScrollToPosition(this.size - 1)
+                }
             }
         }
     }

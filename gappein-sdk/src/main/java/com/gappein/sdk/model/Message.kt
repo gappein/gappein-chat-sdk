@@ -4,7 +4,7 @@ import java.util.*
 
 data class Message(
 
-        var timeStamp: Date? = Calendar.getInstance().time,
+        var timeStamp: Long? = System.currentTimeMillis(),
 
         val message: String = "",
 

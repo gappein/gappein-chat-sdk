@@ -29,7 +29,7 @@ class ChatClientImpl(private val storageManager: FirebaseStorageManager, private
         getUserByToken(receiver, {
 
             val message = Message(
-                timeStamp = Calendar.getInstance().time,
+                timeStamp = System.currentTimeMillis(),
                 message = messageText,
                 isUrl = URLUtil.isValidUrl(messageText),
                 receiver = it,
