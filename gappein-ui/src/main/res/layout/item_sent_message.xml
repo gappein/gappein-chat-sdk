@@ -11,6 +11,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/sent_message_background"
         android:padding="12dp"
+        app:layout_constrainedWidth="true"
         android:text="Hey this, is my first message"
         android:textColor="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
