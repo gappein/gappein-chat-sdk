@@ -11,6 +11,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.QuerySnapshot
 
 
+@Suppress("UNCHECKED_CAST")
 class FirebaseDbManagerImpl : FirebaseDbManager {
 
     private val database: FirebaseFirestore = FirebaseFirestore.getInstance()
@@ -90,8 +91,8 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
                     onSuccess(it[CHANNEL_ID] as String)
                     return@addOnSuccessListener
                 }
-                getUserByToken(participantUserToken, {
-                    channelReference.document(messageId).set(ChannelUsers(currentUser, it))
+                getUserByToken(participantUserToken, { user ->
+                    channelReference.document(messageId).set(ChannelUsers(currentUser, user))
                 }, {
 
                 })
@@ -100,7 +101,6 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
                 addChannelsToUser(participantUserReference, currentUserToken, messageId)
             }
     }
-
 
 
     private fun addChannelsToUser(reference: DocumentReference, token: String, messageId: String) {
@@ -151,6 +151,8 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
                         ?.map {
                             return@map it.toObject(Message::class.java)
 
+                        }?.sortedBy {
+                            it?.timeStamp
                         } as List<Message>
                 )
             }
@@ -160,8 +162,8 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
         channelReference.document(channelId)
             .get()
             .addOnSuccessListener {
-                val data = it.data
-                val userList = data
+                val userData = it.data
+                val userList = userData
                     ?.flatMap { user ->
                         listOf(user.value as HashMap<String, Any>)
                     }?.map { userMap ->
@@ -174,6 +176,5 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
                 userList?.let { users -> onSuccess(users) }
             }
     }
-
 
 }

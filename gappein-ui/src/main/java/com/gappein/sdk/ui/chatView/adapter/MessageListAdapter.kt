@@ -64,7 +64,7 @@ class MessageListAdapter(
     fun addAll(it: List<Message>) {
         messages.run {
             clear()
-            addAll(it.reversed())
+            addAll(it)
             notifyDataSetChanged()
         }
     }

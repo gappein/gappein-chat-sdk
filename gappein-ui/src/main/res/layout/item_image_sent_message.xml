@@ -22,7 +22,6 @@
         android:layout_height="0dp"
         android:background="@drawable/recieved_message_background"
         android:layout_margin="4dp"
-        android:text="Hey this, is my first message"
         android:padding="4dp"
         android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="@+id/imageBackGround"
