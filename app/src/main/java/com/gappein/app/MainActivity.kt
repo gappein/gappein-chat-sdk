@@ -48,6 +48,8 @@ class MainActivity : AppCompatActivity() {
 //            Log.d("Dsfsdf", it.toString())
 //        }
 //
+        ChatClient.getInstance().getAllChannels {
+        }
         startActivity(MessageListActivity.buildIntent(this,"[0987654321, 1234567890]",
             User("0987654321",Date(),"dsfsdfs","Niharika")
         ))

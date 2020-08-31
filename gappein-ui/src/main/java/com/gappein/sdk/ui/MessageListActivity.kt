@@ -74,7 +74,7 @@ class MessageListActivity : AppCompatActivity() {
     }
 
     private fun setupRecyclerView() {
-        adapter = MessageListAdapter()
+        adapter = MessageListAdapter(chatClient = ChatClient.getInstance())
         recyclerViewMessages.layoutManager = LinearLayoutManager(this@MessageListActivity)
         recyclerViewMessages.adapter = adapter
 

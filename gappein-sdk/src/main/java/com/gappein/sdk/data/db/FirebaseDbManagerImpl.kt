@@ -33,7 +33,7 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
                     reference.set(user)
                         .addOnSuccessListener { onSuccess(user) }
                         .addOnFailureListener { onError(it) }
-                }else {
+                } else {
                     onSuccess(user)
                 }
             }
@@ -56,17 +56,13 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
             .get()
             .addOnSuccessListener { result ->
                 val data = result.toObjects(User::class.java)
-                val user = data.find {
-                    it.token == token
-                }
+                val user = data.find { it.token == token }
                 user?.let { onSuccess(it) }
             }
-            .addOnFailureListener { exception ->
-                onError(exception)
-            }
+            .addOnFailureListener { exception -> onError(exception) }
     }
 
-    override fun getOrCreateNewChatChannels(participantUserToken: String, onComplete: (channelId: String) -> Unit) {
+    override fun getOrCreateNewChatChannels(participantUserToken: String, onSuccess: (channelId: String) -> Unit) {
 
         val userChannelReference = channelReference.document(participantUserToken)
         val currentUser = ChatClient.getInstance().getUser()
@@ -80,13 +76,11 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
         userChannelReference.get()
             .addOnSuccessListener {
                 if (it.exists()) {
-                    onComplete(it[CHANNEL_ID] as String)
+                    onSuccess(it[CHANNEL_ID] as String)
                     return@addOnSuccessListener
                 }
                 getUserByToken(participantUserToken, {
-                    channelReference.document(messageId)
-                        .set(ChannelUsers(currentUser, it))
-
+                    channelReference.document(messageId).set(ChannelUsers(currentUser, it))
                 }, {
 
                 })
@@ -106,7 +100,7 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
 
     override fun getAllChannel(onSuccess: (List<String>) -> Unit) {
 
-        val currentUserId = ChatClient.getInstance().getUser().token
+        val currentUserToken = ChatClient.getInstance().getUser().token
         val result = mutableListOf<String>()
 
         channelReference.addSnapshotListener { querySnapshot: QuerySnapshot?, error: FirebaseFirestoreException? ->
@@ -114,7 +108,7 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
                 return@addSnapshotListener
             }
             querySnapshot?.documents?.forEach {
-                if (it.id.contains(currentUserId)) {
+                if (it.id.contains(currentUserToken)) {
                     result.add(it.id)
                 }
             }

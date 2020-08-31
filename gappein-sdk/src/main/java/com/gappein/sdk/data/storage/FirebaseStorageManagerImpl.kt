@@ -29,17 +29,11 @@ class FirebaseStorageManagerImpl : FirebaseStorageManager {
         val imagePath = "$IMAGES/$messagePath"
         val reference = storageReference.child(imagePath)
         reference.putFile(file)
-            .addOnSuccessListener {
-                reference.downloadUrl.addOnSuccessListener {
-                    onSuccess(it.toString())
-                }
-            }
+            .addOnSuccessListener { reference.downloadUrl.addOnSuccessListener { onSuccess(it.toString()) } }
             .addOnProgressListener {
                 val progress = (100.0 * it.bytesTransferred / it.totalByteCount)
                 onProgress(progress.toInt())
             }
-            .addOnFailureListener {
-                onError(it)
-            }
+            .addOnFailureListener { onError(it) }
     }
 }
