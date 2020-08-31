@@ -1,7 +1,6 @@
 package com.gappein.sdk.impl
 
 import android.net.Uri
-import android.util.Log
 import android.webkit.URLUtil
 import com.gappein.sdk.client.ChatClient
 import com.gappein.sdk.data.db.FirebaseDbManager
@@ -48,11 +47,16 @@ class ChatClientImpl(private val storageManager: FirebaseStorageManager, private
         getUserByToken(receiver, {
             storageManager.uploadMessageImage(fileUri, it, getUser(), { message ->
                 sendMessage(message, receiver, {
+                    onSuccess()
                 }, {
                     onError(it)
                 })
             }, { progress ->
-                onProgress(progress)
+                if (progress == 100) {
+                    onSuccess()
+                } else {
+                    onProgress(progress)
+                }
             }, { ex ->
                 onError(ex)
 
@@ -77,5 +81,9 @@ class ChatClientImpl(private val storageManager: FirebaseStorageManager, private
 
     override fun getMessages(channelId: String, onSuccess: (List<Message>) -> Unit) {
         dbManager.getMessages(channelId,onSuccess)
+    }
+
+    override fun getChannelUsers(channelId: String, onSuccess: (List<User>) -> Unit) {
+        dbManager.getChannelUsers(channelId,onSuccess)
     }
 }

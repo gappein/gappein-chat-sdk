@@ -91,6 +91,7 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
     }
 
 
+
     private fun addChannelsToUser(reference: DocumentReference, token: String, messageId: String) {
         reference
             .collection(CHANNEL_COLLECTION)
@@ -135,6 +136,27 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
                     }
                 }
                 onSuccess(messages)
+            }
+    }
+
+    override fun getChannelUsers(channelId: String, onSuccess: (List<User>) -> Unit) {
+        val users = mutableListOf<User>()
+        channelReference.document(channelId)
+            .get()
+            .addOnSuccessListener {
+                val data = it.data
+                data?.forEach { user ->
+                    var values = user.value as HashMap<String, Any>
+                    users.add(
+                        User(
+                            token = values["token"] as String,
+                            name = values["name"] as String,
+                            profileImageUrl = values["profileImageUrl"] as String,
+                        )
+                    )
+
+                }
+                onSuccess(users)
             }
     }
 }

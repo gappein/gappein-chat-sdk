@@ -41,5 +41,6 @@ interface ChatClient {
 
     fun getMessages(channelId: String,onSuccess: (List<Message>) -> Unit)
 
+    fun getChannelUsers(channelId: String,onSuccess: (List<User>) -> Unit)
 
 }

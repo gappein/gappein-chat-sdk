@@ -18,4 +18,6 @@ interface FirebaseDbManager {
     fun sendMessageByToken(message: Message, sender: User, receiver: User, onSuccess: () -> Unit, onError: (Exception) -> Unit)
 
     fun getMessages(channelId: String,onSuccess: (List<Message>) -> Unit)
+
+    fun getChannelUsers(channelId: String,onSuccess: (List<User>) -> Unit)
 }

@@ -10,7 +10,7 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 
-class ImageUtil(context: Context) {
+class ImageCompressor(context: Context) {
 
     companion object {
 
@@ -18,6 +18,7 @@ class ImageUtil(context: Context) {
         private const val maxHeight = 816
         private val compressFormat = CompressFormat.JPEG
         private const val quality = 50
+
     }
 
     private val destinationDirectoryPath: String =

@@ -6,7 +6,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.view.View
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
@@ -21,7 +21,9 @@ import com.gappein.sdk.model.Message
 import com.gappein.sdk.model.User
 import com.gappein.sdk.ui.adapter.MessageListAdapter
 import com.gappein.sdk.ui.bottompicker.ImagePicker
-import com.gappein.sdk.ui.util.ImageUtil
+import com.gappein.sdk.ui.util.ImageCompressor
+import com.gappein.sdk.ui.util.hide
+import com.gappein.sdk.ui.util.show
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -62,6 +64,7 @@ class MessageListActivity : AppCompatActivity(), ImagePicker.ItemClickListener {
         setupUI()
         setupRecyclerView()
         fetchMessage()
+        setupSendMessageListener()
     }
 
     private fun setupUI() {
@@ -71,22 +74,6 @@ class MessageListActivity : AppCompatActivity(), ImagePicker.ItemClickListener {
             .apply(RequestOptions().transforms(CenterCrop(), RoundedCorners(32)))
             .into(avatarImageView)
 
-        editTextChatBox.addTextChangeListener {
-            if (it.isNotEmpty()) {
-                buttonSend.background = ContextCompat.getDrawable(this, R.drawable.ic_send)
-                setupSendMessageListener()
-            } else {
-                buttonSend.background = ContextCompat.getDrawable(this, R.drawable.ic_attach)
-                setupAttachMedia()
-            }
-        }
-    }
-
-    private fun setupAttachMedia() {
-        buttonSend.setOnClickListener {
-            val picker = ImagePicker.newInstance()
-            picker.show(supportFragmentManager, ImagePicker.TAG)
-        }
     }
 
     private fun setupSendMessageListener() {
@@ -101,6 +88,11 @@ class MessageListActivity : AppCompatActivity(), ImagePicker.ItemClickListener {
             }
         }
         imageViewBack.setOnClickListener { onBackPressed() }
+
+        imageButtonAttach.setOnClickListener {
+            val picker = ImagePicker.newInstance()
+            picker.show(supportFragmentManager, ImagePicker.TAG)
+        }
     }
 
     private fun setupRecyclerView() {
@@ -199,18 +191,14 @@ class MessageListActivity : AppCompatActivity(), ImagePicker.ItemClickListener {
 
     private fun sendImageMessage(photo: File?) {
         if (photo != null) {
-            val file = ImageUtil(this).compressToFile(photo)
+            val file = ImageCompressor(this).compressToFile(photo)
             file?.toUri()?.let {
                 ChatClient.getInstance().sendMessage(it, receiver.token, {
-                    progress.visibility = View.GONE
+                    progress.hide()
                 }, {
-                    if (it == 100) {
-                        progress.visibility = View.GONE
-                    } else {
-                        progress.visibility = View.VISIBLE
-                    }
+                    progress.show()
                 }, {
-                    progress.visibility = View.GONE
+                    progress.hide()
                 })
             }
         }
