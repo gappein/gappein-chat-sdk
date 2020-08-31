@@ -3,6 +3,15 @@
     package="com.gappein.sdk.ui">
 
     <application>
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="Gappein.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_provider" />
+        </provider>
         <activity
             android:name=".MessageListActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
