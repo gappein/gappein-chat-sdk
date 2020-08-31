@@ -1,4 +1,4 @@
-package com.gappein.sdk.ui.bottompicker
+package com.gappein.sdk.ui.chatView.bottompicker
 
 import android.content.Context
 import android.os.Bundle

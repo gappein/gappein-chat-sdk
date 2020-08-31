@@ -1,4 +1,4 @@
-package com.gappein.sdk.ui
+package com.gappein.sdk.ui.chatView
 
 import android.Manifest
 import android.content.Context
@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,8 +18,11 @@ import com.bumptech.glide.request.RequestOptions
 import com.gappein.sdk.client.ChatClient
 import com.gappein.sdk.model.Message
 import com.gappein.sdk.model.User
-import com.gappein.sdk.ui.adapter.MessageListAdapter
-import com.gappein.sdk.ui.bottompicker.ImagePicker
+import com.gappein.sdk.ui.R
+import com.gappein.sdk.ui.chatView.adapter.MessageListAdapter
+import com.gappein.sdk.ui.chatView.bottompicker.ImagePicker
+import com.gappein.sdk.ui.createImageFile
+import com.gappein.sdk.ui.getRealPathFromUri
 import com.gappein.sdk.ui.util.ImageCompressor
 import com.gappein.sdk.ui.util.hide
 import com.gappein.sdk.ui.util.show
@@ -113,6 +115,7 @@ class MessageListActivity : AppCompatActivity(), ImagePicker.ItemClickListener {
                 clear()
                 addAll(it)
                 adapter.addAll(this)
+                recyclerViewMessages.smoothScrollToPosition(this.size - 1)
             }
         }
     }
