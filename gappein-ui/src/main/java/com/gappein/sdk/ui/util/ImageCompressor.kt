@@ -18,11 +18,11 @@ class ImageCompressor(context: Context) {
         private const val maxHeight = 816
         private val compressFormat = CompressFormat.JPEG
         private const val quality = 50
-
+        private const val FOLDER = "images"
     }
 
     private val destinationDirectoryPath: String =
-        context.cacheDir.path + File.separator + "images"
+        context.cacheDir.path + File.separator + FOLDER
 
     @Throws(IOException::class)
     fun compressToFile(imageFile: File): File? {

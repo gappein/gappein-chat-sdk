@@ -51,7 +51,6 @@ class MessageListActivity : AppCompatActivity(), ImagePicker.ItemClickListener {
             Intent(context, MessageListActivity::class.java).apply {
                 putExtra(CHANNEL_ID, channelId)
                 putExtra(RECEIVER, receiver)
-
             }
     }
 
