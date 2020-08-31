@@ -65,8 +65,8 @@ class MessageListAdapter(
         messages.run {
             clear()
             addAll(it.reversed())
+            notifyDataSetChanged()
         }
-        notifyItemChanged(it.size - 1)
     }
 
     override fun getItemViewType(position: Int): Int {
