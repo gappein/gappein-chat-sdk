@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
@@ -48,7 +49,6 @@ class MessageListActivity : AppCompatActivity() {
         setupUI()
         setupRecyclerView()
         fetchMessage()
-        setupClickListener()
     }
 
     private fun setupUI() {
@@ -57,9 +57,23 @@ class MessageListActivity : AppCompatActivity() {
             .load("https://in.bmscdn.com/iedb/artist/images/website/poster/large/shah-rukh-khan-2092-12-09-2017-02-10-43.jpg")
             .apply(RequestOptions().transforms(CenterCrop(), RoundedCorners(32)))
             .into(avatarImageView)
+
+        edittext_chatbox.addTextChangeListener {
+            if (it.isNotEmpty()) {
+                buttonSend.background = ContextCompat.getDrawable(this,R.drawable.ic_send)
+                setupSendMessageListener()
+            } else {
+                buttonSend.background = ContextCompat.getDrawable(this,R.drawable.ic_attach)
+                setupAttachMedia()
+            }
+        }
     }
 
-    private fun setupClickListener() {
+    private fun setupAttachMedia() {
+
+    }
+
+    private fun setupSendMessageListener() {
         buttonSend.setOnClickListener {
             val message = edittext_chatbox.text.toString()
             if (message.isNotEmpty()) {
