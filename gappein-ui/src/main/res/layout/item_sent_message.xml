@@ -7,15 +7,32 @@
 
     <TextView
         android:id="@+id/sentTextMessage"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/sent_message_background"
         android:padding="12dp"
         android:text="Hey this, is my first message"
         android:textColor="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/guideline"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/sentTextMessageTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:alpha="0.3"
+        android:paddingStart="12dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:text="dfsfsf"
+        android:textColor="@android:color/white"
+        android:textSize="8sp"
+        app:layout_constraintEnd_toEndOf="@+id/sentTextMessage"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/sentTextMessage" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
