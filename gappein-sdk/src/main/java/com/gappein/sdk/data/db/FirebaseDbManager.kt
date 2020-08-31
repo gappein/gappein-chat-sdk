@@ -1,5 +1,6 @@
 package com.gappein.sdk.data.db
 
+import com.gappein.sdk.model.Channel
 import com.gappein.sdk.model.Message
 import com.gappein.sdk.model.User
 
@@ -13,11 +14,12 @@ interface FirebaseDbManager {
 
     fun getOrCreateNewChatChannels(participantUserToken: String, onSuccess: (channelId: String) -> Unit)
 
-    fun getAllChannel(onSuccess: (List<String>) -> Unit)
+    fun getUserChannels(onSuccess: (List<Channel>) -> Unit)
 
     fun sendMessageByToken(message: Message, sender: User, receiver: User, onSuccess: () -> Unit, onError: (Exception) -> Unit)
 
     fun getMessages(channelId: String,onSuccess: (List<Message>) -> Unit)
 
     fun getChannelUsers(channelId: String,onSuccess: (List<User>) -> Unit)
+
 }

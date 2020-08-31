@@ -1,6 +1,7 @@
 package com.gappein.sdk.data.db
 
 import com.gappein.sdk.client.ChatClient
+import com.gappein.sdk.model.Channel
 import com.gappein.sdk.model.ChannelUsers
 import com.gappein.sdk.model.Message
 import com.gappein.sdk.model.User
@@ -21,6 +22,9 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
         private const val MESSAGES_COLLECTION = "messages"
         private const val CHANNEL_COLLECTION = "channel"
         private const val CHANNEL_ID = "channelId"
+        private const val TOKEN = "token"
+        private const val NAME = "name"
+        private const val IMAGE_URL = "profileImageUrl"
     }
 
     override fun createUser(user: User, onSuccess: (User) -> Unit, onError: (Exception) -> Unit) {
@@ -51,7 +55,11 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
             .addOnFailureListener { onError(it) }
     }
 
-    override fun getUserByToken(token: String, onSuccess: (User) -> Unit, onError: (Exception) -> Unit) {
+    override fun getUserByToken(
+        token: String,
+        onSuccess: (User) -> Unit,
+        onError: (Exception) -> Unit
+    ) {
         userReference
             .get()
             .addOnSuccessListener { result ->
@@ -62,7 +70,10 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
             .addOnFailureListener { exception -> onError(exception) }
     }
 
-    override fun getOrCreateNewChatChannels(participantUserToken: String, onSuccess: (channelId: String) -> Unit) {
+    override fun getOrCreateNewChatChannels(
+        participantUserToken: String,
+        onSuccess: (channelId: String) -> Unit
+    ) {
 
         val userChannelReference = channelReference.document(participantUserToken)
         val currentUser = ChatClient.getInstance().getUser()
@@ -99,25 +110,35 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
             .set(mapOf(CHANNEL_ID to messageId))
     }
 
-    override fun getAllChannel(onSuccess: (List<String>) -> Unit) {
+    override fun getUserChannels(onSuccess: (List<Channel>) -> Unit) {
 
         val currentUserToken = ChatClient.getInstance().getUser().token
-        val result = mutableListOf<String>()
 
         channelReference.addSnapshotListener { querySnapshot: QuerySnapshot?, error: FirebaseFirestoreException? ->
             if (error != null) {
                 return@addSnapshotListener
             }
-            querySnapshot?.documents?.forEach {
-                if (it.id.contains(currentUserToken)) {
-                    result.add(it.id)
+
+            val channels = querySnapshot
+                ?.documents
+                ?.filter {
+                    it.id.contains(currentUserToken)
+                }?.map { channel ->
+                    val channelMapper: Map<String, User> = channel.data as Map<String, User>
+                    val channelUsers = channelMapper.values.toList()
+                    return@map Channel(id = channel.id, channelUsers)
                 }
-            }
-            onSuccess(result)
+            channels?.let { onSuccess(it) }
         }
     }
 
-    override fun sendMessageByToken(message: Message, sender: User, receiver: User, onSuccess: () -> Unit, onError: (Exception) -> Unit) {
+    override fun sendMessageByToken(
+        message: Message,
+        sender: User,
+        receiver: User,
+        onSuccess: () -> Unit,
+        onError: (Exception) -> Unit
+    ) {
         sendMessage(message, onSuccess, onError)
     }
 
@@ -140,23 +161,23 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
     }
 
     override fun getChannelUsers(channelId: String, onSuccess: (List<User>) -> Unit) {
-        val users = mutableListOf<User>()
         channelReference.document(channelId)
             .get()
             .addOnSuccessListener {
                 val data = it.data
-                data?.forEach { user ->
-                    var values = user.value as HashMap<String, Any>
-                    users.add(
-                        User(
-                            token = values["token"] as String,
-                            name = values["name"] as String,
-                            profileImageUrl = values["profileImageUrl"] as String,
+                val userList = data
+                    ?.flatMap { user ->
+                        listOf(user.value as HashMap<String, Any>)
+                    }?.map { userMap ->
+                        return@map User(
+                            token = userMap[TOKEN] as String,
+                            name = userMap[NAME] as String,
+                            profileImageUrl = userMap[IMAGE_URL] as String,
                         )
-                    )
-
-                }
-                onSuccess(users)
+                    }
+                userList?.let { users -> onSuccess(users) }
             }
     }
+
+
 }

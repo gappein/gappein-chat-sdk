@@ -65,6 +65,13 @@ class MessageListActivity : AppCompatActivity(), ImagePicker.ItemClickListener {
         setupRecyclerView()
         fetchMessage()
         setupSendMessageListener()
+
+        ChatClient.getInstance().getUserChannels {
+            Log.d("Sdsfsdf",it.toString())
+        }
+        ChatClient.getInstance().getChannelUsers(channelId) {
+            Log.d("Sdsfsdsf",it.toString())
+        }
     }
 
     private fun setupUI() {

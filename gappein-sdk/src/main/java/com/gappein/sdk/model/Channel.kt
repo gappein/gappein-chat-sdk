@@ -2,16 +2,8 @@ package com.gappein.sdk.model
 
 data class Channel(
 
-    val id: String,
+    var id: String = "",
 
-    val lastMessage: String,
-
-    val lastUpdated: String,
-
-    var isLastRead: Boolean,
-
-    val sender: User,
-
-    val receiver: User
+    val users: List<User> = arrayListOf()
 )
 
