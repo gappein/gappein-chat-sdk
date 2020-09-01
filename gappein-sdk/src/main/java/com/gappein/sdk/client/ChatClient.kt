@@ -44,4 +44,6 @@ interface ChatClient {
 
     fun getChannelUsers(channelId: String,onSuccess: (List<User>) -> Unit)
 
+    fun getChannelRecipientUser(channelId: String, onSuccess: (User) -> Unit)
+
 }

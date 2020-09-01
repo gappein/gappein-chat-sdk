@@ -7,7 +7,7 @@ import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.EditText
-import com.gappein.sdk.ui.chatView.MessageListActivity
+import com.gappein.sdk.ui.view.chatView.MessageListActivity
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat

@@ -8,7 +8,6 @@ import com.gappein.sdk.data.storage.FirebaseStorageManager
 import com.gappein.sdk.model.Channel
 import com.gappein.sdk.model.Message
 import com.gappein.sdk.model.User
-import java.util.*
 
 class ChatClientImpl(private val storageManager: FirebaseStorageManager, private val dbManager: FirebaseDbManager) : ChatClient {
 
@@ -81,10 +80,14 @@ class ChatClientImpl(private val storageManager: FirebaseStorageManager, private
     }
 
     override fun getMessages(channelId: String, onSuccess: (List<Message>) -> Unit) {
-        dbManager.getMessages(channelId,onSuccess)
+        dbManager.getMessages(channelId, onSuccess)
     }
 
     override fun getChannelUsers(channelId: String, onSuccess: (List<User>) -> Unit) {
-        dbManager.getChannelUsers(channelId,onSuccess)
+        dbManager.getChannelUsers(channelId, onSuccess)
+    }
+
+    override fun getChannelRecipientUser(channelId: String, onSuccess: (User) -> Unit) {
+        dbManager.getChannelRecipientUser(channelId, onSuccess)
     }
 }

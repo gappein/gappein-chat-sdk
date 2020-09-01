@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.gappein.sdk.Gappein
 import com.gappein.sdk.model.User
-import com.gappein.sdk.ui.chatView.MessageListActivity
+import com.gappein.sdk.ui.view.chatView.MessageListActivity
 import java.util.*
 
 class MainActivity : AppCompatActivity() {

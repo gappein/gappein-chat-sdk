@@ -1,4 +1,4 @@
-package com.gappein.sdk.ui.chatView
+package com.gappein.sdk.ui.view.chatView
 
 import android.Manifest
 import android.content.Context
@@ -11,21 +11,18 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CenterCrop
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.bumptech.glide.request.RequestOptions
 import com.gappein.sdk.client.ChatClient
 import com.gappein.sdk.model.Message
 import com.gappein.sdk.model.User
 import com.gappein.sdk.ui.R
-import com.gappein.sdk.ui.chatView.adapter.MessageListAdapter
-import com.gappein.sdk.ui.chatView.bottompicker.ImagePicker
+import com.gappein.sdk.ui.base.ChatBaseView
 import com.gappein.sdk.ui.createImageFile
 import com.gappein.sdk.ui.getRealPathFromUri
-import com.gappein.sdk.ui.util.ImageCompressor
-import com.gappein.sdk.ui.util.hide
-import com.gappein.sdk.ui.util.show
+import com.gappein.sdk.ui.view.chatView.adapter.MessageListAdapter
+import com.gappein.sdk.ui.view.chatView.bottompicker.ImagePicker
+import com.gappein.sdk.ui.view.util.ImageCompressor
+import com.gappein.sdk.ui.view.util.hide
+import com.gappein.sdk.ui.view.util.show
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -36,9 +33,9 @@ import java.io.File
 import java.io.IOException
 
 
-class MessageListActivity : AppCompatActivity(), ImagePicker.ItemClickListener {
+class MessageListActivity : AppCompatActivity(), ImagePicker.ItemClickListener, ChatBaseView {
 
-    private var mPhotoFile: File? = null
+    private var photoFile: File? = null
     private lateinit var adapter: MessageListAdapter
     private val chats = mutableListOf<Message>()
 
@@ -47,6 +44,8 @@ class MessageListActivity : AppCompatActivity(), ImagePicker.ItemClickListener {
         private const val REQUEST_GALLERY_PHOTO = 2
         private const val CHANNEL_ID = "channelId"
         private const val RECEIVER = "receiver"
+        private const val DEFAULT_STRING = ""
+        private val EMPTY_USER = User()
 
         @JvmStatic
         fun buildIntent(context: Context, channelId: String, receiver: User) =
@@ -56,8 +55,8 @@ class MessageListActivity : AppCompatActivity(), ImagePicker.ItemClickListener {
             }
     }
 
-    private val channelId by lazy { intent.getStringExtra(CHANNEL_ID) ?: "" }
-    private val receiver by lazy { intent.getParcelableExtra(RECEIVER) ?: User() }
+    private val channelId by lazy { intent.getStringExtra(CHANNEL_ID) ?: DEFAULT_STRING }
+    private val receiver by lazy { intent.getParcelableExtra(RECEIVER) ?: EMPTY_USER }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,6 +65,7 @@ class MessageListActivity : AppCompatActivity(), ImagePicker.ItemClickListener {
         setupRecyclerView()
         fetchMessage()
         setupSendMessageListener()
+
 
         ChatClient.getInstance().getUserChannels {
             Log.d("Sdsfsdf",it.toString())
@@ -76,12 +76,7 @@ class MessageListActivity : AppCompatActivity(), ImagePicker.ItemClickListener {
     }
 
     private fun setupUI() {
-        titleToolbar.text = receiver.name
-        Glide.with(this)
-            .load(receiver.profileImageUrl)
-            .apply(RequestOptions().transforms(CenterCrop(), RoundedCorners(32)))
-            .into(avatarImageView)
-
+        toolbar.init(channelId)
     }
 
     private fun setupSendMessageListener() {
@@ -95,7 +90,7 @@ class MessageListActivity : AppCompatActivity(), ImagePicker.ItemClickListener {
                 })
             }
         }
-        imageViewBack.setOnClickListener { onBackPressed() }
+//        imageViewBack.setOnClickListener { onBackPressed() }
 
         imageButtonAttach.setOnClickListener {
             val picker = ImagePicker.newInstance()
@@ -112,7 +107,6 @@ class MessageListActivity : AppCompatActivity(), ImagePicker.ItemClickListener {
     private fun fetchMessage() {
         ChatClient.getInstance().getMessages(channelId) {
             chats.run {
-                clear()
                 addAll(it)
                 adapter.addAll(this)
                 if (this.isNotEmpty()) {
@@ -178,7 +172,7 @@ class MessageListActivity : AppCompatActivity(), ImagePicker.ItemClickListener {
             }
             if (photoFile != null) {
                 val photoURI: Uri = FileProvider.getUriForFile(this, "Gappein.provider", photoFile)
-                mPhotoFile = photoFile
+                this.photoFile = photoFile
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
                 startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO)
             }
@@ -191,12 +185,12 @@ class MessageListActivity : AppCompatActivity(), ImagePicker.ItemClickListener {
         if (resultCode == RESULT_OK) {
 
             if (requestCode == REQUEST_TAKE_PHOTO) {
-                sendImageMessage(mPhotoFile)
+                sendImageMessage(photoFile)
 
             } else if (requestCode == REQUEST_GALLERY_PHOTO) {
                 val selectedImage = data?.data
-                mPhotoFile = File(getRealPathFromUri(selectedImage))
-                sendImageMessage(mPhotoFile)
+                photoFile = File(getRealPathFromUri(selectedImage))
+                sendImageMessage(photoFile)
             }
         }
     }
@@ -214,5 +208,9 @@ class MessageListActivity : AppCompatActivity(), ImagePicker.ItemClickListener {
                 })
             }
         }
+    }
+
+    override fun getClient(): ChatClient {
+        return ChatClient.getInstance()
     }
 }

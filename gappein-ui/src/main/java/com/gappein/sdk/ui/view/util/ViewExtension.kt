@@ -1,4 +1,4 @@
-package com.gappein.sdk.ui.util
+package com.gappein.sdk.ui.view.util
 
 import android.view.View
 

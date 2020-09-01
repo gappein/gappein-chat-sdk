@@ -145,7 +145,7 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
     override fun getMessages(channelId: String, onSuccess: (List<Message>) -> Unit) {
         channelReference.document(channelId)
             .collection(MESSAGES_COLLECTION)
-            .addSnapshotListener { querySnapshot: QuerySnapshot?, error: FirebaseFirestoreException? ->
+            .addSnapshotListener { querySnapshot: QuerySnapshot?, _: FirebaseFirestoreException? ->
                 onSuccess(
                     querySnapshot?.documents
                         ?.map {
@@ -158,11 +158,31 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
             }
     }
 
+    override fun getLastMessageFromChannel(channelId: String, onSuccess: (Message) -> Unit) {
+        channelReference.document(channelId)
+            .collection(MESSAGES_COLLECTION)
+            .addSnapshotListener { querySnapshot: QuerySnapshot?, _: FirebaseFirestoreException? ->
+
+                val messages = querySnapshot?.documents
+                    ?.map {
+                        return@map it.toObject(Message::class.java)
+                    }?.sortedBy {
+                        it?.timeStamp
+                    } as List<Message>
+
+                if (messages.isNotEmpty() && messages.size > 1) {
+                    onSuccess(messages.last())
+                }
+            }
+    }
+
     override fun getChannelUsers(channelId: String, onSuccess: (List<User>) -> Unit) {
         channelReference.document(channelId)
             .get()
             .addOnSuccessListener {
+
                 val userData = it.data
+
                 val userList = userData
                     ?.flatMap { user ->
                         listOf(user.value as HashMap<String, Any>)
@@ -174,6 +194,30 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
                         )
                     }
                 userList?.let { users -> onSuccess(users) }
+            }
+    }
+
+    override fun getChannelRecipientUser(channelId: String, onSuccess: (User) -> Unit) {
+        channelReference.document(channelId)
+            .get()
+            .addOnSuccessListener {
+
+                val userData = it.data
+
+                val userList = userData
+                    ?.flatMap { user ->
+                        listOf(user.value as HashMap<String, Any>)
+                    }?.map { userMap ->
+                        return@map User(
+                            token = userMap[TOKEN] as String,
+                            name = userMap[NAME] as String,
+                            profileImageUrl = userMap[IMAGE_URL] as String,
+                        )
+                    }?.forEach { user ->
+                        if (user.token != ChatClient.getInstance().getUser().token) {
+                            onSuccess(user)
+                        }
+                    }
             }
     }
 

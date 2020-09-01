@@ -13,7 +13,7 @@
                 android:resource="@xml/file_provider" />
         </provider>
         <activity
-            android:name=".chatView.MessageListActivity"
+            android:name="com.gappein.sdk.ui.view.chatView.MessageListActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
     </application>
 

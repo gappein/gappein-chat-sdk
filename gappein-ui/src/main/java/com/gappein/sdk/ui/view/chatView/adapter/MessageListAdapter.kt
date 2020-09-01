@@ -1,4 +1,4 @@
-package com.gappein.sdk.ui.chatView.adapter
+package com.gappein.sdk.ui.view.chatView.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -6,10 +6,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gappein.sdk.client.ChatClient
 import com.gappein.sdk.model.Message
 import com.gappein.sdk.ui.R
-import com.gappein.sdk.ui.chatView.viewholder.ReceiveImageViewHolder
-import com.gappein.sdk.ui.chatView.viewholder.ReceiverMessageListViewHolder
-import com.gappein.sdk.ui.chatView.viewholder.SenderImageViewHolder
-import com.gappein.sdk.ui.chatView.viewholder.SenderMessageListViewHolder
+import com.gappein.sdk.ui.view.chatView.viewholder.ReceiveImageViewHolder
+import com.gappein.sdk.ui.view.chatView.viewholder.ReceiverMessageListViewHolder
+import com.gappein.sdk.ui.view.chatView.viewholder.SenderImageViewHolder
+import com.gappein.sdk.ui.view.chatView.viewholder.SenderMessageListViewHolder
 
 class MessageListAdapter(
     private var messages: ArrayList<Message> = ArrayList<Message>(),

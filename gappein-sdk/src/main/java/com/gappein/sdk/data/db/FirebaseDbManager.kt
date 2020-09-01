@@ -22,4 +22,7 @@ interface FirebaseDbManager {
 
     fun getChannelUsers(channelId: String,onSuccess: (List<User>) -> Unit)
 
+    fun getLastMessageFromChannel(channelId: String, onSuccess: (Message) -> Unit)
+
+    fun getChannelRecipientUser(channelId: String, onSuccess: (User) -> Unit)
 }
