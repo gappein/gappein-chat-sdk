@@ -3,10 +3,18 @@
     xmlns:aapt="http://schemas.android.com/aapt" xmlns:android="http://schemas.android.com/apk/res/android">
     <path android:pathData="M255.996,255.996m-255.996,0a255.996,255.996 0,1 1,511.992 0a255.996,255.996 0,1 1,-511.992 0">
         <aapt:attr name="android:fillColor">
-            <gradient android:endX="437.0202" android:endY="437.01135"
-                android:startX="74.98076" android:startY="74.97201" android:type="linear">
-                <item android:color="#FF2499FF" android:offset="0"/>
-                <item android:color="#FF004DB1" android:offset="1"/>
+            <gradient
+                android:endX="437.0202"
+                android:endY="437.01135"
+                android:startX="74.98076"
+                android:startY="74.97201"
+                android:type="linear">
+                <item
+                    android:color="#fff"
+                    android:offset="0" />
+                <item
+                    android:color="#fff"
+                    android:offset="1" />
             </gradient>
         </aapt:attr>
     </path>
@@ -14,11 +22,11 @@
         <aapt:attr name="android:fillColor">
             <gradient android:endX="323.47195" android:endY="313.93246"
                 android:startX="192.66711" android:startY="183.11717" android:type="linear">
-                <item android:color="#FFFFFFFF" android:offset="0"/>
-                <item android:color="#FFFCFCFC" android:offset="0.31"/>
-                <item android:color="#FFF2F1F3" android:offset="0.573"/>
-                <item android:color="#FFE1E0E3" android:offset="0.818"/>
-                <item android:color="#FFCFCDD3" android:offset="1"/>
+                <item android:color="#000080" android:offset="0"/>
+                <item android:color="#000080" android:offset="0.31"/>
+                <item android:color="#000080" android:offset="0.573"/>
+                <item android:color="#000080" android:offset="0.818"/>
+                <item android:color="#000080" android:offset="1"/>
             </gradient>
         </aapt:attr>
     </path>

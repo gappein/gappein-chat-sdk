@@ -1,10 +1,11 @@
 package com.gappein.sdk.ui.component
 
+import android.app.Activity
 import android.content.Context
 import android.util.AttributeSet
-import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
+import androidx.appcompat.widget.Toolbar
 import com.bumptech.glide.Glide
 import com.gappein.sdk.client.ChatClient
 import com.gappein.sdk.ui.R
@@ -14,6 +15,7 @@ import kotlinx.android.synthetic.main.header_view.view.*
 class GappeinHeader : LinearLayout, ChatBaseView {
 
     private lateinit var view: View
+    private lateinit var toolbar: Toolbar
 
     constructor(context: Context?) : this(context, null)
     constructor(context: Context?, attrs: AttributeSet?) : this(context, attrs, 0)
@@ -26,7 +28,7 @@ class GappeinHeader : LinearLayout, ChatBaseView {
     }
 
     private fun initViews() {
-        view = LayoutInflater.from(context).inflate(R.layout.header_view, this, true)
+        view = inflate(context, R.layout.header_view, this)
     }
 
     fun init(channelId: String) {
@@ -34,6 +36,10 @@ class GappeinHeader : LinearLayout, ChatBaseView {
             view.titleToolbar.text = it.name
             Glide.with(view).load(it.profileImageUrl).into(view.avatarImageView)
         }
+    }
+
+    fun init( channelId: () -> String) {
+        init(channelId.invoke())
     }
 
     fun setOnBackPressed(onBackPress: () -> Unit) {

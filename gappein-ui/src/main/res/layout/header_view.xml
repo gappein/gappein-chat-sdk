@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.Toolbar android:id="@+id/toolbar"
+<androidx.appcompat.widget.Toolbar
+    android:id="@+id/toolbar"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#16132B"
+    android:background="@android:color/white"
     app:layout_constraintEnd_toEndOf="parent"
+    android:elevation="8dp"
+    app:elevation="8dp"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -29,7 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:textColor="@android:color/white"
+            android:textColor="@android:color/black"
             android:alpha="0.5"
             android:textSize="16sp"
             android:textStyle="bold"
@@ -38,7 +41,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toolbar3" />
 
-    </LinearLayout>
+    </LinearLayout>a
     <ImageView
         android:layout_width="wrap_content"
         android:id="@+id/avatarImageView"

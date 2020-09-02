@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:padding="4dp"
+    android:padding="2dp"
     android:layout_height="wrap_content">
 
     <TextView
@@ -23,12 +23,11 @@
         android:id="@+id/sentTextMessageTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:alpha="0.3"
         android:paddingStart="12dp"
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
         android:text="dfsfsf"
-        android:textColor="@android:color/white"
+        android:textColor="@android:color/darker_gray"
         android:textSize="8sp"
         app:layout_constraintEnd_toEndOf="@+id/sentTextMessage"
         app:layout_constraintHorizontal_bias="1.0"

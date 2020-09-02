@@ -76,7 +76,9 @@ class MessageListActivity : AppCompatActivity(), ImagePicker.ItemClickListener, 
     }
 
     private fun setupUI() {
-        toolbar.init(channelId)
+        toolbar.init {
+            channelId
+        }
     }
 
     private fun setupSendMessageListener() {
