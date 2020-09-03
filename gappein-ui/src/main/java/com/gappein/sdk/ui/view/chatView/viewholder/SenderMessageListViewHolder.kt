@@ -17,7 +17,6 @@ class SenderMessageListViewHolder(private val view: View) : RecyclerView.ViewHol
             val nextAuthor = messages.getOrNull(position.minus(1))?.sender
             val isFirstMessageByAuthor = prevAuthor != content.sender
             val isLastMessageByAuthor = nextAuthor != content.sender
-
             if (isFirstMessageByAuthor) {
                 if (index == 0) {
                     view.sentTextMessageTime.text = DatesUtil.getTimeAgo(content.timeStamp)
@@ -25,6 +24,8 @@ class SenderMessageListViewHolder(private val view: View) : RecyclerView.ViewHol
                 } else view.sentTextMessageTime.hide()
             }
         }
+        view.sentTextMessage.text = messages[position].message
+
     }
 
 }

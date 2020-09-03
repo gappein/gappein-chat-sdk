@@ -146,15 +146,19 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
         channelReference.document(channelId)
             .collection(MESSAGES_COLLECTION)
             .addSnapshotListener { querySnapshot: QuerySnapshot?, _: FirebaseFirestoreException? ->
-                onSuccess(
-                    querySnapshot?.documents
+                val messages = mutableListOf<Message>()
+                   val data = querySnapshot?.documents
                         ?.map {
                             return@map it.toObject(Message::class.java)
 
                         }?.sortedBy {
                             it?.timeStamp
                         } as List<Message>
-                )
+                messages.run {
+                    clear()
+                    addAll(data)
+                    onSuccess(this)
+                }
             }
     }
 

@@ -7,7 +7,6 @@ import com.gappein.sdk.ui.view.util.DatesUtil
 import com.gappein.sdk.ui.view.util.hide
 import com.gappein.sdk.ui.view.util.show
 import kotlinx.android.synthetic.main.item_received_message.view.*
-import kotlinx.android.synthetic.main.item_sent_message.view.*
 
 class ReceiverMessageListViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
 
@@ -21,9 +20,10 @@ class ReceiverMessageListViewHolder(private val view: View) : RecyclerView.ViewH
             if (isFirstMessageByAuthor) {
                 if (index == 0) {
                     view.receivedTextMessageTime.text = DatesUtil.getTimeAgo(content.timeStamp)
-                    view.receivedTextMessage.show()
-                } else view.sentTextMessageTime.hide()
+                    view.receivedTextMessageTime.show()
+                } else view.receivedTextMessageTime.hide()
             }
         }
+            view.receivedTextMessage.text =  messages[position].message
     }
 }

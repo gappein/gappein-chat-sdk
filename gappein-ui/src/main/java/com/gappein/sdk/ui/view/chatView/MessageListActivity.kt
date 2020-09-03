@@ -109,6 +109,7 @@ class MessageListActivity : AppCompatActivity(), ImagePicker.ItemClickListener, 
     private fun fetchMessage() {
         ChatClient.getInstance().getMessages(channelId) {
             chats.run {
+                clear()
                 addAll(it)
                 adapter.addAll(this)
                 if (this.isNotEmpty()) {

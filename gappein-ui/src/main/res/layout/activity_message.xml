@@ -73,6 +73,8 @@
             android:hint="@string/enter_your_message"
             android:maxLines="6"
             android:minHeight="60dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
             android:textColor="@android:color/white"
             android:textColorHint="@color/hint_color"
             app:layout_constraintEnd_toEndOf="parent"
