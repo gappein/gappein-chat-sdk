@@ -41,7 +41,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toolbar3" />
 
-    </LinearLayout>a
+    </LinearLayout>
     <ImageView
         android:layout_width="wrap_content"
         android:id="@+id/avatarImageView"

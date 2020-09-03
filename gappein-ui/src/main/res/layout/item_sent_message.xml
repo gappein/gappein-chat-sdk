@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:padding="2dp"
     android:layout_height="wrap_content">
@@ -27,12 +28,15 @@
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
         android:text="dfsfsf"
+        android:visibility="gone"
         android:textColor="@android:color/darker_gray"
         android:textSize="8sp"
-        app:layout_constraintEnd_toEndOf="@+id/sentTextMessage"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintBottom_toBottomOf="@+id/sentTextMessage"
+        app:layout_constraintEnd_toStartOf="@+id/sentTextMessage"
+        app:layout_constraintHorizontal_bias="0.96"
         app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/sentTextMessage" />
+        app:layout_constraintTop_toTopOf="@+id/sentTextMessage"
+        app:layout_constraintVertical_bias="1.0" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
