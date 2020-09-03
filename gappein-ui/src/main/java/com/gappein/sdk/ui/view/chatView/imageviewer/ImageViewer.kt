@@ -13,6 +13,7 @@ fun openImage(context: Context, url: String) {
 
     val view = LayoutInflater.from(context).inflate(R.layout.item_photo_viewer, null, false)
     val popupWindow = PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+    popupWindow.setAnimationStyle(R.style.popup_window_animation);
 
     Glide.with(context).load(url).into(view.imageViewPreview)
 
