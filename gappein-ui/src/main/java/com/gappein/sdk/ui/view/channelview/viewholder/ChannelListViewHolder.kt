@@ -13,7 +13,11 @@ import kotlinx.android.synthetic.main.item_channel.view.*
 
 class ChannelListViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
 
-    fun bind(channel: Channel, onChannelClick: (Channel, User) -> Unit) {
+    fun bind(
+        channel: Channel,
+        onUserClick: (User) -> Unit,
+        onChannelClick: (Channel, User) -> Unit
+    ) {
 
         channel.toChannelList { data ->
             Glide.with(view)
@@ -23,7 +27,9 @@ class ChannelListViewHolder(private val view: View) : RecyclerView.ViewHolder(vi
             view.textViewUserName.setText(data.user.name)
             view.textViewLastMessage.setText(data.lastMessage.message)
             view.textViewLastMessageTime.setText(DatesUtil.getTimeAgo(data.lastMessage.timeStamp))
-
+            view.imageViewAvatar.setOnClickListener {
+                onUserClick(data.user)
+            }
             view.setOnClickListener {
                 onChannelClick.invoke(channel, data.user)
             }
