@@ -42,9 +42,11 @@ class ChannelListFragment : Fragment(), ChatBaseView {
     }
 
     private fun setupChannelList(view: View) {
-        adapter = ChannelListAdapter { channel, user ->
+        adapter = ChannelListAdapter(onUserClick = {
+
+        }, onChannelClick = { channel, user ->
             startActivity(MessageListActivity.buildIntent(requireContext(), channel.id, user))
-        }
+        })
         view.recyclerViewChannel.layoutManager = LinearLayoutManager(requireContext())
         view.recyclerViewChannel.adapter = adapter
     }

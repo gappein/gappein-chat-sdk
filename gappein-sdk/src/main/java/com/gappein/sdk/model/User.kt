@@ -13,5 +13,7 @@ data class User(
 
     val profileImageUrl: String = "",
 
-    val name: String = ""
+    val name: String = "",
+
+    var isOnline: Boolean = false
 ) : Parcelable

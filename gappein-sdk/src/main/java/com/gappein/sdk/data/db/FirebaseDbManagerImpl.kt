@@ -220,5 +220,4 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
                     }
             }
     }
-
 }
