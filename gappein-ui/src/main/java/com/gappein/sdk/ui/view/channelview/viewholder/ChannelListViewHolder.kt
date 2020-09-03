@@ -15,7 +15,7 @@ class ChannelListViewHolder(private val view: View) : RecyclerView.ViewHolder(vi
 
     fun bind(channel: Channel, onChannelClick: (Channel, User) -> Unit) {
 
-        val channelData = channel.toChannelList { data ->
+        channel.toChannelList { data ->
             Glide.with(view)
                 .load("https://static.toiimg.com/thumb/msid-69902898,imgsize-115506,width-800,height-600,resizemode-75/69902898.jpg")
                 .transform(CenterCrop(), RoundedCorners(100))
