@@ -20,6 +20,7 @@ import com.gappein.sdk.ui.createImageFile
 import com.gappein.sdk.ui.getRealPathFromUri
 import com.gappein.sdk.ui.view.chatView.adapter.MessageListAdapter
 import com.gappein.sdk.ui.view.chatView.bottompicker.ImagePicker
+import com.gappein.sdk.ui.view.chatView.imageviewer.openImage
 import com.gappein.sdk.ui.view.util.ImageCompressor
 import com.gappein.sdk.ui.view.util.hide
 import com.gappein.sdk.ui.view.util.show
@@ -103,7 +104,9 @@ class MessageListActivity : AppCompatActivity(), ImagePicker.ItemClickListener, 
     }
 
     private fun setupRecyclerView() {
-        adapter = MessageListAdapter(chatClient = ChatClient.getInstance())
+        adapter = MessageListAdapter(chatClient = ChatClient.getInstance(), onImageClick = {
+            openImage(this, it)
+        })
         recyclerViewMessages.layoutManager = LinearLayoutManager(this@MessageListActivity)
         recyclerViewMessages.adapter = adapter
     }

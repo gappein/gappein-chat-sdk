@@ -17,7 +17,8 @@ import kotlin.collections.ArrayList
 
 class MessageListAdapter(
     private var messages: ArrayList<Message> = ArrayList<Message>(),
-    private val chatClient: ChatClient
+    private val chatClient: ChatClient,
+    private val onImageClick: (String) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), Filterable {
 
     var filteredList = mutableListOf<Message>()
@@ -59,9 +60,9 @@ class MessageListAdapter(
         } else if (getItemViewType(position) == VIEW_TYPE_RECEIVER) {
             (holder as ReceiverMessageListViewHolder).bind(filteredList.toList(), position)
         } else if (getItemViewType(position) == VIEW_TYPE_RECEIVER_IMAGE) {
-            (holder as ReceiveImageViewHolder).bind(filteredList[position], position)
+            (holder as ReceiveImageViewHolder).bind(filteredList[position], position,onImageClick)
         } else if (getItemViewType(position) == VIEW_TYPE_SENDER_IMAGE) {
-            (holder as SenderImageViewHolder).bind(filteredList[position], position)
+            (holder as SenderImageViewHolder).bind(filteredList[position], position,onImageClick)
         }
     }
 

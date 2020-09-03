@@ -10,11 +10,14 @@ import kotlinx.android.synthetic.main.item_image_received_message.view.*
 
 class ReceiveImageViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
 
-    fun bind(message: Message, position: Int) {
+    fun bind(message: Message, position: Int, onImageClick: (String) -> Unit) {
         Glide.with(view)
             .load(message.message)
             .transform(CenterCrop(), RoundedCorners(48))
             .into(view.receivedImageMessage)
+
+        view.receivedImageMessage.setOnClickListener { onImageClick.invoke(message.message) }
+
     }
 
 }
