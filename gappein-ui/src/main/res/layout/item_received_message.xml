@@ -16,12 +16,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/receivedTextMessage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="12dp"
-            android:textColor="@android:color/black" />
+            app:fontFamily="@font/karla_bold"
+            android:textColor="@android:color/white" />
 
         <TextView
             android:id="@+id/receivedTextMessageTime"

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#16132B"
+    android:background="@color/input_background"
     android:minHeight="200dp"
     android:paddingBottom="8dp">
 
@@ -17,11 +17,12 @@
         android:text="Select Picker"
         android:textAlignment="gravity"
         android:textStyle="bold"
+        app:fontFamily="@font/karla_bold"
         android:textAppearance="@android:style/TextAppearance.Medium"
         android:textColor="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />v
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardCameraPicker"
@@ -30,7 +31,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="20dp"
-        app:cardBackgroundColor="#513B88"
+        app:cardBackgroundColor="#212223"
         app:cardCornerRadius="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
@@ -46,6 +47,7 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_margin="20dp"
+                android:padding="4dp"
                 android:alpha="0.5"
                 android:src="@drawable/ic_camera"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -59,6 +61,7 @@
                 android:alpha="0.7"
                 android:gravity="center"
                 android:text="Camera"
+                app:fontFamily="@font/karla_bold"
                 android:textColor="@android:color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -72,7 +75,8 @@
         android:layout_height="0dp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
-        android:layout_marginBottom="20dp"        app:cardBackgroundColor="#513B88"
+        android:layout_marginBottom="20dp"
+        app:cardBackgroundColor="#212223"
         app:cardCornerRadius="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -89,6 +93,7 @@
                 android:layout_height="50dp"
                 android:layout_margin="20dp"
                 android:alpha="0.5"
+                android:padding="4dp"
                 android:src="@drawable/ic_gallery"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -101,6 +106,7 @@
                 android:alpha="0.7"
                 android:gravity="center"
                 android:text="Gallery"
+                app:fontFamily="@font/karla_bold"
                 android:textColor="@android:color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
