@@ -24,8 +24,7 @@ class SenderMessageListViewHolder(private val view: View) : RecyclerView.ViewHol
                 } else view.sentTextMessageTime.hide()
             }
         }
-        view.sentTextMessage.text = messages[position].message
-
+        view.sentTextMessage.text = (messages[position].message)
     }
 
 }

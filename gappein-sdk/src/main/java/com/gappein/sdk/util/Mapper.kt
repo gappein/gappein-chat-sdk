@@ -1,4 +1,4 @@
-package com.gappein.sdk.mapper
+package com.gappein.sdk.util
 
 import com.gappein.sdk.client.ChatClient
 import com.gappein.sdk.model.Channel

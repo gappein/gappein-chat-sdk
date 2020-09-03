@@ -5,7 +5,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.gappein.sdk.mapper.toChannelList
+import com.gappein.sdk.util.toChannelList
 import com.gappein.sdk.model.Channel
 import com.gappein.sdk.model.User
 import com.gappein.sdk.ui.view.util.DatesUtil

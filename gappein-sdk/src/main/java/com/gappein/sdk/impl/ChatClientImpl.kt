@@ -46,24 +46,15 @@ class ChatClientImpl(private val storageManager: FirebaseStorageManager, private
 
         getUserByToken(receiver, {
             storageManager.uploadMessageImage(fileUri, it, getUser(), { message ->
-                sendMessage(message, receiver, {
-                    onSuccess()
-                }, {
-                    onError(it)
-                })
+                sendMessage(message, receiver, { onSuccess() }, { onError(it) })
             }, { progress ->
                 if (progress == 100) {
                     onSuccess()
                 } else {
                     onProgress(progress)
                 }
-            }, { ex ->
-                onError(ex)
-
-            })
-        }, {
-            onError(it)
-        })
+            }, { exception -> onError(exception) })
+        }, { exception -> onError(exception) })
 
     }
 
