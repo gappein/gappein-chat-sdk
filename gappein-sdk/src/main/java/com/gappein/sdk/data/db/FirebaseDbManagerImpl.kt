@@ -26,6 +26,7 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
         private const val TOKEN = "token"
         private const val NAME = "name"
         private const val IMAGE_URL = "profileImageUrl"
+        private const val IS_ONLINE = "isOnline"
     }
 
     override fun createUser(user: User, onSuccess: (User) -> Unit, onError: (Exception) -> Unit) {
@@ -218,6 +219,30 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
                             onSuccess(user)
                         }
                     }
+            }
+    }
+
+    override fun isUserOnline(token: String, onSuccess: (Boolean, String) -> Unit) {
+        val userChannelReference = userReference.document(token)
+        userChannelReference.get()
+            .addOnSuccessListener {
+                val userData = it.data as Map<String, User>
+                if (userData["isOnline"].toString() == "true") {
+                    onSuccess(true, "")
+                } else {
+                    onSuccess(
+                        false,
+                        userData["lastOnlineAt"].toString()
+                    )
+                }
+            }
+    }
+
+    override fun setUserOnline(token: String) {
+        val userChannelReference = userReference.document(token)
+        userChannelReference.update(IS_ONLINE, true)
+            .addOnSuccessListener {
+
             }
     }
 }

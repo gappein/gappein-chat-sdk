@@ -1,8 +1,8 @@
 package com.gappein.sdk.data.storage
 
 import android.net.Uri
-import com.gappein.sdk.model.User
 import com.gappein.sdk.data.uploadUserImage
+import com.gappein.sdk.model.User
 import com.google.firebase.storage.FirebaseStorage
 import java.io.File
 
@@ -19,7 +19,7 @@ class FirebaseStorageManagerImpl : FirebaseStorageManager {
         manager.uploadUserImage(
             user,
             file,
-            { onSuccess(User(user.token, user.createdAt, it, user.name)) },
+            { onSuccess(User(token = user.token,createdAt =  user.createdAt, profileImageUrl = it,name =  user.name)) },
             { onError(it) })
     }
 

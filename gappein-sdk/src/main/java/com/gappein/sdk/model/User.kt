@@ -11,6 +11,8 @@ data class User(
 
     var createdAt: Date? = null,
 
+    var lastOnlineAt: Date? = null,
+
     val profileImageUrl: String = "",
 
     val name: String = "",

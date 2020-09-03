@@ -21,7 +21,9 @@ class SenderMessageListViewHolder(private val view: View) : RecyclerView.ViewHol
                 if (index == 0) {
                     view.sentTextMessageTime.text = DatesUtil.getTimeAgo(content.timeStamp)
                     view.sentTextMessageTime.show()
-                } else view.sentTextMessageTime.hide()
+                } else {
+                    view.sentTextMessageTime.hide()
+                }
             }
         }
         view.sentTextMessage.text = (messages[position].message)

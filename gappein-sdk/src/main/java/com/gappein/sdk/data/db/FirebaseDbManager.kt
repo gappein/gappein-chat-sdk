@@ -25,4 +25,8 @@ interface FirebaseDbManager {
     fun getLastMessageFromChannel(channelId: String, onSuccess: (Message, User) -> Unit)
 
     fun getChannelRecipientUser(channelId: String, onSuccess: (User) -> Unit)
+
+    fun isUserOnline(token: String, onSuccess: (Boolean, String) -> Unit)
+
+    fun setUserOnline(token: String)
 }

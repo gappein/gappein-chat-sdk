@@ -82,7 +82,15 @@ class ChatClientImpl(private val storageManager: FirebaseStorageManager, private
         dbManager.getChannelRecipientUser(channelId, onSuccess)
     }
 
-    override fun getLastMessageFromChannel(channelId: String, onSuccess: (Message,User) -> Unit) {
-        dbManager.getLastMessageFromChannel(channelId,onSuccess)
+    override fun getLastMessageFromChannel(channelId: String, onSuccess: (Message, User) -> Unit) {
+        dbManager.getLastMessageFromChannel(channelId, onSuccess)
+    }
+
+    override fun isUserOnline(token: String, onSuccess: (Boolean,String) -> Unit) {
+        dbManager.isUserOnline(token, onSuccess)
+    }
+
+    override fun setUserOnline(token: String) {
+        dbManager.setUserOnline(token)
     }
 }

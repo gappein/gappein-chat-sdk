@@ -48,4 +48,8 @@ interface ChatClient {
 
     fun getLastMessageFromChannel(channelId: String, onSuccess: (Message,User) -> Unit)
 
+    fun isUserOnline(token: String,onSuccess: (Boolean,String) -> Unit)
+
+    fun setUserOnline(token: String)
+
 }

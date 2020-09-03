@@ -1,8 +1,10 @@
 package com.gappein.app
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.gappein.sdk.Gappein
+import com.gappein.sdk.client.ChatClient
 import com.gappein.sdk.model.User
 import com.gappein.sdk.ui.view.channelview.ChannelListFragment
 import java.util.*
@@ -23,6 +25,12 @@ class MainActivity : AppCompatActivity() {
         )
 
         addFragment()
+
+//        ChatClient.getInstance().setUserOnline("1234567890")
+        ChatClient.getInstance().isUserOnline("1234567890"){isOlinne,date->
+            Log.d("SDfsdf",isOlinne.toString())
+            Log.d("SDfsdf",date.toString())
+        }
 
 
 //        ChatClient.instance().sendMessage(

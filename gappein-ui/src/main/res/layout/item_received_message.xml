@@ -8,7 +8,6 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/recieved_message_background"
         android:orientation="vertical"
         app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toStartOf="@id/guideline"
@@ -16,27 +15,30 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/receivedTextMessage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="12dp"
-            app:fontFamily="@font/karla_bold"
-            android:textColor="@android:color/white" />
-
         <TextView
             android:id="@+id/receivedTextMessageTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingStart="12dp"
             android:paddingTop="4dp"
+            android:textColor="#9FA2A2"
             android:paddingBottom="4dp"
-            android:textColor="@android:color/darker_gray"
             android:textSize="8sp"
             app:layout_constraintEnd_toStartOf="@id/guideline"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/receivedTextMessage"
+            android:layout_width="wrap_content"
+            android:background="@drawable/recieved_message_background"
+            android:layout_height="wrap_content"
+            android:text="Hey this, is my first message"
+            android:padding="12dp"
+            android:textColor="@android:color/white"
+            app:fontFamily="@font/karla_bold" />
+
     </LinearLayout>
 
 
