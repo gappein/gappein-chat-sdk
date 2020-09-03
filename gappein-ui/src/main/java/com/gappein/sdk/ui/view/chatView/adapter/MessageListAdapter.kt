@@ -49,9 +49,9 @@ class MessageListAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (getItemViewType(position) == VIEW_TYPE_SENDER) {
-            (holder as SenderMessageListViewHolder).bind(messages[position], position)
+            (holder as SenderMessageListViewHolder).bind( position,messages)
         } else if (getItemViewType(position) == VIEW_TYPE_RECEIVER) {
-            (holder as ReceiverMessageListViewHolder).bind(messages[position], position)
+            (holder as ReceiverMessageListViewHolder).bind(messages, position)
         } else if (getItemViewType(position) == VIEW_TYPE_RECEIVER_IMAGE) {
             (holder as ReceiveImageViewHolder).bind(messages[position], position)
         } else if (getItemViewType(position) == VIEW_TYPE_SENDER_IMAGE) {
