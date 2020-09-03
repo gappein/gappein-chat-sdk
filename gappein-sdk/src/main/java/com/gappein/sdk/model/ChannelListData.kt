@@ -4,7 +4,7 @@ data class ChannelListData(
 
     var id: String = "",
 
-    val users: User,
+    val user: User,
 
     val lastMessage: Message
 )

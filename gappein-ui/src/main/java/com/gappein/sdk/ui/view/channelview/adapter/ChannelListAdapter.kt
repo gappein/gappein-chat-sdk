@@ -4,11 +4,14 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.gappein.sdk.model.Channel
+import com.gappein.sdk.model.User
 import com.gappein.sdk.ui.R
 import com.gappein.sdk.ui.view.channelview.viewholder.ChannelListViewHolder
 
-class ChannelListAdapter(private val channel: ArrayList<Channel> = arrayListOf()) :
-    RecyclerView.Adapter<ChannelListViewHolder>() {
+class ChannelListAdapter(
+    private val channel: ArrayList<Channel> = arrayListOf(),
+    private val  onChannelClick: (Channel, User) -> Unit
+) : RecyclerView.Adapter<ChannelListViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChannelListViewHolder {
         return ChannelListViewHolder(
@@ -24,7 +27,7 @@ class ChannelListAdapter(private val channel: ArrayList<Channel> = arrayListOf()
     }
 
     override fun onBindViewHolder(holder: ChannelListViewHolder, position: Int) {
-        holder.bind(channel[position])
+        holder.bind(channel[position],onChannelClick)
     }
 
     override fun getItemCount() = channel.count()

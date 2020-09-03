@@ -11,7 +11,7 @@ fun Channel.toChannelList(onSuccess: (ChannelListData) -> Unit) {
 
         val channelListData = ChannelListData(
             id = channelId,
-            users = user,
+            user = user,
             lastMessage = message
         )
         onSuccess(channelListData)

@@ -10,6 +10,7 @@ import com.gappein.sdk.client.ChatClient
 import com.gappein.sdk.ui.R
 import com.gappein.sdk.ui.base.ChatBaseView
 import com.gappein.sdk.ui.view.channelview.adapter.ChannelListAdapter
+import com.gappein.sdk.ui.view.chatView.MessageListActivity
 import kotlinx.android.synthetic.main.fragment_channel_list.view.*
 
 
@@ -37,7 +38,9 @@ class ChannelListFragment : Fragment(), ChatBaseView {
     }
 
     private fun setupChannelList(view: View) {
-        adapter = ChannelListAdapter()
+        adapter = ChannelListAdapter { channel, user ->
+            startActivity(MessageListActivity.buildIntent(requireContext(), channel.id, user))
+        }
         view.recyclerViewChannel.layoutManager = LinearLayoutManager(requireContext())
         view.recyclerViewChannel.adapter = adapter
     }
