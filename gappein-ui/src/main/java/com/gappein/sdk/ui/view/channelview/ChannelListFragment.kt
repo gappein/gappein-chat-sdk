@@ -16,6 +16,10 @@ import kotlinx.android.synthetic.main.fragment_channel_list.view.*
 
 class ChannelListFragment : Fragment(), ChatBaseView {
 
+    companion object {
+        fun newInstance() = ChannelListFragment()
+    }
+
     private lateinit var adapter: ChannelListAdapter
 
     override fun onCreateView(

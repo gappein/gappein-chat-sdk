@@ -10,7 +10,7 @@ import kotlinx.android.synthetic.main.item_sent_message.view.*
 
 class SenderMessageListViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
 
-    fun bind(position: Int, messages: ArrayList<Message>) {
+    fun bind(position: Int, messages: List<Message>) {
 
         messages.forEachIndexed { index, content ->
             val prevAuthor = messages.getOrNull(position.plus(1))?.sender

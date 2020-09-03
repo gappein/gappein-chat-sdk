@@ -2,6 +2,8 @@ package com.gappein.sdk.ui.view.chatView.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Filter
+import android.widget.Filterable
 import androidx.recyclerview.widget.RecyclerView
 import com.gappein.sdk.client.ChatClient
 import com.gappein.sdk.model.Message
@@ -10,11 +12,15 @@ import com.gappein.sdk.ui.view.chatView.viewholder.ReceiveImageViewHolder
 import com.gappein.sdk.ui.view.chatView.viewholder.ReceiverMessageListViewHolder
 import com.gappein.sdk.ui.view.chatView.viewholder.SenderImageViewHolder
 import com.gappein.sdk.ui.view.chatView.viewholder.SenderMessageListViewHolder
+import java.util.*
+import kotlin.collections.ArrayList
 
 class MessageListAdapter(
     private var messages: ArrayList<Message> = ArrayList<Message>(),
     private val chatClient: ChatClient
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), Filterable {
+
+    var filteredList = mutableListOf<Message>()
 
     companion object {
         private const val VIEW_TYPE_SENDER = 1
@@ -49,20 +55,20 @@ class MessageListAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (getItemViewType(position) == VIEW_TYPE_SENDER) {
-            (holder as SenderMessageListViewHolder).bind( position,messages)
+            (holder as SenderMessageListViewHolder).bind(position, filteredList.toList())
         } else if (getItemViewType(position) == VIEW_TYPE_RECEIVER) {
-            (holder as ReceiverMessageListViewHolder).bind(messages, position)
+            (holder as ReceiverMessageListViewHolder).bind(filteredList.toList(), position)
         } else if (getItemViewType(position) == VIEW_TYPE_RECEIVER_IMAGE) {
-            (holder as ReceiveImageViewHolder).bind(messages[position], position)
+            (holder as ReceiveImageViewHolder).bind(filteredList[position], position)
         } else if (getItemViewType(position) == VIEW_TYPE_SENDER_IMAGE) {
-            (holder as SenderImageViewHolder).bind(messages[position], position)
+            (holder as SenderImageViewHolder).bind(filteredList[position], position)
         }
     }
 
-    override fun getItemCount() = messages.count()
+    override fun getItemCount() = filteredList.count()
 
     fun addAll(it: List<Message>) {
-        messages.run {
+        filteredList.run {
             clear()
             addAll(it)
             notifyDataSetChanged()
@@ -70,14 +76,14 @@ class MessageListAdapter(
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (messages[position].isUrl) {
-            if (chatClient.getUser().token == messages[position].receiver.token) {
+        return if (filteredList[position].isUrl) {
+            if (chatClient.getUser().token == filteredList[position].receiver.token) {
                 VIEW_TYPE_RECEIVER_IMAGE
             } else {
                 VIEW_TYPE_SENDER_IMAGE
             }
         } else {
-            if (chatClient.getUser().token == messages[position].receiver.token) {
+            if (chatClient.getUser().token == filteredList[position].receiver.token) {
                 VIEW_TYPE_RECEIVER
             } else {
                 VIEW_TYPE_SENDER
@@ -85,4 +91,32 @@ class MessageListAdapter(
         }
     }
 
+    override fun getFilter(): Filter {
+        return object : Filter() {
+            override fun performFiltering(constraint: CharSequence?): FilterResults {
+                val charSearch = constraint.toString()
+                filteredList = if (charSearch.isEmpty()) {
+                    messages
+                } else {
+                    val resultList = mutableListOf<Message>()
+                    for (row in messages) {
+                        if (row.message.toLowerCase(Locale.ROOT)
+                                .contains(charSearch.toLowerCase(Locale.ROOT))
+                        ) {
+                            resultList.add(row)
+                        }
+                    }
+                    resultList
+                }
+                val filterResults = FilterResults()
+                filterResults.values = filteredList
+                return filterResults
+            }
+
+            override fun publishResults(p0: CharSequence?, results: FilterResults?) {
+                filteredList = (results?.values as List<Message>).toMutableList()
+                notifyDataSetChanged()
+            }
+        }
+    }
 }

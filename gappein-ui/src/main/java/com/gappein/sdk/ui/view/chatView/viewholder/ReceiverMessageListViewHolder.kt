@@ -10,7 +10,7 @@ import kotlinx.android.synthetic.main.item_received_message.view.*
 
 class ReceiverMessageListViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
 
-    fun bind(messages: ArrayList<Message>, position: Int) {
+    fun bind(messages: List<Message>, position: Int) {
         messages.forEachIndexed { index, content ->
             val prevAuthor = messages.getOrNull(position - 1)?.sender
             val nextAuthor = messages.getOrNull(position + 1)?.sender

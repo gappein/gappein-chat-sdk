@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity() {
     private fun addFragment() {
         val fm = supportFragmentManager
         val ft = fm.beginTransaction()
-        ft.add(R.id.container,ChannelListFragment())
+        ft.add(R.id.container,ChannelListFragment.newInstance())
         ft.commit()
     }
 
