@@ -148,12 +148,12 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
             .addSnapshotListener { querySnapshot: QuerySnapshot?, _: FirebaseFirestoreException? ->
                 val messages = mutableListOf<Message>()
                    val data = querySnapshot?.documents
-                        ?.map {
-                            return@map it.toObject(Message::class.java)
+                       ?.map {
+                           return@map it.toObject(Message::class.java)
 
-                        }?.sortedBy {
-                            it?.timeStamp
-                        } as List<Message>
+                       }?.sortedBy {
+                           it?.timeStamp
+                       } as List<Message>
                 messages.run {
                     clear()
                     addAll(data)
@@ -162,22 +162,18 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
             }
     }
 
-    override fun getLastMessageFromChannel(channelId: String, onSuccess: (Message) -> Unit) {
-        channelReference.document(channelId)
-            .collection(MESSAGES_COLLECTION)
-            .addSnapshotListener { querySnapshot: QuerySnapshot?, _: FirebaseFirestoreException? ->
-
-                val messages = querySnapshot?.documents
-                    ?.map {
-                        return@map it.toObject(Message::class.java)
-                    }?.sortedBy {
-                        it?.timeStamp
-                    } as List<Message>
-
-                if (messages.isNotEmpty() && messages.size > 1) {
-                    onSuccess(messages.last())
+    override fun getLastMessageFromChannel(channelId: String, onSuccess: (Message, User) -> Unit) {
+        getMessages(channelId) {
+            val users = mutableListOf<User>().apply {
+                add(it.first().receiver)
+                add(it.first().sender)
+                filter { user ->
+                    user.token == ChatClient.getInstance().getUser().token
                 }
             }
+            onSuccess(it.last(), users.first())
+        }
+
     }
 
     override fun getChannelUsers(channelId: String, onSuccess: (List<User>) -> Unit) {

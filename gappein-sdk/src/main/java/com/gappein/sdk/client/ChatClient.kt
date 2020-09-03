@@ -46,4 +46,6 @@ interface ChatClient {
 
     fun getChannelRecipientUser(channelId: String, onSuccess: (User) -> Unit)
 
+    fun getLastMessageFromChannel(channelId: String, onSuccess: (Message,User) -> Unit)
+
 }

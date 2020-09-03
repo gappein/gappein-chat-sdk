@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import java.text.SimpleDateFormat
 import java.util.*
 
+
 object DatesUtil {
     private const val SECOND_MILLIS = 1000
     private const val MINUTE_MILLIS = 60 * SECOND_MILLIS
@@ -23,7 +24,7 @@ object DatesUtil {
     }
 
 
-    fun getTimeAgo(date: Date): String? {
+    private fun getTimeAgo(date: Date): String? {
         var time: Long = date.getTime()
         if (time < 1000000000000L) {
             time *= 1000
@@ -49,4 +50,6 @@ object DatesUtil {
             diff.div(DAY_MILLIS).toString() + " days ago"
         }
     }
+
+
 }
