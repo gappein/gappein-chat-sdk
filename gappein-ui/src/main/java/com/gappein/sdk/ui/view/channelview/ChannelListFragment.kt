@@ -32,10 +32,10 @@ class ChannelListFragment : Fragment(), ChatBaseView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupChannelList(view)
-        fetchChannels()
+        fetchChannels(view)
     }
 
-    private fun fetchChannels() {
+    private fun fetchChannels(view: View) {
         getClient().getUserChannels {
             adapter.addAll(it)
         }
