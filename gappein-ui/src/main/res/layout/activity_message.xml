@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="#fff"
+    android:background="@color/input_background"
     android:layout_height="match_parent">
 
     <com.gappein.sdk.ui.component.GappeinHeader
@@ -45,8 +45,7 @@
         tools:listitem="@layout/item_received_message" />
 
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:id="@+id/container"
         android:layout_height="wrap_content"
@@ -56,6 +55,14 @@
         app:layout_constraintStart_toStartOf="parent"
         android:minHeight="84dp">
 
+        <View
+            android:id="@+id/divider"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="#9FA2A2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
         <EditText
             android:id="@+id/editTextChatBox"
             android:layout_width="0dp"
@@ -70,7 +77,7 @@
             android:textColorHint="@color/hint_color"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/divider" />
 
         <ImageView
             android:id="@+id/imageButtonAttach"
