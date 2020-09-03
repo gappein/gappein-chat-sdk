@@ -1,16 +1,13 @@
 package com.gappein.sdk.ui.view.chatView
 
 import android.Manifest
-import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
-import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.SearchView
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,7 +21,6 @@ import com.gappein.sdk.ui.getRealPathFromUri
 import com.gappein.sdk.ui.view.chatView.adapter.MessageListAdapter
 import com.gappein.sdk.ui.view.chatView.bottompicker.ImagePicker
 import com.gappein.sdk.ui.view.util.ImageCompressor
-import com.gappein.sdk.ui.view.util.addFilter
 import com.gappein.sdk.ui.view.util.hide
 import com.gappein.sdk.ui.view.util.show
 import com.karumi.dexter.Dexter
@@ -33,7 +29,6 @@ import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import kotlinx.android.synthetic.main.activity_message.*
-import kotlinx.android.synthetic.main.header_view.view.*
 import java.io.File
 import java.io.IOException
 
@@ -97,7 +92,9 @@ class MessageListActivity : AppCompatActivity(), ImagePicker.ItemClickListener, 
                 })
             }
         }
-//        imageViewBack.setOnClickListener { onBackPressed() }
+        toolbar.setOnBackPressed {
+            onBackPressed()
+        }
 
         imageButtonAttach.setOnClickListener {
             val picker = ImagePicker.newInstance()
