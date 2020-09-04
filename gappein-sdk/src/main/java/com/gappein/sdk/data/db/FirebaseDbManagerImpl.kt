@@ -27,6 +27,7 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
         private const val NAME = "name"
         private const val IMAGE_URL = "profileImageUrl"
         private const val IS_ONLINE = "isOnline"
+        private const val LAST_ONLINE_AT = "lastOnlineAt"
     }
 
     override fun createUser(user: User, onSuccess: (User) -> Unit, onError: (Exception) -> Unit) {
@@ -57,11 +58,7 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
             .addOnFailureListener { onError(it) }
     }
 
-    override fun getUserByToken(
-        token: String,
-        onSuccess: (User) -> Unit,
-        onError: (Exception) -> Unit
-    ) {
+    override fun getUserByToken(token: String, onSuccess: (User) -> Unit, onError: (Exception) -> Unit) {
         userReference
             .get()
             .addOnSuccessListener { result ->
@@ -72,10 +69,7 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
             .addOnFailureListener { exception -> onError(exception) }
     }
 
-    override fun getOrCreateNewChatChannels(
-        participantUserToken: String,
-        onSuccess: (channelId: String) -> Unit
-    ) {
+    override fun getOrCreateNewChatChannels(participantUserToken: String, onSuccess: (channelId: String) -> Unit) {
 
         val userChannelReference = channelReference.document(participantUserToken)
         val currentUser = ChatClient.getInstance().getUser()
@@ -133,13 +127,7 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
         }
     }
 
-    override fun sendMessageByToken(
-        message: Message,
-        sender: User,
-        receiver: User,
-        onSuccess: () -> Unit,
-        onError: (Exception) -> Unit
-    ) {
+    override fun sendMessageByToken(message: Message, sender: User, receiver: User, onSuccess: () -> Unit, onError: (Exception) -> Unit) {
         sendMessage(message, onSuccess, onError)
     }
 
@@ -228,10 +216,7 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
                 if (userData[IS_ONLINE].toString() == "true") {
                     onSuccess(true, "")
                 } else {
-                    onSuccess(
-                        false,
-                        userData["lastOnlineAt"].toString()
-                    )
+                    onSuccess(false, userData[LAST_ONLINE_AT].toString())
                 }
             }
     }
