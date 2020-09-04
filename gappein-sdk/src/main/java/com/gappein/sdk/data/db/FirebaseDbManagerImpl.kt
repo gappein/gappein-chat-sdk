@@ -169,9 +169,7 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
             val users = mutableListOf<User>().apply {
                 add(it.first().receiver)
                 add(it.first().sender)
-                filter { user ->
-                    user.token == ChatClient.getInstance().getUser().token
-                }
+                filter { user -> user.token == ChatClient.getInstance().getUser().token }
             }
             onSuccess(it.last(), users.first())
         }
@@ -228,7 +226,7 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
         userChannelReference.get()
             .addOnSuccessListener {
                 val userData = it.data as Map<String, User>
-                if (userData["isOnline"].toString() == "true") {
+                if (userData[IS_ONLINE].toString() == "true") {
                     onSuccess(true, "")
                 } else {
                     onSuccess(
