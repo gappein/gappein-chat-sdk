@@ -5,10 +5,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.gappein.sdk.util.toChannelList
+import com.gappein.sdk.client.ChatClient
 import com.gappein.sdk.model.Channel
 import com.gappein.sdk.model.User
+import com.gappein.sdk.ui.R
 import com.gappein.sdk.ui.view.util.DatesUtil
+import com.gappein.sdk.util.toChannelList
 import kotlinx.android.synthetic.main.item_channel.view.*
 
 class ChannelListViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
@@ -25,8 +27,11 @@ class ChannelListViewHolder(private val view: View) : RecyclerView.ViewHolder(vi
                 .transform(CenterCrop(), RoundedCorners(100))
                 .into(view.imageViewAvatar)
             view.textViewUserName.setText(data.user.name)
+
             view.textViewLastMessage.setText(data.lastMessage.message)
+
             view.textViewLastMessageTime.setText(DatesUtil.getTimeAgo(data.lastMessage.timeStamp))
+
             view.imageViewAvatar.setOnClickListener {
                 onUserClick(data.user)
             }
@@ -34,7 +39,16 @@ class ChannelListViewHolder(private val view: View) : RecyclerView.ViewHolder(vi
                 onChannelClick.invoke(channel, data.user)
             }
 
+            ChatClient.getInstance().isUserOnline(data.user.token) { isOnline, lastTimeStamp ->
+                if (isOnline) {
+                    Glide.with(view)
+                        .load(R.drawable.ic_online_indicator)
+                        .transform(CenterCrop(), RoundedCorners(100))
+                        .into(view.imageViewOnline)
+                }
+            }
         }
+
     }
 
 }

@@ -6,6 +6,9 @@ data class ChannelListData(
 
     val user: User,
 
-    val lastMessage: Message
+    val lastMessage: Message,
+
+    var isUserOnline: Boolean = false
+
 )
 

@@ -6,13 +6,14 @@ import com.gappein.sdk.model.ChannelListData
 
 fun Channel.toChannelList(onSuccess: (ChannelListData) -> Unit) {
     val channelId = this.id
-
-    ChatClient.getInstance().getLastMessageFromChannel(channelId) { message, user ->
+    val client = ChatClient.getInstance()
+    client.getLastMessageFromChannel(channelId) { message, user ->
 
         val channelListData = ChannelListData(
             id = channelId,
             user = user,
-            lastMessage = message
+            lastMessage = message,
+            isUserOnline = user.isOnline
         )
         onSuccess(channelListData)
     }
