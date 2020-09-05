@@ -36,7 +36,7 @@ interface ChatClient {
 
     fun getUserByToken(token: String, onSuccess: (User) -> Unit, onError: (Exception) -> Unit)
 
-    fun openOrCreateChannel(participantUserToken: String, onComplete: (channelId: String) -> Unit)
+    fun getOrCreateChannel(currentUserToken:String, participantUserToken: String, onComplete: (channelId: String) -> Unit)
 
     fun getUserChannels(onSuccess: (List<Channel>) -> Unit)
 

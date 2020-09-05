@@ -18,22 +18,22 @@ class MainActivity : AppCompatActivity() {
 
         Gappein.getInstance().setUser(
             User(
-                token = "1234567890",
+                token = "TokenCHnaef",
                 createdAt = Date(),
-                profileImageUrl = "1234567890",
-                name = "Himanshu"
-            ), token = "1234567890", {}, {}
+                profileImageUrl = "TokenCHnaef",
+                name = "Anu"
+            ), token = "TokenCHnaef", {}, {}
         )
 
-        addFragment()
+//        addFragment()
 
 //        ChatClient.getInstance().setUserOnline("1234567890")
-        ChatClient.getInstance().isUserOnline("1234567890"){isOlinne,date->
-            Log.d("SDfsdf",isOlinne.toString())
-            Log.d("SDfsdf",date.toString())
-        }
+//        ChatClient.getInstance().isUserOnline("1234567890"){isOlinne,date->
+//            Log.d("SDfsdf",isOlinne.toString())
+//            Log.d("SDfsdf",date.toString())
+//        }
 
-
+        Log.d("SDfsdf",ChatClient.getInstance().getUser().toString())
 //        ChatClient.instance().sendMessage(
 //            "dskjfndjksnfkjsn",
 //            "akaash",
@@ -43,9 +43,9 @@ class MainActivity : AppCompatActivity() {
 //            "https://firebasestorage.googleapis.com/v0/b/chatsdk-demo-8b9a6.appspot.com/o/0.jpeg?alt=media&token=4a2821a4-7c5c-4dc8-91f0-e8cc031dc66d",
 //            "akaash",
 //            {}, {})
-//        ChatClient.instance().openOrCreateChannel("0987654321") {
+        ChatClient.getInstance().getOrCreateChannel("TokenCHnaef","yeus11v") {
 //
-//        }
+        }
 //        ChatClient.instance().sendMessage(
 //            "https://firebasestorage.googleapis.com/v0/b/chatsdk-demo-8b9a6.appspot.com/o/0.jpeg?alt=media&token=4a2821a4-7c5c-4dc8-91f0-e8cc031dc66d",
 //            "0987654321", {

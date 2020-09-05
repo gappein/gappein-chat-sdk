@@ -9,6 +9,7 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.QuerySnapshot
+import java.util.*
 
 
 @Suppress("UNCHECKED_CAST")
@@ -69,16 +70,18 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
             .addOnFailureListener { exception -> onError(exception) }
     }
 
-    override fun getOrCreateNewChatChannels(participantUserToken: String, onSuccess: (channelId: String) -> Unit) {
+    override fun getOrCreateNewChatChannels(
+        currentUserToken: String,
+        participantUserToken: String,
+        onSuccess: (channelId: String) -> Unit
+    ) {
 
-        val userChannelReference = channelReference.document(participantUserToken)
-        val currentUser = ChatClient.getInstance().getUser()
-        val currentUserToken = currentUser.token
+        val userChannelReference = channelReference.document(currentUserToken)
         val currentUserReference = userReference.document(currentUserToken)
         val participantUserReference = userReference.document(participantUserToken)
-
         val userList = listOf(participantUserToken, currentUserToken)
         val messageId = userList.sorted().toString()
+        val currentUser = ChatClient.getInstance().getUser()
 
         userChannelReference.get()
             .addOnSuccessListener {
@@ -218,6 +221,36 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
                 } else {
                     onSuccess(false, userData[LAST_ONLINE_AT].toString())
                 }
+            }
+    }
+
+    fun userStartedTyping(channelId: String) {
+        val userRef = channelReference.document(channelId)
+        userRef
+            .get()
+            .addOnSuccessListener {
+                val userMap = it.data as Map<String, User>
+                val users = userMap.values.toList()
+//                val currentUser = users.find { u ->
+//                    u.isCurrentUser()
+//                }
+
+                userRef
+                    .update(
+                        "userOne", User(
+                            token = "1234567890",
+                            createdAt = Date(),
+                            profileImageUrl = "1234567890",
+                            name = "Himanshu",
+                            isTyping = true
+                        )
+                    )
+                    .addOnSuccessListener {
+                    }
+                    .addOnFailureListener {
+                    }
+
+
             }
     }
 

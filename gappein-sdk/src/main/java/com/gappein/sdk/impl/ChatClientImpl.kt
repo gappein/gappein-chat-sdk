@@ -1,6 +1,7 @@
 package com.gappein.sdk.impl
 
 import android.net.Uri
+import android.util.Log
 import android.webkit.URLUtil
 import com.gappein.sdk.client.ChatClient
 import com.gappein.sdk.data.db.FirebaseDbManager
@@ -15,7 +16,8 @@ class ChatClientImpl(private val storageManager: FirebaseStorageManager, private
 
     override fun setUser(user: User, token: String, onSuccess: (User) -> Unit, onError: (Exception) -> Unit) {
         dbManager.createUser(user, {
-            currentUser = (user)
+            currentUser = it
+            Log.d("Dsdfdsf2",getUser().toString())
             onSuccess(it)
         }, {
             onError(it)
@@ -62,8 +64,8 @@ class ChatClientImpl(private val storageManager: FirebaseStorageManager, private
         dbManager.getUserByToken(token, onSuccess, onError)
     }
 
-    override fun openOrCreateChannel(participantUserToken: String, onComplete: (channelId: String) -> Unit) {
-        dbManager.getOrCreateNewChatChannels(participantUserToken, onComplete)
+    override fun getOrCreateChannel(currentUserToken:String, participantUserToken: String, onComplete: (channelId: String) -> Unit) {
+        dbManager.getOrCreateNewChatChannels(currentUserToken,participantUserToken, onComplete)
     }
 
     override fun getUserChannels(onSuccess: (List<Channel>) -> Unit) {
