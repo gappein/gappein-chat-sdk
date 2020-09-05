@@ -1,5 +1,6 @@
 package com.gappein.sdk.data.db
 
+import android.util.Log
 import com.gappein.sdk.client.ChatClient
 import com.gappein.sdk.model.Channel
 import com.gappein.sdk.model.ChannelUsers
@@ -153,12 +154,20 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
 
     override fun getLastMessageFromChannel(channelId: String, onSuccess: (Message, User) -> Unit) {
         getMessages(channelId) {
-            val users = mutableListOf<User>().apply {
-                add(it.first().receiver)
-                add(it.first().sender)
-                filter { user -> user.token == ChatClient.getInstance().getUser().token }
+            if (it.isNotEmpty()) {
+                val users = mutableListOf<User>().apply {
+                    add(it.first().receiver)
+                    add(it.first().sender)
+                    filter { user -> user.token == ChatClient.getInstance().getUser().token }
+                }
+                onSuccess(it.last(), users.first())
+            } else {
+                getChannelUsers(channelId) {
+                    val user =
+                        it.filter { user -> user.token != ChatClient.getInstance().getUser().token }
+                    onSuccess(Message(), user.first())
+                }
             }
-            onSuccess(it.last(), users.first())
         }
 
     }
@@ -212,11 +221,13 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
         val userChannelReference = userReference.document(token)
         userChannelReference.get()
             .addOnSuccessListener {
-                val userData = it.data as Map<String, User>
-                if (userData[IS_ONLINE].toString() == "true") {
-                    onSuccess(true, "")
-                } else {
-                    onSuccess(false, userData[LAST_ONLINE_AT].toString())
+                if (it.data != null) {
+                    val userData = it.data as Map<String, User>
+                    if (userData[IS_ONLINE].toString() == "true") {
+                        onSuccess(true, "")
+                    } else {
+                        onSuccess(false, userData[LAST_ONLINE_AT].toString())
+                    }
                 }
             }
     }

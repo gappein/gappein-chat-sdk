@@ -7,15 +7,15 @@ import java.util.*
 @Parcelize
 data class User(
 
-    val token: String = "",
+    var token: String = "",
 
     var createdAt: Date? = null,
 
     var lastOnlineAt: Date? = null,
 
-    val profileImageUrl: String = "",
+    var profileImageUrl: String = "",
 
-    val name: String = "",
+    var name: String = "",
 
     var isOnline: Boolean = false
 ) : Parcelable
