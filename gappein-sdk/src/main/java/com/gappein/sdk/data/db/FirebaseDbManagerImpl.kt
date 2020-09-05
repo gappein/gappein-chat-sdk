@@ -1,6 +1,5 @@
 package com.gappein.sdk.data.db
 
-import android.util.Log
 import com.gappein.sdk.client.ChatClient
 import com.gappein.sdk.model.Channel
 import com.gappein.sdk.model.ChannelUsers

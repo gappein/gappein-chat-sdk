@@ -22,9 +22,7 @@ class MainActivity : AppCompatActivity() {
                 profileImageUrl = "Nihariak",
                 name = "Niharika"
             ), token = "Nihariak", {
-                Log.d("SDfsdf1",it.toString())
             }, {
-                Log.d("SDfsdf2",it.toString())
             }
         )
 
@@ -35,9 +33,7 @@ class MainActivity : AppCompatActivity() {
             Log.d("SDfsdf",date.toString())
         }
 
-        ChatClient.getInstance().openOrCreateChannel("yuufhjbjfhbsdbfjkbsdfjl") {
-            Log.d("SDfsdfsdfsdf",it)
-        }
+
 
 //        ChatClient.instance().sendMessage(
 //            "dskjfndjksnfkjsn",
