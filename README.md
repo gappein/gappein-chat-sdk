@@ -1,6 +1,8 @@
 # Gappein
 
-Gappein is a new Chat SDK in town, a plug and play toolkit for integrating Chat feature on top of Firebase!
+Gappein is a new Chat SDK in town!
+
+A plug and play modular toolkit for integrating the Chat feature on top of Firebase!
 
 # Table of contents
 
@@ -29,21 +31,26 @@ implementation "com.google.firebase:firebase-firestore:21.5.0"
 # Initialization
 [(Back to top)](#table-of-contents)
 
-Initialize the Gappein SDK with our builder object and set the `User` which would be the user of the current device.
+Initialize the Gappein SDK with one line.
 
 ```kotlin
 //TODO make this better
 Gappein.Builder().build()
+```
 
+Set the `User` by passing information about the currently logged in user
+
+```kotlin
 Gappein.getInstance().setUser(
             User(
                 token = "1234567890",
                 createdAt = Date(),
-                profileImageUrl = "1234567890",
-                name = "Himanshu"
+                profileImageUrl = "link_to_image",
+                name = "Himanshu" //UserName
             ), token = "1234567890", {}, {}
         )
 ```
+
 
 # UI
 [(Back to top)](#table-of-contents)
