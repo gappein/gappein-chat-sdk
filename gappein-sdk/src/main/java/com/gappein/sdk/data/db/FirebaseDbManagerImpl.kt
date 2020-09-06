@@ -1,6 +1,5 @@
 package com.gappein.sdk.data.db
 
-import android.util.Log
 import com.gappein.sdk.client.ChatClient
 import com.gappein.sdk.model.Channel
 import com.gappein.sdk.model.ChannelUsers
@@ -28,6 +27,7 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
         private const val NAME = "name"
         private const val IMAGE_URL = "profileImageUrl"
         private const val IS_ONLINE = "isOnline"
+        private const val LAST_ONLINE_AT = "lastOnlineAt"
     }
 
     override fun createUser(user: User, onSuccess: (User) -> Unit, onError: (Exception) -> Unit) {
@@ -58,11 +58,7 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
             .addOnFailureListener { onError(it) }
     }
 
-    override fun getUserByToken(
-        token: String,
-        onSuccess: (User) -> Unit,
-        onError: (Exception) -> Unit
-    ) {
+    override fun getUserByToken(token: String, onSuccess: (User) -> Unit, onError: (Exception) -> Unit) {
         userReference
             .get()
             .addOnSuccessListener { result ->
@@ -73,10 +69,7 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
             .addOnFailureListener { exception -> onError(exception) }
     }
 
-    override fun getOrCreateNewChatChannels(
-        participantUserToken: String,
-        onSuccess: (channelId: String) -> Unit
-    ) {
+    override fun getOrCreateNewChatChannels(participantUserToken: String, onSuccess: (channelId: String) -> Unit) {
 
         val userChannelReference = channelReference.document(participantUserToken)
         val currentUser = ChatClient.getInstance().getUser()
@@ -134,13 +127,7 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
         }
     }
 
-    override fun sendMessageByToken(
-        message: Message,
-        sender: User,
-        receiver: User,
-        onSuccess: () -> Unit,
-        onError: (Exception) -> Unit
-    ) {
+    override fun sendMessageByToken(message: Message, sender: User, receiver: User, onSuccess: () -> Unit, onError: (Exception) -> Unit) {
         sendMessage(message, onSuccess, onError)
     }
 
@@ -156,6 +143,7 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
                        }?.sortedBy {
                            it?.timeStamp
                        } as List<Message>
+
                 messages.run {
                     clear()
                     addAll(data)
@@ -166,14 +154,19 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
 
     override fun getLastMessageFromChannel(channelId: String, onSuccess: (Message, User) -> Unit) {
         getMessages(channelId) {
-            val users = mutableListOf<User>().apply {
-                add(it.first().receiver)
-                add(it.first().sender)
-                filter { user ->
-                    user.token == ChatClient.getInstance().getUser().token
+            if (it.isNotEmpty()) {
+                val users = mutableListOf<User>().apply {
+                    add(it.first().receiver)
+                    add(it.first().sender)
+                    filter { user -> user.token == ChatClient.getInstance().getUser().token }
+                }
+                onSuccess(it.last(), users.first())
+            } else {
+                getChannelUsers(channelId) {_u->
+                    val user = _u.filter { user -> user.token != ChatClient.getInstance().getUser().token }
+                    onSuccess(Message(), user.first())
                 }
             }
-            onSuccess(it.last(), users.first())
         }
 
     }
@@ -206,7 +199,7 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
 
                 val userData = it.data
 
-                val userList = userData
+                userData
                     ?.flatMap { user ->
                         listOf(user.value as HashMap<String, Any>)
                     }?.map { userMap ->
@@ -227,14 +220,13 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
         val userChannelReference = userReference.document(token)
         userChannelReference.get()
             .addOnSuccessListener {
-                val userData = it.data as Map<String, User>
-                if (userData["isOnline"].toString() == "true") {
-                    onSuccess(true, "")
-                } else {
-                    onSuccess(
-                        false,
-                        userData["lastOnlineAt"].toString()
-                    )
+                if (it.data != null) {
+                    val userData = it.data as Map<String, User>
+                    if (userData[IS_ONLINE].toString() == "true") {
+                        onSuccess(true, "")
+                    } else {
+                        onSuccess(false, userData[LAST_ONLINE_AT].toString())
+                    }
                 }
             }
     }
@@ -246,4 +238,5 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
 
             }
     }
+
 }

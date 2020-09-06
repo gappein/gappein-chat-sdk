@@ -11,15 +11,22 @@ import com.gappein.sdk.model.User
 
 class ChatClientImpl(private val storageManager: FirebaseStorageManager, private val dbManager: FirebaseDbManager) : ChatClient {
 
-    private var currentUser = User()
+    private var currentUser  = User()
 
     override fun setUser(user: User, token: String, onSuccess: (User) -> Unit, onError: (Exception) -> Unit) {
+        currentUser = user
         dbManager.createUser(user, {
-            currentUser = (user)
             onSuccess(it)
         }, {
             onError(it)
         })
+    }
+
+    private fun assignCurrentUser(currentUser: User, user: User) {
+        currentUser.isOnline = user.isOnline
+        currentUser.name = user.name
+        currentUser.profileImageUrl = user.profileImageUrl
+        currentUser.createdAt = user.createdAt
     }
 
     override fun getUser() = currentUser

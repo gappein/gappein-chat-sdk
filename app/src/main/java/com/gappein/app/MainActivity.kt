@@ -13,24 +13,26 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        Gappein.Builder().build()
+
 
         Gappein.getInstance().setUser(
             User(
-                token = "1234567890",
+                token = "Nihariak",
                 createdAt = Date(),
-                profileImageUrl = "1234567890",
-                name = "Himanshu"
-            ), token = "1234567890", {}, {}
+                profileImageUrl = "Nihariak",
+                name = "Niharika"
+            ), token = "Nihariak", {
+            }, {
+            }
         )
 
         addFragment()
 
 //        ChatClient.getInstance().setUserOnline("1234567890")
         ChatClient.getInstance().isUserOnline("1234567890"){isOlinne,date->
-            Log.d("SDfsdf",isOlinne.toString())
             Log.d("SDfsdf",date.toString())
         }
+
 
 
 //        ChatClient.instance().sendMessage(

@@ -12,7 +12,6 @@ import androidx.core.text.color
 
 fun String.checkForAnnotation(): String {
     if (this.contains("@")) {
-        Log.d("dsfdsdf", this)
         val text = SpannableStringBuilder()
             .color(Color.BLUE) { append(this) }
         return text.toString()

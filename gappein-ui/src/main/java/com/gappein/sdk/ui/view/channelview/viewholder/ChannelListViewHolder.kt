@@ -23,14 +23,14 @@ class ChannelListViewHolder(private val view: View) : RecyclerView.ViewHolder(vi
 
         channel.toChannelList { data ->
             Glide.with(view)
-                .load("https://static.toiimg.com/thumb/msid-69902898,imgsize-115506,width-800,height-600,resizemode-75/69902898.jpg")
+                .load("https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=934&q=80")
                 .transform(CenterCrop(), RoundedCorners(100))
                 .into(view.imageViewAvatar)
-            view.textViewUserName.setText(data.user.name)
+            view.textViewUserName.text = data.user.name
 
-            view.textViewLastMessage.setText(data.lastMessage.message)
+            view.textViewLastMessage.text = data.lastMessage.message
 
-            view.textViewLastMessageTime.setText(DatesUtil.getTimeAgo(data.lastMessage.timeStamp))
+            view.textViewLastMessageTime.text = DatesUtil.getTimeAgo(data.lastMessage.timeStamp)
 
             view.imageViewAvatar.setOnClickListener {
                 onUserClick(data.user)

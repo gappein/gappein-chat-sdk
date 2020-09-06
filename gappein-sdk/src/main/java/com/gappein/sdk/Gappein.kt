@@ -1,12 +1,12 @@
 package com.gappein.sdk
 
 import com.gappein.sdk.client.ChatClient
-import com.gappein.sdk.impl.GappeinImpl
-import com.gappein.sdk.model.User
 import com.gappein.sdk.data.db.FirebaseDbManager
 import com.gappein.sdk.data.db.FirebaseDbManagerImpl
 import com.gappein.sdk.data.storage.FirebaseStorageManager
 import com.gappein.sdk.data.storage.FirebaseStorageManagerImpl
+import com.gappein.sdk.impl.GappeinImpl
+import com.gappein.sdk.model.User
 
 interface Gappein {
 
@@ -22,7 +22,7 @@ interface Gappein {
 
     fun setUser(user: User, token: String, onSuccess: (User) -> Unit, onError: (Exception) -> Unit)
 
-    class Builder {
+    class Builder() {
 
         private val firebaseDbManager: FirebaseDbManager = FirebaseDbManagerImpl()
         private val firebaseStorageManager: FirebaseStorageManager = FirebaseStorageManagerImpl()
