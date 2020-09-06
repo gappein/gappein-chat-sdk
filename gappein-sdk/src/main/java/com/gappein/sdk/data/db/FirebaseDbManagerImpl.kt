@@ -143,6 +143,7 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
                        }?.sortedBy {
                            it?.timeStamp
                        } as List<Message>
+
                 messages.run {
                     clear()
                     addAll(data)
@@ -161,9 +162,8 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
                 }
                 onSuccess(it.last(), users.first())
             } else {
-                getChannelUsers(channelId) {
-                    val user =
-                        it.filter { user -> user.token != ChatClient.getInstance().getUser().token }
+                getChannelUsers(channelId) {_u->
+                    val user = _u.filter { user -> user.token != ChatClient.getInstance().getUser().token }
                     onSuccess(Message(), user.first())
                 }
             }
@@ -199,7 +199,7 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
 
                 val userData = it.data
 
-                val userList = userData
+                userData
                     ?.flatMap { user ->
                         listOf(user.value as HashMap<String, Any>)
                     }?.map { userMap ->
