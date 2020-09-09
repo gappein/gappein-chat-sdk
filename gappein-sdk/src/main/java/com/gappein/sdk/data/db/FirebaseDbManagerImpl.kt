@@ -1,5 +1,6 @@
 package com.gappein.sdk.data.db
 
+import android.util.Log
 import com.gappein.sdk.client.ChatClient
 import com.gappein.sdk.model.Channel
 import com.gappein.sdk.model.ChannelUsers
@@ -78,23 +79,25 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
         val participantUserReference = userReference.document(participantUserToken)
 
         val userList = listOf(participantUserToken, currentUserToken)
-        val messageId = userList.sorted().toString()
+        val channelId = userList.sorted().toString()
 
-        userChannelReference.get()
+       userChannelReference.get()
             .addOnSuccessListener {
                 if (it.exists()) {
                     onSuccess(it[CHANNEL_ID] as String)
                     return@addOnSuccessListener
                 }
                 getUserByToken(participantUserToken, { user ->
-                    channelReference.document(messageId).set(ChannelUsers(currentUser, user))
+                    channelReference.document(channelId).set(ChannelUsers(currentUser, user))
                 }, {
 
                 })
-                addChannelsToUser(currentUserReference, participantUserToken, messageId)
+                addChannelsToUser(currentUserReference, participantUserToken, channelId)
 
-                addChannelsToUser(participantUserReference, currentUserToken, messageId)
+                addChannelsToUser(participantUserReference, currentUserToken, channelId)
+                onSuccess(channelId)
             }
+
     }
 
 
@@ -239,4 +242,33 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
             }
     }
 
+    override fun getAllChannels(onSuccess: (List<Channel>) -> Unit) {
+
+        channelReference.addSnapshotListener { querySnapshot: QuerySnapshot?, error: FirebaseFirestoreException? ->
+            if (error != null) {
+                return@addSnapshotListener
+            }
+
+            val channels = querySnapshot
+                ?.documents
+                ?.map { channel ->
+                    val channelMapper: Map<String, User> = channel.data as Map<String, User>
+                    val channelUsers = channelMapper.values.toList()
+                    return@map Channel(id = channel.id, channelUsers)
+                }
+            channels?.let { onSuccess(it) }
+        }
+    }
+
+    //for later implementation will check soon.
+    private fun getAllUsers(onSuccess: (List<User>) -> Unit) {
+        userReference.addSnapshotListener { value, _ ->
+            val userList = mutableListOf<User>()
+            value?.documents?.map {
+                val userMapper: Map<String, User> = it.data as Map<String, User>
+                userList.addAll(userMapper.values.toList())
+            }
+            onSuccess(userList)
+        }
+    }
 }

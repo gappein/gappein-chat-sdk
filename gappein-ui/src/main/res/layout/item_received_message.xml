@@ -34,10 +34,9 @@
             android:layout_width="wrap_content"
             android:background="@drawable/recieved_message_background"
             android:layout_height="wrap_content"
-            android:text="Hey this, is my first message"
             android:padding="12dp"
             android:textColor="@android:color/white"
-            app:fontFamily="@font/karla_bold" />
+            app:fontFamily="@font/nunito_bold" />
 
     </LinearLayout>
 

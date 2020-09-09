@@ -11,8 +11,6 @@ data class User(
 
     var createdAt: Date? = null,
 
-    var lastOnlineAt: Date? = null,
-
     var profileImageUrl: String = "",
 
     var name: String = "",

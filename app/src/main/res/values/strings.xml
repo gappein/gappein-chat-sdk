@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">app</string>
+    <string name="login_via_google">Login Via Google</string>
 </resources>

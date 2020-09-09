@@ -37,9 +37,9 @@ object DatesUtil {
         return if (diff < MINUTE_MILLIS) {
             "moments ago"
         } else if (diff < 2 * MINUTE_MILLIS) {
-            "a minute ago"
+            "a min ago"
         } else if (diff < 60 * MINUTE_MILLIS) {
-            diff.div(MINUTE_MILLIS).toString() + " minutes ago"
+            diff.div(MINUTE_MILLIS).toString() + " mins ago"
         } else if (diff < 2 * HOUR_MILLIS) {
             "an hour ago"
         } else if (diff < 24 * HOUR_MILLIS) {

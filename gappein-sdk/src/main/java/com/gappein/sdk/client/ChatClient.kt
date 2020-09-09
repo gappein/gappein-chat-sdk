@@ -1,12 +1,12 @@
 package com.gappein.sdk.client
 
 import android.net.Uri
-import com.gappein.sdk.impl.ChatClientImpl
-import com.gappein.sdk.model.User
 import com.gappein.sdk.data.db.FirebaseDbManager
 import com.gappein.sdk.data.storage.FirebaseStorageManager
+import com.gappein.sdk.impl.ChatClientImpl
 import com.gappein.sdk.model.Channel
 import com.gappein.sdk.model.Message
+import com.gappein.sdk.model.User
 
 interface ChatClient {
 
@@ -52,4 +52,5 @@ interface ChatClient {
 
     fun setUserOnline(token: String)
 
+    fun getAllChannels(onSuccess: (List<Channel>) -> Unit)
 }

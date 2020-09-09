@@ -15,14 +15,9 @@ import com.gappein.sdk.model.Message
 import com.gappein.sdk.model.User
 import com.gappein.sdk.ui.R
 import com.gappein.sdk.ui.base.ChatBaseView
-import com.gappein.sdk.ui.createImageFile
-import com.gappein.sdk.ui.getRealPathFromUri
 import com.gappein.sdk.ui.view.chatView.adapter.MessageListAdapter
-import com.gappein.sdk.ui.view.chatView.bottompicker.ImagePicker
 import com.gappein.sdk.ui.view.chatView.imageviewer.openImage
-import com.gappein.sdk.ui.view.util.ImageCompressor
-import com.gappein.sdk.ui.view.util.hide
-import com.gappein.sdk.ui.view.util.show
+import com.gappein.sdk.ui.view.util.*
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -33,7 +28,7 @@ import java.io.File
 import java.io.IOException
 
 
-class MessageListActivity : AppCompatActivity(), ImagePicker.ItemClickListener, ChatBaseView {
+class MessageListActivity : AppCompatActivity(), ChatBaseView {
 
     private var photoFile: File? = null
     private lateinit var adapter: MessageListAdapter
@@ -89,8 +84,7 @@ class MessageListActivity : AppCompatActivity(), ImagePicker.ItemClickListener, 
         }
 
         imageButtonAttach.setOnClickListener {
-            val picker = ImagePicker.newInstance()
-            picker.show(supportFragmentManager, ImagePicker.TAG)
+            requestPermissions()
         }
     }
 
@@ -115,49 +109,24 @@ class MessageListActivity : AppCompatActivity(), ImagePicker.ItemClickListener, 
         }
     }
 
-    override fun onCameraClick() {
-        requestPermissions(true)
-
-    }
-
-    override fun onGalleryClick() {
-        requestPermissions(false)
-    }
-
-    private fun requestPermissions(isCamera: Boolean) {
+    private fun requestPermissions() {
         Dexter.withContext(this)
             .withPermissions(
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.CAMERA
             ).withListener(object : MultiplePermissionsListener {
                 override fun onPermissionsChecked(report: MultiplePermissionsReport) {
                     if (report.areAllPermissionsGranted()) {
-                        if (isCamera) {
-                            dispatchTakePictureIntent();
-                        } else {
-                            dispatchGalleryIntent();
-                        }
+                        dispatchTakePictureIntent();
                     }
                 }
 
-                override fun onPermissionRationaleShouldBeShown(
-                    p0: MutableList<PermissionRequest>?,
-                    token: PermissionToken
-                ) {
+                override fun onPermissionRationaleShouldBeShown(p0: MutableList<PermissionRequest>?, token: PermissionToken) {
                     token.continuePermissionRequest();
                 }
 
             })
             .onSameThread()
             .check()
-    }
-
-    private fun dispatchGalleryIntent() {
-        Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI).apply {
-            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            startActivityForResult(this, REQUEST_GALLERY_PHOTO)
-        }
     }
 
     private fun dispatchTakePictureIntent() {
@@ -178,7 +147,6 @@ class MessageListActivity : AppCompatActivity(), ImagePicker.ItemClickListener, 
         }
     }
 
-    //check user gallery upload
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == RESULT_OK) {

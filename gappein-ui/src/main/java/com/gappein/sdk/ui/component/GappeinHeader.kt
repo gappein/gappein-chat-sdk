@@ -7,6 +7,8 @@ import android.widget.LinearLayout
 import androidx.annotation.MenuRes
 import androidx.appcompat.widget.Toolbar
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.gappein.sdk.client.ChatClient
 import com.gappein.sdk.ui.R
 import com.gappein.sdk.ui.base.ChatBaseView
@@ -34,7 +36,12 @@ class GappeinHeader : LinearLayout, ChatBaseView {
     fun init(channelId: String) {
         getClient().getChannelRecipientUser(channelId) {
             view.titleToolbar.text = it.name
-            Glide.with(view).load(it.profileImageUrl).into(view.avatarImageView)
+
+            Glide.with(view)
+                .load(it.profileImageUrl)
+                .placeholder(R.drawable.ic_user_placeholder)
+                .transform(CenterCrop(), RoundedCorners(16))
+                .into(view.avatarImageView)
         }
     }
 

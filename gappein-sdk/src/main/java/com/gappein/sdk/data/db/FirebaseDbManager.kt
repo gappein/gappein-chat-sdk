@@ -29,4 +29,7 @@ interface FirebaseDbManager {
     fun isUserOnline(token: String, onSuccess: (Boolean, String) -> Unit)
 
     fun setUserOnline(token: String)
+
+    fun getAllChannels(onSuccess: (List<Channel>) -> Unit)
+
 }

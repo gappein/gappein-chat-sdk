@@ -1,10 +1,13 @@
 package com.gappein.sdk.ui.view.channelview.viewholder
 
+import android.graphics.drawable.Drawable
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.Target
 import com.gappein.sdk.client.ChatClient
 import com.gappein.sdk.model.Channel
 import com.gappein.sdk.model.User
@@ -13,19 +16,19 @@ import com.gappein.sdk.ui.view.util.DatesUtil
 import com.gappein.sdk.util.toChannelList
 import kotlinx.android.synthetic.main.item_channel.view.*
 
+
 class ChannelListViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
 
-    fun bind(
-        channel: Channel,
-        onUserClick: (User) -> Unit,
-        onChannelClick: (Channel, User) -> Unit
-    ) {
+    fun bind(channel: Channel, onUserClick: (User) -> Unit, onChannelClick: (Channel, User) -> Unit) {
 
         channel.toChannelList { data ->
+
             Glide.with(view)
-                .load("https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=934&q=80")
-                .transform(CenterCrop(), RoundedCorners(100))
+                .load(data.user.profileImageUrl)
+                .transform(CenterCrop(), RoundedCorners(36))
+                .placeholder(R.drawable.ic_user_placeholder)
                 .into(view.imageViewAvatar)
+
             view.textViewUserName.text = data.user.name
 
             view.textViewLastMessage.text = data.lastMessage.message
