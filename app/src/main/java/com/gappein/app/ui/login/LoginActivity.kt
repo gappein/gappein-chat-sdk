@@ -35,7 +35,6 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         checkIfUserIsNotRegistered()
-
     }
 
     private fun checkIfUserIsNotRegistered() {
@@ -70,11 +69,10 @@ class LoginActivity : AppCompatActivity() {
         if (requestCode == RC_SIGN_IN) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             try {
-                val account = task.getResult(ApiException::class.java)!!
-                Log.d(TAG, "firebaseAuthWithGoogle:" + account.id)
-                firebaseAuthWithGoogle(account.idToken!!)
-            } catch (e: ApiException) {
-                Log.e(TAG, "Google sign in failed ${e.localizedMessage}")
+                val account = task.getResult(ApiException::class.java)
+                account?.idToken?.let { firebaseAuthWithGoogle(it) }
+            } catch (ignored: ApiException) {
+
             }
         }
     }
@@ -93,7 +91,9 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun setupUser(user: FirebaseUser?) {
+
         if (user != null) {
+
             Log.d(TAG, user.photoUrl.toString())
             val currentUser = User(
                 token = user.uid,
