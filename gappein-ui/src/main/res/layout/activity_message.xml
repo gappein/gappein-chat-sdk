@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@android:color/white"
+    android:background="#0C9175"
     android:layout_height="match_parent">
 
     <com.gappein.sdk.ui.component.GappeinHeader
@@ -24,7 +24,7 @@
         android:indeterminate="true"
         android:visibility="gone"
         android:max="100"
-        android:background="#0A081B"
+        android:background="#0C9175"
         android:progressTint="@android:color/white"
         android:progress="45"
         app:layout_constraintEnd_toEndOf="parent"
@@ -34,7 +34,8 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewMessages"
         android:layout_width="0dp"
-        android:padding="8dp"
+        android:background="@drawable/white_curved_background"
+        android:padding="4dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/container"
         app:layout_constraintHorizontal_bias="0.0"
@@ -54,60 +55,63 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:minHeight="84dp">
+        android:minHeight="60dp">
 
         <View
             android:id="@+id/divider"
             android:layout_width="0dp"
             android:layout_height="1dp"
             android:background="#9FA2A2"
+            android:alpha="0.2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
         <EditText
             android:id="@+id/editTextChatBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@null"
-            android:fontFamily="@font/karla_regular"
+            android:fontFamily="@font/nunito_regular"
             android:hint="@string/enter_your_message"
             android:maxLines="6"
             android:minHeight="60dp"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
-            android:textColor="@android:color/white"
+            android:textColor="@android:color/black"
             android:textColorHint="@color/hint_color"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/imageButtonAttach"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/divider" />
 
         <ImageView
             android:id="@+id/imageButtonAttach"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:src="@drawable/ic_photo"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextChatBox" />
+            android:src="@drawable/ic_attachment"
+            android:alpha="0.6"
+            app:layout_constraintBottom_toBottomOf="@+id/buttonSend"
+            app:layout_constraintEnd_toStartOf="@+id/buttonSend"
+            app:layout_constraintTop_toTopOf="@+id/buttonSend" />
 
-        <androidx.appcompat.widget.AppCompatTextView
+        <ImageView
             android:id="@+id/buttonSend"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
-            android:background="@drawable/rounded_button"
             android:paddingStart="12dp"
             android:paddingTop="6dp"
             android:paddingEnd="12dp"
             android:paddingBottom="6dp"
+            android:src="@drawable/ic_send_button"
             android:text="Send"
             android:textColor="@color/hint_color"
             app:fontFamily="@font/karla_bold"
-            app:layout_constraintBottom_toBottomOf="@+id/imageButtonAttach"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/imageButtonAttach" />
+            app:layout_constraintTop_toTopOf="parent" />
 
 
 

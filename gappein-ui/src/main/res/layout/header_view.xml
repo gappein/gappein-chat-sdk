@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.appcompat.widget.Toolbar android:id="@+id/toolbar"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="56dp"
     android:background="#0C9175"
     app:layout_constraintEnd_toEndOf="parent"
     android:elevation="8dp"
@@ -25,6 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_height="wrap_content">
+
         <ImageView
             android:layout_width="wrap_content"
             android:id="@+id/avatarImageView"
@@ -32,6 +33,7 @@
             android:src="@drawable/sent_message_background"
             android:layout_margin="4dp"
             android:layout_height="wrap_content"/>
+
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/titleToolbar"
             android:layout_width="wrap_content"
