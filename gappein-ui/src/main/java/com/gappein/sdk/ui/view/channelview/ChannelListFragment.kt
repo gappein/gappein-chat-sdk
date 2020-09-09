@@ -11,6 +11,8 @@ import com.gappein.sdk.ui.R
 import com.gappein.sdk.ui.base.ChatBaseView
 import com.gappein.sdk.ui.view.channelview.adapter.ChannelListAdapter
 import com.gappein.sdk.ui.view.chatView.MessageListActivity
+import com.gappein.sdk.ui.view.util.hide
+import com.gappein.sdk.ui.view.util.show
 import kotlinx.android.synthetic.main.fragment_channel_list.view.*
 
 
@@ -41,7 +43,14 @@ class ChannelListFragment : Fragment(), ChatBaseView {
 
     private fun fetchChannels(view: View) {
         getClient().getUserChannels {
-            adapter.addAll(it)
+            if (it.isNotEmpty()) {
+                adapter.addAll(it)
+                view.linearLayoutNoChatFound.hide()
+                view.recyclerViewChannel.show()
+            }else {
+               view.linearLayoutNoChatFound.show()
+               view.recyclerViewChannel.hide()
+            }
         }
     }
 
