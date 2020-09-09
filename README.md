@@ -21,8 +21,8 @@ Add the dependencies to the `build.gradle`
 
 ```groovy
 //TODO final dependency name will depend on bintray setup
-implementation "com.gappein.sdk:gappein-sdk:1.0.0" 
-implementation "com.gappein.sdk:gappein-ui:1.0.0"
+implementation "com.gappein.sdk:gappein-sdk:1.0.0-alpha-01" 
+implementation "com.gappein.sdk:gappein-ui:1.0.0-alpha-01"
 implementation "com.google.firebase:firebase-core:17.5.0"
 implementation "com.google.firebase:firebase-storage:19.1.1"
 implementation "com.google.firebase:firebase-firestore:21.5.0"
@@ -43,11 +43,10 @@ Set the `User` by passing information about the currently logged in user
 ```kotlin
 Gappein.getInstance().setUser(
             User(
-                token = "1234567890",
-                createdAt = Date(),
+                token = "user_token",
                 profileImageUrl = "link_to_image",
-                name = "Himanshu" //UserName
-            ), token = "1234567890", {}, {}
+                name = "user_name" 
+            ), token = "user_token", {}, {}
         )
 ```
 
@@ -56,11 +55,11 @@ Gappein.getInstance().setUser(
 [(Back to top)](#table-of-contents)
 
 You can either build your own UI or use our UI SDK to create a beautiful chat experience.
-To open the Chat List Fragment add the following code -
+To open the Channel List Fragment add the following code -
 
 ```kotlin
 //TODO make this better
-private fun addFragment() {
+private fun addChannelListFragment() {
         val fm = supportFragmentManager
         val ft = fm.beginTransaction()
         ft.add(R.id.container,ChannelListFragment.newInstance())
@@ -71,10 +70,10 @@ private fun addFragment() {
 To open the Chat between two users, use the following code -
 
 ```kotlin
-startActivity(MessageListActivity.buildIntent(this,"[0987654321, 1234567890]",User))
+startActivity(MessageListActivity.buildIntent(this,"channel_id",User))
 ```
 
-where `User` is the current user of the device.
+where `User` is the recipient user of the device.
 
 # Developer Notes
 [(Back to top)](#table-of-contents)
