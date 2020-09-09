@@ -106,7 +106,6 @@
             android:paddingEnd="12dp"
             android:paddingBottom="6dp"
             android:src="@drawable/ic_send_button"
-            android:text="Send"
             android:textColor="@color/hint_color"
             app:fontFamily="@font/karla_bold"
             app:layout_constraintBottom_toBottomOf="parent"

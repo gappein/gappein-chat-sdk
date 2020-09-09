@@ -2,9 +2,7 @@ package com.gappein.sdk.ui.view.channelview
 
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gappein.sdk.client.ChatClient
@@ -53,4 +51,5 @@ class ChannelListFragment : Fragment(), ChatBaseView {
     }
 
     override fun getClient() = ChatClient.getInstance()
+
 }

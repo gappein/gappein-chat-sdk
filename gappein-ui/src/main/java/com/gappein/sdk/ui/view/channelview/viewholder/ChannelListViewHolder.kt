@@ -28,8 +28,9 @@ class ChannelListViewHolder(private val view: View) : RecyclerView.ViewHolder(vi
         channel.toChannelList { data ->
 
             Glide.with(view)
-                .load("https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=934&q=80")
+                .load(data.user.profileImageUrl)
                 .transform(CenterCrop(), RoundedCorners(36))
+                .placeholder(R.drawable.ic_user_placeholder)
                 .into(view.imageViewAvatar)
             view.textViewUserName.text = data.user.name
 
@@ -44,10 +45,6 @@ class ChannelListViewHolder(private val view: View) : RecyclerView.ViewHolder(vi
                 onChannelClick.invoke(channel, data.user)
             }
 
-            Glide.with(view)
-                .load(R.drawable.ic_online_indicator)
-                .transform(CenterCrop(), RoundedCorners(100))
-                .into(view.imageViewOnline)
             ChatClient.getInstance().isUserOnline(data.user.token) { isOnline, lastTimeStamp ->
                 if (isOnline) {
                     Glide.with(view)

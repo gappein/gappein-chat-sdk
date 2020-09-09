@@ -12,6 +12,7 @@ class ReceiverMessageListViewHolder(private val view: View) : RecyclerView.ViewH
 
     fun bind(messages: List<Message>, position: Int) {
         messages.forEachIndexed { index, content ->
+
             val prevAuthor = messages.getOrNull(position - 1)?.sender
             val nextAuthor = messages.getOrNull(position + 1)?.sender
             val isFirstMessageByAuthor = prevAuthor != content.sender

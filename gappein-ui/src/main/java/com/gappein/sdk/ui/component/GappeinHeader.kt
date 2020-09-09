@@ -38,8 +38,8 @@ class GappeinHeader : LinearLayout, ChatBaseView {
             view.titleToolbar.text = it.name
 
             Glide.with(view)
-//                .load(it.profileImageUrl)
-                .load("https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=934&q=80")
+                .load(it.profileImageUrl)
+                .placeholder(R.drawable.ic_user_placeholder)
                 .transform(CenterCrop(), RoundedCorners(16))
                 .into(view.avatarImageView)
         }

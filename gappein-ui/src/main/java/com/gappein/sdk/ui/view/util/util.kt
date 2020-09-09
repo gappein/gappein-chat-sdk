@@ -1,4 +1,4 @@
-package com.gappein.sdk.ui
+package com.gappein.sdk.ui.view.util
 
 import android.database.Cursor
 import android.net.Uri
