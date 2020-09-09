@@ -46,7 +46,11 @@ Gappein.getInstance().setUser(
                 token = "user_token",
                 profileImageUrl = "link_to_image",
                 name = "user_name" 
-            ), token = "user_token", {}, {}
+            ), token = "user_token", {
+            //Handle onSuccess
+            }, {
+            //Handle onError
+            }
         )
 ```
 
