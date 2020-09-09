@@ -78,7 +78,7 @@
             app:fontFamily="@font/nunito_bold"
             android:gravity="center"
             android:textSize="20sp"
-            android:text="No chat found"
+            android:text="@string/no_chat_found"
             android:alpha="0.5"
             android:layout_marginStart="8dp"
             android:textStyle="bold"

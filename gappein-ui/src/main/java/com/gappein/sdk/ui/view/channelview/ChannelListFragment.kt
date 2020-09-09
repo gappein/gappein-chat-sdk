@@ -47,7 +47,7 @@ class ChannelListFragment : Fragment(), ChatBaseView {
                 adapter.addAll(it)
                 view.linearLayoutNoChatFound.hide()
                 view.recyclerViewChannel.show()
-            }else {
+            } else {
                view.linearLayoutNoChatFound.show()
                view.recyclerViewChannel.hide()
             }
