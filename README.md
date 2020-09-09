@@ -21,6 +21,7 @@ Add the dependencies to the `build.gradle`
 
 ```groovy
 //TODO final dependency name will depend on bintray setup
+
 implementation "com.gappein.sdk:gappein-sdk:1.0.0-alpha-01" 
 implementation "com.gappein.sdk:gappein-ui:1.0.0-alpha-01"
 implementation "com.google.firebase:firebase-core:17.5.0"
@@ -59,6 +60,7 @@ Gappein.getInstance().setUser(
 [(Back to top)](#table-of-contents)
 
 You can either build your own UI or use our UI SDK to create a beautiful chat experience.
+
 To open the Channel List Fragment add the following code -
 
 ```kotlin
@@ -78,6 +80,7 @@ startActivity(MessageListActivity.buildIntent(this,"channel_id",User))
 ```
 
 where `User` is the recipient user of the device.
+
 
 # Developer Notes
 [(Back to top)](#table-of-contents)
