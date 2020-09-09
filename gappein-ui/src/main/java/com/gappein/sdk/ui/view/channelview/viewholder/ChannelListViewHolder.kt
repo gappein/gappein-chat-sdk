@@ -19,11 +19,7 @@ import kotlinx.android.synthetic.main.item_channel.view.*
 
 class ChannelListViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
 
-    fun bind(
-        channel: Channel,
-        onUserClick: (User) -> Unit,
-        onChannelClick: (Channel, User) -> Unit
-    ) {
+    fun bind(channel: Channel, onUserClick: (User) -> Unit, onChannelClick: (Channel, User) -> Unit) {
 
         channel.toChannelList { data ->
 
