@@ -32,6 +32,7 @@ class ChannelListViewHolder(private val view: View) : RecyclerView.ViewHolder(vi
                 .transform(CenterCrop(), RoundedCorners(36))
                 .placeholder(R.drawable.ic_user_placeholder)
                 .into(view.imageViewAvatar)
+
             view.textViewUserName.text = data.user.name
 
             view.textViewLastMessage.text = data.lastMessage.message
