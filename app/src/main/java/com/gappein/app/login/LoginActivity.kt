@@ -109,7 +109,7 @@ class LoginActivity : AppCompatActivity() {
         Gappein.getInstance().setUser(
             currentUser,
             token = currentUser.token, {
-                startActivity(ChatActivity.buildIntent(this,true))
+                startActivity(ChatActivity.buildIntent(this))
             }, {
 
             }

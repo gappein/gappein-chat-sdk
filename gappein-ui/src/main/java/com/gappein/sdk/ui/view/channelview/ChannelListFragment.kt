@@ -17,16 +17,6 @@ import kotlinx.android.synthetic.main.fragment_channel_list.view.*
 class ChannelListFragment : Fragment(), ChatBaseView {
 
     companion object {
-        private const val LIST_ALL_CHANNELS = "list_all_channels"
-
-        @JvmStatic
-        fun newInstance(allUserList: Boolean): ChannelListFragment {
-            val fragment = ChannelListFragment()
-            fragment.arguments = Bundle().apply {
-                putBoolean(LIST_ALL_CHANNELS, allUserList)
-            }
-            return fragment
-        }
 
         @JvmStatic
         fun newInstance() = ChannelListFragment()
@@ -35,7 +25,6 @@ class ChannelListFragment : Fragment(), ChatBaseView {
     }
 
     private lateinit var adapter: ChannelListAdapter
-    private val listAllChannel by lazy { arguments?.getBoolean(LIST_ALL_CHANNELS, false) }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,14 +40,8 @@ class ChannelListFragment : Fragment(), ChatBaseView {
     }
 
     private fun fetchChannels(view: View) {
-        if (listAllChannel == true) {
-            getClient().getAllChannels {
-                adapter.addAll(it)
-            }
-        } else {
-            getClient().getUserChannels {
-                adapter.addAll(it)
-            }
+        getClient().getUserChannels {
+            adapter.addAll(it)
         }
     }
 

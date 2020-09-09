@@ -32,4 +32,6 @@ interface FirebaseDbManager {
 
     fun getAllChannels(onSuccess: (List<Channel>) -> Unit)
 
+    fun getAllUsers(onSuccess: (List<User>) -> Unit)
+
 }

@@ -4,6 +4,7 @@ import android.util.Log
 import com.gappein.sdk.client.ChatClient
 import com.gappein.sdk.model.Channel
 import com.gappein.sdk.model.ChannelListData
+import com.gappein.sdk.model.User
 
 fun Channel.toChannelList(onSuccess: (ChannelListData) -> Unit) {
     val channelId = this.id
@@ -16,4 +17,8 @@ fun Channel.toChannelList(onSuccess: (ChannelListData) -> Unit) {
         )
         onSuccess(channelListData)
     }
+}
+
+fun User.asChannel(){
+    val channel = Channel()
 }

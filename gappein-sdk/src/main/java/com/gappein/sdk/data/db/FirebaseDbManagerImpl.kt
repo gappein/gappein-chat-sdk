@@ -246,7 +246,9 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
             if (error != null) {
                 return@addSnapshotListener
             }
-
+            getAllUsers() {
+                Log.d("SDfsdf", it.toString())
+            }
             val channels = querySnapshot
                 ?.documents
                 ?.map { channel ->
@@ -258,4 +260,14 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
         }
     }
 
+    override fun getAllUsers(onSuccess: (List<User>) -> Unit) {
+        userReference.addSnapshotListener { value, error ->
+            val userList = mutableListOf<User>()
+            value?.documents?.map {
+                val userMapper: Map<String, User> = it.data as Map<String, User>
+                userList.addAll(userMapper.values.toList())
+            }
+            onSuccess(userList)
+        }
+    }
 }
