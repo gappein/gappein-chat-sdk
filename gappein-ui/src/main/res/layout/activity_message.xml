@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@color/input_background"
+    android:background="@android:color/white"
     android:layout_height="match_parent">
 
     <com.gappein.sdk.ui.component.GappeinHeader
@@ -34,6 +34,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewMessages"
         android:layout_width="0dp"
+        android:padding="8dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/container"
         app:layout_constraintHorizontal_bias="0.0"

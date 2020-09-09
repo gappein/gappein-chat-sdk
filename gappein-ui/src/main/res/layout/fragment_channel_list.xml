@@ -10,7 +10,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/input_background"
+        android:background="@android:color/white"
         android:id="@+id/recyclerViewChannel"
         tools:listitem="@layout/item_channel" />
 
