@@ -9,7 +9,7 @@ object AppPreference {
 
     private var sharedPreferences: SharedPreferences? = null
     private const val NAME = "sample-app"
-    private const val USER_REGISTER = "user_register"
+    private const val USER = "user"
 
     fun init(context: Context) {
         if (sharedPreferences == null) {
@@ -21,12 +21,12 @@ object AppPreference {
 
     fun setUser(user: User) {
         val editor = sharedPreferences?.edit()
-        editor?.putString(USER_REGISTER, Gson().toJson(user))
+        editor?.putString(USER, Gson().toJson(user))
         editor?.apply()
     }
 
     fun getUser(): User? {
-        val userString = sharedPreferences?.getString(USER_REGISTER, "")
+        val userString = sharedPreferences?.getString(USER, "")
         return if (userString != null) {
             Gson().fromJson(userString, User::class.java)
         } else null

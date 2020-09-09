@@ -94,7 +94,6 @@ class LoginActivity : AppCompatActivity() {
 
         if (user != null) {
 
-            Log.d(TAG, user.photoUrl.toString())
             val currentUser = User(
                 token = user.uid,
                 profileImageUrl = user.photoUrl.toString(),
