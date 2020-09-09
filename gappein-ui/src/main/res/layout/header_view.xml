@@ -3,51 +3,53 @@
     android:layout_width="match_parent"
     android:layout_height="56dp"
     android:background="#0C9175"
-    app:layout_constraintEnd_toEndOf="parent"
     android:elevation="8dp"
     app:elevation="8dp"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-
-    <ImageView
-        android:id="@+id/imageViewBack"
-        android:layout_width="wrap_content"
-        android:padding="12dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:foreground="?android:attr/selectableItemBackground"
-        android:src="@drawable/ic_arrow_back_24dp" />
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_height="wrap_content">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <ImageView
+            android:id="@+id/imageViewBack"
             android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:padding="12dp"
+            android:src="@drawable/ic_arrow_back_24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <ImageView
             android:id="@+id/avatarImageView"
-            android:padding="2dp"
-            android:layout_margin="4dp"
-            android:layout_height="wrap_content"/>
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:padding="8dp"
+            app:layout_constraintStart_toEndOf="@+id/imageViewBack"
+            app:layout_constraintTop_toTopOf="@+id/imageViewBack"
+            app:layout_constraintBottom_toBottomOf="@+id/imageViewBack" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/titleToolbar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textColor="@android:color/white"
-            app:fontFamily="@font/nunito_bold"
-            android:textSize="16sp"
-            android:layout_marginStart="8dp"
-            android:textStyle="bold"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:layout_gravity="center_vertical"
-            app:layout_constraintBottom_toTopOf="@+id/guideline1"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:paddingStart="8dp"
+            android:gravity="center_vertical"
+            android:textStyle="bold"
+            app:fontFamily="@font/nunito_bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar3" />
-    </LinearLayout>
+            app:layout_constraintTop_toTopOf="@+id/imageViewBack"
+            app:layout_constraintBottom_toBottomOf="@+id/imageViewBack"
+            app:layout_constraintStart_toEndOf="@+id/avatarImageView" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.appcompat.widget.Toolbar>

@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:padding="12dp"
             android:textColor="@android:color/white"
-            app:fontFamily="@font/karla_bold" />
+            app:fontFamily="@font/nunito_bold" />
 
     </LinearLayout>
 

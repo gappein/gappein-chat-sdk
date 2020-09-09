@@ -1,13 +1,14 @@
-package com.gappein.app.login
+package com.gappein.app.ui.login
 
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.gappein.app.R
-import com.gappein.app.chat.ChatActivity
 import com.gappein.app.data.AppPreference
+import com.gappein.app.ui.chat.ChatActivity
 import com.gappein.sdk.Gappein
+import com.gappein.sdk.client.ChatClient
 import com.gappein.sdk.model.User
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -24,6 +25,7 @@ class LoginActivity : AppCompatActivity() {
     companion object {
         private const val RC_SIGN_IN = 100
         private const val TAG = "LoginActivityy"
+        private const val TEST_TOKEN = "HimanshuSinghTestAccount"
     }
 
     private lateinit var auth: FirebaseAuth
@@ -109,7 +111,9 @@ class LoginActivity : AppCompatActivity() {
         Gappein.getInstance().setUser(
             currentUser,
             token = currentUser.token, {
-                startActivity(ChatActivity.buildIntent(this))
+                ChatClient.getInstance().openOrCreateChannel(TEST_TOKEN) {
+                    startActivity(ChatActivity.buildIntent(this))
+                }
             }, {
 
             }

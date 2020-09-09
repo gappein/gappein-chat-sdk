@@ -1,4 +1,4 @@
-package com.gappein.app.chat
+package com.gappein.app.ui.chat
 
 import android.content.Context
 import android.content.Intent

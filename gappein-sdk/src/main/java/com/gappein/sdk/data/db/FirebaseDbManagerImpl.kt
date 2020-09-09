@@ -79,23 +79,25 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
         val participantUserReference = userReference.document(participantUserToken)
 
         val userList = listOf(participantUserToken, currentUserToken)
-        val messageId = userList.sorted().toString()
+        val channelId = userList.sorted().toString()
 
-        userChannelReference.get()
+       userChannelReference.get()
             .addOnSuccessListener {
                 if (it.exists()) {
                     onSuccess(it[CHANNEL_ID] as String)
                     return@addOnSuccessListener
                 }
                 getUserByToken(participantUserToken, { user ->
-                    channelReference.document(messageId).set(ChannelUsers(currentUser, user))
+                    channelReference.document(channelId).set(ChannelUsers(currentUser, user))
                 }, {
 
                 })
-                addChannelsToUser(currentUserReference, participantUserToken, messageId)
+                addChannelsToUser(currentUserReference, participantUserToken, channelId)
 
-                addChannelsToUser(participantUserReference, currentUserToken, messageId)
+                addChannelsToUser(participantUserReference, currentUserToken, channelId)
+                onSuccess(channelId)
             }
+
     }
 
 

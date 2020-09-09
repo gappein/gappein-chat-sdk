@@ -147,7 +147,6 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
         }
     }
 
-    //check user gallery upload
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == RESULT_OK) {
