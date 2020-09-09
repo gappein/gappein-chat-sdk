@@ -124,7 +124,6 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
                     val channelUsers = channelMapper.values.toList()
                     return@map Channel(id = channel.id, channelUsers)
                 }
-            Log.d("Sdfsdfsdf",ChatClient.getInstance().getUser().toString())
             channels?.let { onSuccess(it) }
         }
     }
@@ -239,6 +238,24 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
             .addOnSuccessListener {
 
             }
+    }
+
+    override fun getAllChannels(onSuccess: (List<Channel>) -> Unit) {
+
+        channelReference.addSnapshotListener { querySnapshot: QuerySnapshot?, error: FirebaseFirestoreException? ->
+            if (error != null) {
+                return@addSnapshotListener
+            }
+
+            val channels = querySnapshot
+                ?.documents
+                ?.map { channel ->
+                    val channelMapper: Map<String, User> = channel.data as Map<String, User>
+                    val channelUsers = channelMapper.values.toList()
+                    return@map Channel(id = channel.id, channelUsers)
+                }
+            channels?.let { onSuccess(it) }
+        }
     }
 
 }
