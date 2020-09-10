@@ -48,7 +48,7 @@ class ChannelListFragment : Fragment(), ChatBaseView {
         super.onAttach(context)
         try {
             onUserClick = (context) as OnChannelClick
-        }catch (ex:Exception){
+        } catch (ex:Exception){
             throw NotImplementedError("Implement OnChannelClick on your base activity")
         }
     }
