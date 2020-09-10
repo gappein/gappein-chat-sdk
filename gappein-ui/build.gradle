@@ -143,8 +143,7 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     implementation "androidx.recyclerview:recyclerview:1.1.0"
-    //implementation project(':gappein-sdk')
-    implementation 'com.gappein.sdk:gappein-sdk:1.0.0-alpha1'
+    implementation 'com.gappein.sdk:gappein-sdk:1.0.0-alpha2'
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     kapt 'com.github.bumptech.glide:compiler:4.11.0'
     implementation "androidx.cardview:cardview:1.0.0"
