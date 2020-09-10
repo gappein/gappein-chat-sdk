@@ -1,5 +1,6 @@
 package com.gappein.sdk.ui.view.channelview
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.gappein.sdk.client.ChatClient
 import com.gappein.sdk.ui.R
 import com.gappein.sdk.ui.base.ChatBaseView
+import com.gappein.sdk.ui.view.channelview.`interface`.OnChannelClick
 import com.gappein.sdk.ui.view.channelview.adapter.ChannelListAdapter
 import com.gappein.sdk.ui.view.chatView.MessageListActivity
 import com.gappein.sdk.ui.view.util.hide
@@ -27,6 +29,7 @@ class ChannelListFragment : Fragment(), ChatBaseView {
     }
 
     private lateinit var adapter: ChannelListAdapter
+    private lateinit var onUserClick: OnChannelClick
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,6 +42,15 @@ class ChannelListFragment : Fragment(), ChatBaseView {
         super.onViewCreated(view, savedInstanceState)
         setupChannelList(view)
         fetchChannels(view)
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        try {
+            onUserClick = (context) as OnChannelClick
+        }catch (ex:Exception){
+            throw NotImplementedError("Implement OnChannelClick on your base activity")
+        }
     }
 
     private fun fetchChannels(view: View) {
@@ -56,7 +68,7 @@ class ChannelListFragment : Fragment(), ChatBaseView {
 
     private fun setupChannelList(view: View) {
         adapter = ChannelListAdapter(onUserClick = {
-
+            onUserClick.onUserClick(it)
         }, onChannelClick = { channel, user ->
             startActivity(MessageListActivity.buildIntent(requireContext(), channel.id, user))
         })

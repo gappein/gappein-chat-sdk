@@ -1,13 +1,10 @@
 package com.gappein.sdk.ui.view.channelview.viewholder
 
-import android.graphics.drawable.Drawable
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.bumptech.glide.request.RequestOptions
-import com.bumptech.glide.request.target.Target
 import com.gappein.sdk.client.ChatClient
 import com.gappein.sdk.model.Channel
 import com.gappein.sdk.model.User
@@ -42,7 +39,7 @@ class ChannelListViewHolder(private val view: View) : RecyclerView.ViewHolder(vi
                 onChannelClick.invoke(channel, data.user)
             }
 
-            ChatClient.getInstance().isUserOnline(data.user.token) { isOnline, lastTimeStamp ->
+            ChatClient.getInstance().isUserOnline(data.user.token) { isOnline, _ ->
                 if (isOnline) {
                     Glide.with(view)
                         .load(R.drawable.ic_online_indicator)
