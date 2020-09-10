@@ -23,8 +23,8 @@ Add the dependencies to the `build.gradle`
 ```groovy
 //TODO final dependency name will depend on bintray setup
 
-implementation "com.gappein.sdk:gappein-sdk:1.0.0-alpha-01" 
-implementation "com.gappein.sdk:gappein-ui:1.0.0-alpha-01"
+implementation "com.gappein.sdk:gappein-sdk:1.0.0-alpha-1" 
+implementation "com.gappein.sdk:gappein-ui:1.0.0-alpha1"
 implementation "com.google.firebase:firebase-core:17.5.0"
 implementation "com.google.firebase:firebase-storage:19.1.1"
 implementation "com.google.firebase:firebase-firestore:21.5.0"

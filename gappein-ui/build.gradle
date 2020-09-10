@@ -8,7 +8,7 @@ apply plugin: 'com.github.dcendents.android-maven'
 ext {
     bintrayRepo = 'Gappein'
     bintrayName = 'Gappein-UI-SDK'
-    org = 'Gappein'
+    org = 'gappein'
 
     publishedGroupId = 'com.gappein.sdk'
     libraryName = 'Gappein-UI-SDK'
