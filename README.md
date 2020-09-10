@@ -1,5 +1,5 @@
 # Gappein
-<img src=https://github.com/Gappein/Gappein-Chat-SDK/blob/master/art/banner-chat-sdk.png >
+<img src=https://github.com/Gappein/Gappein-Chat-SDK/blob/main/art/banner-chat-sdk.png >
 
 [ ![Download Chat](https://api.bintray.com/packages/gappein/Gappein/Gappein-Chat-SDK/images/download.svg) ](https://bintray.com/gappein/Gappein/Gappein-Chat-SDK/_latestVersion)
 [ ![Download UI](https://api.bintray.com/packages/gappein/Gappein/Gappein-UI-SDK/images/download.svg) ](https://bintray.com/gappein/Gappein/Gappein-UI-SDK/_latestVersion)
@@ -93,7 +93,7 @@ This SDK is in alpha release, we would love to hear your feedback. If you face a
 # Sample App
 [(Back to top)](#table-of-contents)
 
-Find the [Demo App here](https://github.com/Gappein/Gappein-Chat-SDK/tree/master/app)
+Find the [Demo App here](https://github.com/Gappein/Gappein-Chat-SDK/tree/main/app)
 
 # Contributing
 [(Back to top)](#table-of-contents)
