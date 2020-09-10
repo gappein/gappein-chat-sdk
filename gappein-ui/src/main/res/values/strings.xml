@@ -7,4 +7,6 @@
     <string name="cancel">Cancel</string>
     <string name="no_chat_found">No chat found</string>
     <string name="begin_chat">Begin Chat</string>
+    <string name="permission_already_granted">Permission already granted</string>
+    <string name="permission_deined">Camera Permission Denied</string>
 </resources>

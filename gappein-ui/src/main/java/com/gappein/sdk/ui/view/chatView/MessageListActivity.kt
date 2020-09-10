@@ -3,10 +3,14 @@ package com.gappein.sdk.ui.view.chatView
 import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,11 +22,6 @@ import com.gappein.sdk.ui.base.ChatBaseView
 import com.gappein.sdk.ui.view.chatView.adapter.MessageListAdapter
 import com.gappein.sdk.ui.view.chatView.imageviewer.openImage
 import com.gappein.sdk.ui.view.util.*
-import com.karumi.dexter.Dexter
-import com.karumi.dexter.MultiplePermissionsReport
-import com.karumi.dexter.PermissionToken
-import com.karumi.dexter.listener.PermissionRequest
-import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import kotlinx.android.synthetic.main.activity_message.*
 import java.io.File
 import java.io.IOException
@@ -41,6 +40,8 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
         private const val RECEIVER = "receiver"
         private const val DEFAULT_STRING = ""
         private val EMPTY_USER = User()
+        private const val CAMERA_PERMISSION_CODE = 100
+
 
         @JvmStatic
         fun buildIntent(context: Context, channelId: String, receiver: User) =
@@ -84,7 +85,15 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
         }
 
         imageButtonAttach.setOnClickListener {
-            requestPermissions()
+            checkForPermission(Manifest.permission.CAMERA, CAMERA_PERMISSION_CODE);
+        }
+    }
+
+    private fun checkForPermission(camera: String, requestCode: Int) {
+        if (ContextCompat.checkSelfPermission(this, camera) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(camera), requestCode);
+        } else {
+            dispatchTakePictureIntent()
         }
     }
 
@@ -109,24 +118,23 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
         }
     }
 
-    private fun requestPermissions() {
-        Dexter.withContext(this)
-            .withPermissions(
-                Manifest.permission.CAMERA
-            ).withListener(object : MultiplePermissionsListener {
-                override fun onPermissionsChecked(report: MultiplePermissionsReport) {
-                    if (report.areAllPermissionsGranted()) {
-                        dispatchTakePictureIntent();
-                    }
-                }
 
-                override fun onPermissionRationaleShouldBeShown(p0: MutableList<PermissionRequest>?, token: PermissionToken) {
-                    token.continuePermissionRequest();
-                }
-
-            })
-            .onSameThread()
-            .check()
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray,
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == CAMERA_PERMISSION_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                dispatchTakePictureIntent()
+            } else {
+                Toast.makeText(this,
+                    getString(R.string.permission_deined),
+                    Toast.LENGTH_SHORT)
+                    .show();
+            }
+        }
     }
 
     private fun dispatchTakePictureIntent() {
