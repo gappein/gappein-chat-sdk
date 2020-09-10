@@ -1,5 +1,7 @@
 # Gappein
 
+<img src=“https://github.com/Gappein/Gappein-Chat-SDK/blob/development/art/banner-chat-sdk.png”>
+
 Gappein is a new Chat SDK in town!
 
 A plug and play modular toolkit for integrating the Chat feature on top of Firebase!
