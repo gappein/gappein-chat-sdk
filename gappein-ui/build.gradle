@@ -2,6 +2,32 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'com.jfrog.bintray'
+apply plugin: 'com.github.dcendents.android-maven'
+
+ext {
+    bintrayRepo = 'Gappein'
+    bintrayName = 'Gappein-UI-SDK'
+    org = 'Gappein'
+
+    publishedGroupId = 'com.gappein.sdk'
+    libraryName = 'Gappein-UI-SDK'
+    artifact = 'gappein-ui'
+    libraryDescription = 'A plug and play modular toolkit for integrating the Chat feature on top of Firebase!'
+
+    siteUrl = 'https://www.gappein.com/'
+    gitUrl = 'https://github.com/Gappein/Gappein-Chat-SDK.git'
+
+    libraryVersion = '1.0.0-alpha1'
+
+    developerId = 'hi-manshu'
+    developerName = 'Himanshu Singh'
+    developerEmail = ''
+
+    licenseName = 'MIT License'
+    licenseUrl = 'https://opensource.org/licenses/MIT'
+    allLicenses = ["MIT"]
+}
 
 android {
     compileSdkVersion 30
@@ -47,6 +73,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     implementation "androidx.recyclerview:recyclerview:1.1.0"
     implementation project(':gappein-sdk')
+    //implementation 'com.gappein.sdk:gappein-sdk:1.0.0-alpha1'
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     kapt 'com.github.bumptech.glide:compiler:4.11.0'
     implementation "androidx.cardview:cardview:1.0.0"
