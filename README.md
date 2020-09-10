@@ -44,14 +44,14 @@ Set the `User` by passing information about the currently logged in user
 
 ```kotlin
 Gappein.getInstance().setUser(
-            User(
+         User(
                 token = "user_token",
                 profileImageUrl = "link_to_image",
                 name = "user_name" 
             ), token = "user_token", {
-            //Handle onSuccess
+             //Handle onSuccess
             }, {
-            //Handle onError
+             //Handle onError
             }
         )
 ```
