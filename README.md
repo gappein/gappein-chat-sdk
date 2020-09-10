@@ -1,6 +1,5 @@
 # Gappein
-
-<img src=“https://github.com/Gappein/Gappein-Chat-SDK/blob/development/art/banner-chat-sdk.png”>
+<img src=https://github.com/Gappein/Gappein-Chat-SDK/blob/development/art/banner-chat-sdk.png >
 
 Gappein is a new Chat SDK in town!
 
