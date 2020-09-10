@@ -22,7 +22,7 @@ ext {
 
     developerId = 'hi-manshu'
     developerName = 'Himanshu Singh'
-    developerEmail = ''
+    developerEmail = 'hello2himanshusingh@gmail.com'
 
     licenseName = 'MIT License'
     licenseUrl = 'https://opensource.org/licenses/MIT'
@@ -60,6 +60,77 @@ android {
     }
 }
 
+version = libraryVersion
+group = publishedGroupId
+
+install {
+    repositories.mavenInstaller {
+        pom.project {
+            packaging 'aar'
+            groupId publishedGroupId
+            artifactId artifact
+
+            name libraryName
+            description libraryDescription
+            url siteUrl
+
+            licenses {
+                license {
+                    name licenseName
+                    url licenseUrl
+                }
+            }
+            developers {
+                developer {
+                    id developerId
+                    name developerName
+                    email developerEmail
+                }
+            }
+            scm {
+                connection gitUrl
+                developerConnection gitUrl
+                url siteUrl
+            }
+        }
+    }
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from android.sourceSets.main.java.srcDirs
+}
+
+artifacts {
+    archives sourcesJar
+}
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+bintray {
+    user = properties.getProperty("bintray.user")
+    key = properties.getProperty("bintray.apikey")
+
+    configurations = ['archives']
+    pkg {
+        repo = bintrayRepo
+        name = bintrayName
+        userOrg = org
+        desc = libraryDescription
+        websiteUrl = siteUrl
+        vcsUrl = gitUrl
+        licenses = allLicenses
+        dryRun = false
+        publish = true
+        override = false
+        publicDownloadNumbers = true
+        version {
+            desc = libraryDescription
+        }
+    }
+}
+
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
@@ -72,8 +143,8 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     implementation "androidx.recyclerview:recyclerview:1.1.0"
-    implementation project(':gappein-sdk')
-    //implementation 'com.gappein.sdk:gappein-sdk:1.0.0-alpha1'
+    //implementation project(':gappein-sdk')
+    implementation 'com.gappein.sdk:gappein-sdk:1.0.0-alpha1'
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     kapt 'com.github.bumptech.glide:compiler:4.11.0'
     implementation "androidx.cardview:cardview:1.0.0"
