@@ -27,6 +27,11 @@ interface Gappein {
         private val firebaseDbManager: FirebaseDbManager = FirebaseDbManagerImpl()
         private val firebaseStorageManager: FirebaseStorageManager = FirebaseStorageManagerImpl()
 
+        /**
+         * Use this to initialize the SDK in the Application class
+         *
+         * @return Instance of Gappein-Chat-SDK
+         */
         fun build(): Gappein =  GappeinImpl(ChatClient.Builder(firebaseStorageManager, firebaseDbManager).build()).apply {
                 instance = this
         }

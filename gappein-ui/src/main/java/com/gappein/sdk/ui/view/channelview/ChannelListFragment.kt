@@ -22,6 +22,10 @@ class ChannelListFragment : Fragment(), ChatBaseView {
 
     companion object {
 
+        /**
+         * Returns instance of ChanneListFragment
+         *
+         */
         @JvmStatic
         fun newInstance() = ChannelListFragment()
 

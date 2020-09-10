@@ -42,7 +42,10 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
         private val EMPTY_USER = User()
         private const val CAMERA_PERMISSION_CODE = 100
 
-
+        /**
+         * Returns intent of MessageListActivity
+         *
+         */
         @JvmStatic
         fun buildIntent(context: Context, channelId: String, receiver: User) =
             Intent(context, MessageListActivity::class.java).apply {
@@ -59,7 +62,7 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
         setContentView(R.layout.activity_message)
         setupUI()
         setupRecyclerView()
-        fetchMessage()
+        fetchMessages()
         setupSendMessageListener()
     }
 
@@ -105,7 +108,7 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
         recyclerViewMessages.adapter = adapter
     }
 
-    private fun fetchMessage() {
+    private fun fetchMessages() {
         ChatClient.getInstance().getMessages(channelId) {
             chats.run {
                 clear()

@@ -1,5 +1,8 @@
 # Gappein
-<img src=https://github.com/Gappein/Gappein-Chat-SDK/blob/development/art/banner-chat-sdk.png >
+<img src=https://github.com/Gappein/Gappein-Chat-SDK/blob/master/art/banner-chat-sdk.png >
+
+[ ![Download Chat](https://api.bintray.com/packages/gappein/Gappein/Gappein-Chat-SDK/images/download.svg) ](https://bintray.com/gappein/Gappein/Gappein-Chat-SDK/_latestVersion)
+[ ![Download UI](https://api.bintray.com/packages/gappein/Gappein/Gappein-UI-SDK/images/download.svg) ](https://bintray.com/gappein/Gappein/Gappein-UI-SDK/_latestVersion)
 
 Gappein is a new Chat SDK in town!
 
@@ -21,10 +24,7 @@ A plug and play modular toolkit for integrating the Chat feature on top of Fireb
 Add the dependencies to the `build.gradle`
 
 ```groovy
-//TODO final dependency name will depend on bintray setup
-
-implementation "com.gappein.sdk:gappein-sdk:1.0.0-alpha1" 
-implementation "com.gappein.sdk:gappein-ui:1.0.0-alpha1"
+implementation "com.gappein.sdk:gappein-sdk:1.0.0-alpha2" 
 implementation "com.google.firebase:firebase-core:17.5.0"
 implementation "com.google.firebase:firebase-storage:19.1.1"
 implementation "com.google.firebase:firebase-firestore:21.5.0"
@@ -36,7 +36,6 @@ implementation "com.google.firebase:firebase-firestore:21.5.0"
 Initialize the Gappein SDK with one line.
 
 ```kotlin
-//TODO make this better
 Gappein.Builder().build()
 ```
 
@@ -56,16 +55,19 @@ Gappein.getInstance().setUser(
         )
 ```
 
-
 # UI
 [(Back to top)](#table-of-contents)
 
 You can either build your own UI or use our UI SDK to create a beautiful chat experience.
+To use our UI SDK add the following to your app's `build.gradle` -
+
+```groovy
+implementation "com.gappein.sdk:gappein-ui:1.0.0-alpha2"
+```
 
 To open the Channel List Fragment add the following code -
 
 ```kotlin
-//TODO make this better
 private fun addChannelListFragment() {
         val fm = supportFragmentManager
         val ft = fm.beginTransaction()
@@ -86,12 +88,12 @@ where `User` is the recipient user of the device.
 # Developer Notes
 [(Back to top)](#table-of-contents)
 
-//TODO add this for explaining nuances of the SDK or give the link to Wiki
+This SDK is in alpha release, we would love to hear your feedback. If you face any issues please let us know [here](https://github.com/Gappein/Gappein-Chat-SDK/issues)
 
 # Sample App
 [(Back to top)](#table-of-contents)
 
-Find the [Demo App here](https://github.com/Gappein/Gappein-Chat-SDK/tree/development/app)
+Find the [Demo App here](https://github.com/Gappein/Gappein-Chat-SDK/tree/master/app)
 
 # Contributing
 [(Back to top)](#table-of-contents)
