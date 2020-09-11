@@ -10,6 +10,7 @@ A plug and play modular toolkit for integrating the Chat feature on top of Fireb
 
 # Table of contents
 
+- [Get Started](#installation)
 - [Installation](#installation)
 - [Initialization](#initialization)
 - [UI](#UI)
@@ -17,6 +18,10 @@ A plug and play modular toolkit for integrating the Chat feature on top of Fireb
 - [Sample App](#sample-app)
 - [Contributing](#contributing)
 - [License](#license)
+
+# Get Started
+[(Back to top)](#table-of-contents)
+To get started you need to first create a Firebase project for your app and add the `google-service.json` file in your project.
 
 # Installation
 [(Back to top)](#table-of-contents)
