@@ -24,7 +24,7 @@ A plug and play modular toolkit for integrating the Chat feature on top of Fireb
 Add the dependencies to the `build.gradle`
 
 ```groovy
-implementation "com.gappein.sdk:gappgein-sdk:1.0.0-alpha2" 
+implementation "com.gappein.sdk:gappein-sdk:1.0.0-alpha2" 
 implementation "com.google.firebase:firebase-core:17.5.0"
 implementation "com.google.firebase:firebase-storage:19.1.1"
 implementation "com.google.firebase:firebase-firestore:21.5.0"
