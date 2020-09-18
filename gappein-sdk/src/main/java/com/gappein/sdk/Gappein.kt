@@ -12,29 +12,28 @@ interface Gappein {
 
     companion object {
 
-        private var instance: Gappein? = null
-
-        @JvmStatic
-        fun getInstance(): Gappein = instance ?: throw IllegalStateException("Gappein.Builder::build() must be called before obtaining Gappein instance")
-    }
-
-    fun currentUser(): User
-
-    fun setUser(user: User, token: String, onSuccess: (User) -> Unit, onError: (Exception) -> Unit)
-
-
-    class Builder() {
-
         private val firebaseDbManager: FirebaseDbManager = FirebaseDbManagerImpl()
         private val firebaseStorageManager: FirebaseStorageManager = FirebaseStorageManagerImpl()
+
 
         /**
          * Use this to initialize the SDK in the Application class
          *
          * @return Instance of Gappein-Chat-SDK
          */
-        fun build(): Gappein =  GappeinImpl(ChatClient.Builder(firebaseStorageManager, firebaseDbManager).build()).apply {
-                instance = this
-        }
+
+        @JvmStatic
+        fun initialize(): Gappein = GappeinImpl(
+            ChatClient.Builder()
+                .setDbManager(firebaseDbManager)
+                .setStorageManager(firebaseStorageManager)
+                .build()
+        )
+
     }
+
+    fun currentUser(): User
+
+    fun setUser(user: User, token: String, onSuccess: (User) -> Unit, onError: (Exception) -> Unit)
+
 }

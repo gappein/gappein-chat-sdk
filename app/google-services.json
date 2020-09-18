@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "939751632320",
+    "firebase_url": "https://chatsdk-demo-8b9a6.firebaseio.com",
+    "project_id": "chatsdk-demo-8b9a6",
+    "storage_bucket": "chatsdk-demo-8b9a6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:939751632320:android:99c37ff7279de69769ac25",
+        "android_client_info": {
+          "package_name": "com.gappein.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "939751632320-bc0mlmorregircqnj1ho9hvqaqn629qg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.gappein.app",
+            "certificate_hash": "794588b657fd2ad35c5ecd05e4342fa9bbe826a2"
+          }
+        },
+        {
+          "client_id": "939751632320-tk1dm518e72vfu1dmojeasuol0cf2h23.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCgS5fULlMsQfUXCqzvWSAJQdkyPdzT4xc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "939751632320-tk1dm518e72vfu1dmojeasuol0cf2h23.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
