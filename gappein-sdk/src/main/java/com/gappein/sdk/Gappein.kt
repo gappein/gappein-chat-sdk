@@ -14,6 +14,10 @@ interface Gappein {
 
         private val firebaseDbManager: FirebaseDbManager = FirebaseDbManagerImpl()
         private val firebaseStorageManager: FirebaseStorageManager = FirebaseStorageManagerImpl()
+        private var INSTANCE: Gappein? = null
+
+        fun getInstance(): Gappein = INSTANCE
+            ?: throw IllegalStateException("Gappein.initialize() must be called before obtaining Gappein instance")
 
 
         /**
@@ -23,12 +27,15 @@ interface Gappein {
          */
 
         @JvmStatic
-        fun initialize(): Gappein = GappeinImpl(
-            ChatClient.Builder()
-                .setDbManager(firebaseDbManager)
-                .setStorageManager(firebaseStorageManager)
-                .build()
-        )
+        fun initialize(): Gappein {
+            INSTANCE = GappeinImpl(
+                ChatClient.Builder()
+                    .setDbManager(firebaseDbManager)
+                    .setStorageManager(firebaseStorageManager)
+                    .build()
+            )
+            return INSTANCE as Gappein
+        }
 
     }
 
