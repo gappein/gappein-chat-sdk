@@ -28,13 +28,15 @@ interface Gappein {
 
         @JvmStatic
         fun initialize(): Gappein {
-            INSTANCE = GappeinImpl(
+            return GappeinImpl(
                 ChatClient.Builder()
                     .setDbManager(firebaseDbManager)
                     .setStorageManager(firebaseStorageManager)
                     .build()
-            )
-            return INSTANCE as Gappein
+            ).apply {
+                INSTANCE = this
+            }
+
         }
 
     }

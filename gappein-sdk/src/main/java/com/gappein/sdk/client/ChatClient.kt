@@ -12,10 +12,10 @@ interface ChatClient {
 
     companion object {
 
-        private var instance: ChatClient? = null
+        private var INSTANCE: ChatClient? = null
 
         @JvmStatic
-        fun getInstance(): ChatClient = instance
+        fun getInstance(): ChatClient = INSTANCE
             ?: throw IllegalStateException("Gappein.Builder::build() must be called before obtaining Gappein instance")
 
     }
@@ -35,7 +35,7 @@ interface ChatClient {
          * @return Instance of ChatClient
          */
         fun build(): ChatClient = storageManager?.let {storageManager-> dbManager?.let { dbManager -> ChatClientImpl(storageManager, dbManager).apply {
-                    instance = this
+                    INSTANCE = this
                 }
             }
         } as ChatClient
