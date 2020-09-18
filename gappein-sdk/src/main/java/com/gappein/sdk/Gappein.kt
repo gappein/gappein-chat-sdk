@@ -16,8 +16,8 @@ interface Gappein {
         private val firebaseStorageManager: FirebaseStorageManager = FirebaseStorageManagerImpl()
         private var INSTANCE: Gappein? = null
 
-        fun getInstance(): Gappein = INSTANCE
-            ?: throw IllegalStateException("Gappein.initialize() must be called before obtaining Gappein instance")
+        @JvmStatic
+        fun getInstance(): Gappein = INSTANCE ?: throw IllegalStateException("Gappein.initialize() must be called before obtaining Gappein instance")
 
 
         /**
