@@ -22,6 +22,7 @@ interface Gappein {
 
     fun setUser(user: User, token: String, onSuccess: (User) -> Unit, onError: (Exception) -> Unit)
 
+
     class Builder() {
 
         private val firebaseDbManager: FirebaseDbManager = FirebaseDbManagerImpl()
