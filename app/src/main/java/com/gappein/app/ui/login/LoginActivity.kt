@@ -65,19 +65,19 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
         if (requestCode == RC_SIGN_IN) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             try {
                 val account = task.getResult(ApiException::class.java)
                 account?.idToken?.let { firebaseAuthWithGoogle(it) }
             } catch (ignored: ApiException) {
-
+                Log.d(TAG,ignored.stackTraceToString().toString())
             }
         }
     }
 
     private fun firebaseAuthWithGoogle(idToken: String) {
+        Log.d(TAG,idToken.toString())
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         auth.signInWithCredential(credential)
             .addOnCompleteListener(this) { task ->

@@ -12,23 +12,33 @@ interface ChatClient {
 
     companion object {
 
-        private var instance: ChatClient? = null
+        private var INSTANCE: ChatClient? = null
 
         @JvmStatic
-        fun getInstance(): ChatClient = instance ?: throw IllegalStateException("Gappein.Builder::build() must be called before obtaining Gappein instance")
+        fun getInstance(): ChatClient = INSTANCE
+            ?: throw IllegalStateException("Gappein.Builder::build() must be called before obtaining Gappein instance")
 
     }
 
-    class Builder(private val storageManager: FirebaseStorageManager, private val dbManager: FirebaseDbManager) {
+    class Builder {
+
+        private var dbManager: FirebaseDbManager? = null
+        private var storageManager: FirebaseStorageManager? = null
+
+        fun setDatabaseManager(dbManager: FirebaseDbManager) = apply { this.dbManager = dbManager }
+
+        fun setStorageManager(storageManager: FirebaseStorageManager) = apply { this.storageManager = storageManager }
 
         /**
          * Use this to use the methods of ChatClient
          *
          * @return Instance of ChatClient
          */
-        fun build(): ChatClient = ChatClientImpl(storageManager, dbManager).apply {
-                instance = this
-        }
+        fun build(): ChatClient = storageManager?.let {storageManager-> dbManager?.let { dbManager -> ChatClientImpl(storageManager, dbManager).apply {
+                    INSTANCE = this
+                }
+            }
+        } as ChatClient
     }
 
     /**
@@ -56,7 +66,12 @@ interface ChatClient {
      * @param onSuccess - Success callback
      * @param onError - Error callback
      */
-    fun sendMessage(messageText: String, receiver: String, onSuccess: () -> Unit, onError: (Exception) -> Unit)
+    fun sendMessage(
+        messageText: String,
+        receiver: String,
+        onSuccess: () -> Unit,
+        onError: (Exception) -> Unit
+    )
 
     /**
      * Use to send file URI
@@ -67,7 +82,13 @@ interface ChatClient {
      * @param onProgress - File upload progress callback
      * @param onError - Error callback
      */
-    fun sendMessage(fileUri: Uri, receiver: String, onSuccess: () -> Unit, onProgress: (Int) -> Unit, onError: (Exception) -> Unit)
+    fun sendMessage(
+        fileUri: Uri,
+        receiver: String,
+        onSuccess: () -> Unit,
+        onProgress: (Int) -> Unit,
+        onError: (Exception) -> Unit
+    )
 
     /**
      * Use to get User for the respective token
@@ -99,7 +120,7 @@ interface ChatClient {
      * @param channelId - String - channel id
      * @param onSuccess - Success callback
      */
-    fun getMessages(channelId: String,onSuccess: (List<Message>) -> Unit)
+    fun getMessages(channelId: String, onSuccess: (List<Message>) -> Unit)
 
     /**
      * Use to get Users for given channel
@@ -107,7 +128,7 @@ interface ChatClient {
      * @param channelId - String - channel id
      * @param onSuccess - Success callback
      */
-    fun getChannelUsers(channelId: String,onSuccess: (List<User>) -> Unit)
+    fun getChannelUsers(channelId: String, onSuccess: (List<User>) -> Unit)
 
     /**
      * Use to get the recipient User of a channel
@@ -123,7 +144,7 @@ interface ChatClient {
      * @param channelId - String - channel id
      * @param onSuccess - Success callback
      */
-    fun getLastMessageFromChannel(channelId: String, onSuccess: (Message,User) -> Unit)
+    fun getLastMessageFromChannel(channelId: String, onSuccess: (Message, User) -> Unit)
 
     /**
      * Use to check whether a particular User is online
@@ -131,7 +152,7 @@ interface ChatClient {
      * @param token - String - token of the User you want to check
      * @param onSuccess - Success callback
      */
-    fun isUserOnline(token: String,onSuccess: (Boolean,String) -> Unit)
+    fun isUserOnline(token: String, onSuccess: (Boolean, String) -> Unit)
 
     /**
      * Use to set the User online

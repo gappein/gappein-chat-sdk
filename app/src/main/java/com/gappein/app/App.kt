@@ -8,7 +8,7 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
         AppPreference.init(this)
-        Gappein.Builder().build()
+        Gappein.initialize()
     }
 
 }
