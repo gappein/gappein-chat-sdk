@@ -98,4 +98,8 @@ class ChatClientImpl(private val storageManager: FirebaseStorageManager, private
     override fun getAllChannels(onSuccess: (List<Channel>) -> Unit) {
         dbManager.getAllChannels(onSuccess)
     }
+
+    override fun deleteMessage(channelId: String, onSuccess: () -> Unit){
+        dbManager.deleteMessage(channelId,onSuccess)
+    }
 }

@@ -1,10 +1,11 @@
 package com.gappein.sdk.model
 
-import java.util.*
 
 data class Message(
 
         var timeStamp: Long? = System.currentTimeMillis(),
+
+        val _id:String ="",
 
         val message: String = "",
 
@@ -12,6 +13,8 @@ data class Message(
 
         val receiver: User = User(),
 
-        var isUrl: Boolean = false
+        var isUrl: Boolean = false,
+
+        val isDeleted:Boolean = false
 )
 

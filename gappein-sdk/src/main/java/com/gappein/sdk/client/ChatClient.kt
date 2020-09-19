@@ -162,4 +162,7 @@ interface ChatClient {
     fun setUserOnline(token: String)
 
     fun getAllChannels(onSuccess: (List<Channel>) -> Unit)
+
+    fun deleteMessage(channelId: String,onSuccess: () -> Unit)
+
 }
