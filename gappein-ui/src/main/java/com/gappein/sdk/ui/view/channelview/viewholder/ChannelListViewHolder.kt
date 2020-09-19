@@ -28,11 +28,7 @@ class ChannelListViewHolder(private val view: View) : RecyclerView.ViewHolder(vi
 
             view.textViewUserName.text = data.user.name
 
-            if (data.lastMessage.deleted) {
-                view.textViewLastMessage.text = data.lastMessage.message
-            } else {
-                view.textViewLastMessage.text = view.context.getString(R.string.message_has_been_deleted)
-            }
+            view.textViewLastMessage.text = data.lastMessage.message
 
             view.textViewLastMessageTime.text = DatesUtil.getTimeAgo(data.lastMessage.timeStamp)
 

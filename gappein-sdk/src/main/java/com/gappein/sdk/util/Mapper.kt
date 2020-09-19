@@ -18,3 +18,7 @@ fun Channel.toChannelList(onSuccess: (ChannelListData) -> Unit) {
         onSuccess(channelListData)
     }
 }
+
+fun User.asChannel(){
+    val channel = Channel()
+}

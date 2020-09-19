@@ -22,6 +22,12 @@ class ChatClientImpl(private val storageManager: FirebaseStorageManager, private
         })
     }
 
+    private fun assignCurrentUser(currentUser: User, user: User) {
+        currentUser.isOnline = user.isOnline
+        currentUser.name = user.name
+        currentUser.profileImageUrl = user.profileImageUrl
+        currentUser.createdAt = user.createdAt
+    }
 
     override fun getUser() = currentUser
 
@@ -97,9 +103,5 @@ class ChatClientImpl(private val storageManager: FirebaseStorageManager, private
 
     override fun getAllChannels(onSuccess: (List<Channel>) -> Unit) {
         dbManager.getAllChannels(onSuccess)
-    }
-
-    override fun deleteMessage(channelId: String, messageId: String,onSuccess: () -> Unit){
-        dbManager.deleteMessage(channelId,messageId,onSuccess)
     }
 }
