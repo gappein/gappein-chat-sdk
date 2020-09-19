@@ -1,8 +1,13 @@
 package com.gappein.sdk.ui.view.chatView.viewholder
 
+import android.content.Context
+import android.graphics.Color
+import android.graphics.Typeface
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.gappein.sdk.model.Message
+import com.gappein.sdk.ui.R
 import com.gappein.sdk.ui.view.util.DatesUtil
 import com.gappein.sdk.ui.view.util.hide
 import com.gappein.sdk.ui.view.util.show
@@ -28,7 +33,14 @@ class SenderMessageListViewHolder(private val view: View) : RecyclerView.ViewHol
             }
         }
         view.setOnClickListener { onMessageClick(messages[position]._id) }
-        view.sentTextMessage.text = (messages[position].message)
+        if (messages[position].deleted) {
+            view.sentTextMessage.text = view.context.getString(R.string.delete_for_all)
+            view.sentTextMessage.setTypeface(  view.sentTextMessage.typeface,Typeface.ITALIC)
+            view.sentTextMessage.setTextColor(Color.parseColor("#828282"))
+            view.sentTextMessage.setBackgroundResource(R.drawable.sent_message_deleted_background)
+        } else {
+            view.sentTextMessage.text = (messages[position].message)
+        }
     }
 
 }

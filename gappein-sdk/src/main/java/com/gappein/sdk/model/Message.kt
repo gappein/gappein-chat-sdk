@@ -15,6 +15,6 @@ data class Message(
 
         var isUrl: Boolean = false,
 
-        val isDeleted:Boolean = false
+        val deleted:Boolean = false
 )
 
