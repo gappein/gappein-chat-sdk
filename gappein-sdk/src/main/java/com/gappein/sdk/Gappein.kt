@@ -30,7 +30,7 @@ interface Gappein {
         fun initialize(): Gappein {
             return GappeinImpl(
                 ChatClient.Builder()
-                    .setDbManager(firebaseDbManager)
+                    .setDatabaseManager(firebaseDbManager)
                     .setStorageManager(firebaseStorageManager)
                     .build()
             ).apply {
