@@ -32,6 +32,6 @@ interface FirebaseDbManager {
 
     fun getAllChannels(onSuccess: (List<Channel>) -> Unit)
 
-    fun deleteMessage(channelId: String,onSuccess: () -> Unit)
+    fun deleteMessage(channelId: String,messageId: String,onSuccess: () -> Unit)
 
 }

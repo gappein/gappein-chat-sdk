@@ -104,7 +104,7 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
         adapter = MessageListAdapter(chatClient = ChatClient.getInstance(), onImageClick = {
             openImage(this, it)
         },onMessageClick = {
-            ChatClient.getInstance().deleteMessage(channelId) {
+            ChatClient.getInstance().deleteMessage(channelId,it) {
 
             }
         })

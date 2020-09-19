@@ -56,21 +56,25 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
         val userList = listOf(message.sender.token, message.receiver.token)
         val channelId = userList.sorted().toString()
 
-        val collection = channelReference.document(channelId)
+        channelReference.document(channelId)
             .collection(MESSAGES_COLLECTION)
-        collection
             .add(message)
             .addOnSuccessListener {
-                updateMessage(channelId,it,onSuccess,onError)
+                updateMessage(channelId, it, onSuccess, onError)
             }
             .addOnFailureListener { onError(it) }
     }
 
-    private fun updateMessage(channelId:String,it: DocumentReference, onSuccess: () -> Unit, onError: (Exception) -> Unit) {
+    private fun updateMessage(
+        channelId: String,
+        it: DocumentReference,
+        onSuccess: () -> Unit,
+        onError: (Exception) -> Unit
+    ) {
         channelReference.document(channelId)
             .collection(MESSAGES_COLLECTION)
             .document(it.id)
-            .update("_id",it.id)
+            .update("_id", it.id)
             .addOnSuccessListener { onSuccess() }
             .addOnFailureListener { onError(it) }
     }
@@ -290,10 +294,13 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
         }
     }
 
-    override fun deleteMessage(channelId: String, onSuccess: () -> Unit) {
-        val x = channelReference.document(channelId)
+    override fun deleteMessage(channelId: String, messageId: String, onSuccess: () -> Unit) {
+        channelReference.document(channelId)
             .collection(MESSAGES_COLLECTION)
-            .document()
+            .document(messageId)
+            .update("deleted", true)
+            .addOnSuccessListener { }
+            .addOnFailureListener { }
 
 
     }
