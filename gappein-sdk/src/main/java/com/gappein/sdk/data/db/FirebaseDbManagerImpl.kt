@@ -47,7 +47,11 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
             }
     }
 
-    override fun sendMessage(message: Message, onSuccess: () -> Unit, onError: (Exception) -> Unit) {
+    override fun sendMessage(
+        message: Message,
+        onSuccess: () -> Unit,
+        onError: (Exception) -> Unit
+    ) {
 
         val userList = listOf(message.sender.token, message.receiver.token)
         val channelId = userList.sorted().toString()
@@ -55,11 +59,31 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
         channelReference.document(channelId)
             .collection(MESSAGES_COLLECTION)
             .add(message)
+            .addOnSuccessListener {
+                updateMessage(channelId, it, onSuccess, onError)
+            }
+            .addOnFailureListener { onError(it) }
+    }
+
+    private fun updateMessage(
+        channelId: String,
+        it: DocumentReference,
+        onSuccess: () -> Unit,
+        onError: (Exception) -> Unit
+    ) {
+        channelReference.document(channelId)
+            .collection(MESSAGES_COLLECTION)
+            .document(it.id)
+            .update("_id", it.id)
             .addOnSuccessListener { onSuccess() }
             .addOnFailureListener { onError(it) }
     }
 
-    override fun getUserByToken(token: String, onSuccess: (User) -> Unit, onError: (Exception) -> Unit) {
+    override fun getUserByToken(
+        token: String,
+        onSuccess: (User) -> Unit,
+        onError: (Exception) -> Unit
+    ) {
         userReference
             .get()
             .addOnSuccessListener { result ->
@@ -70,7 +94,10 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
             .addOnFailureListener { exception -> onError(exception) }
     }
 
-    override fun getOrCreateNewChatChannels(participantUserToken: String, onSuccess: (channelId: String) -> Unit) {
+    override fun getOrCreateNewChatChannels(
+        participantUserToken: String,
+        onSuccess: (channelId: String) -> Unit
+    ) {
 
         val userChannelReference = channelReference.document(participantUserToken)
         val currentUser = ChatClient.getInstance().getUser()
@@ -81,7 +108,7 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
         val userList = listOf(participantUserToken, currentUserToken)
         val channelId = userList.sorted().toString()
 
-       userChannelReference.get()
+        userChannelReference.get()
             .addOnSuccessListener {
                 if (it.exists()) {
                     onSuccess(it[CHANNEL_ID] as String)
@@ -130,7 +157,13 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
         }
     }
 
-    override fun sendMessageByToken(message: Message, sender: User, receiver: User, onSuccess: () -> Unit, onError: (Exception) -> Unit) {
+    override fun sendMessageByToken(
+        message: Message,
+        sender: User,
+        receiver: User,
+        onSuccess: () -> Unit,
+        onError: (Exception) -> Unit
+    ) {
         sendMessage(message, onSuccess, onError)
     }
 
@@ -139,13 +172,13 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
             .collection(MESSAGES_COLLECTION)
             .addSnapshotListener { querySnapshot: QuerySnapshot?, _: FirebaseFirestoreException? ->
                 val messages = mutableListOf<Message>()
-                   val data = querySnapshot?.documents
-                       ?.map {
-                           return@map it.toObject(Message::class.java)
+                val data = querySnapshot?.documents
+                    ?.map {
+                        return@map it.toObject(Message::class.java)
 
-                       }?.sortedBy {
-                           it?.timeStamp
-                       } as List<Message>
+                    }?.sortedBy {
+                        it?.timeStamp
+                    } as List<Message>
 
                 messages.run {
                     clear()
@@ -165,8 +198,9 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
                 }
                 onSuccess(it.last(), users.first())
             } else {
-                getChannelUsers(channelId) {_u->
-                    val user = _u.filter { user -> user.token != ChatClient.getInstance().getUser().token }
+                getChannelUsers(channelId) { _u ->
+                    val user =
+                        _u.filter { user -> user.token != ChatClient.getInstance().getUser().token }
                     onSuccess(Message(), user.first())
                 }
             }
@@ -258,6 +292,17 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
                 }
             channels?.let { onSuccess(it) }
         }
+    }
+
+    override fun deleteMessage(channelId: String, messageId: String, onSuccess: () -> Unit) {
+        channelReference.document(channelId)
+            .collection(MESSAGES_COLLECTION)
+            .document(messageId)
+            .update("deleted", true)
+            .addOnSuccessListener { }
+            .addOnFailureListener { }
+
+
     }
 
     //for later implementation will check soon.
