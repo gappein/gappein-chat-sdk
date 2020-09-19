@@ -36,7 +36,7 @@ class SenderMessageListViewHolder(private val view: View) : RecyclerView.ViewHol
         if (messages[position].deleted) {
             view.sentTextMessage.text = view.context.getString(R.string.delete_for_all)
             view.sentTextMessage.setTypeface(  view.sentTextMessage.typeface,Typeface.ITALIC)
-            view.sentTextMessage.setTextColor(Color.parseColor("#828282"))
+            view.sentTextMessage.setTextColor(Color.parseColor("#d3d3d3"))
             view.sentTextMessage.setBackgroundResource(R.drawable.sent_message_deleted_background)
         } else {
             view.sentTextMessage.text = (messages[position].message)
