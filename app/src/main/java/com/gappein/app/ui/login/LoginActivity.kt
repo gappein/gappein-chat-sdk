@@ -72,7 +72,6 @@ class LoginActivity : AppCompatActivity() {
                 account?.idToken?.let { firebaseAuthWithGoogle(it) }
             } catch (ignored: ApiException) {
                 Log.d(TAG,ignored.stackTraceToString().toString())
-
             }
         }
     }
