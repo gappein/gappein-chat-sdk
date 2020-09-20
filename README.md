@@ -41,7 +41,7 @@ implementation "com.google.firebase:firebase-firestore:21.5.0"
 Initialize the Gappein SDK with one line.
 
 ```kotlin
-Gappein.Builder().build()
+Gappein.initialize()
 ```
 
 Set the `User` by passing information about the currently logged in user
