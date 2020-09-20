@@ -1,6 +1,5 @@
 package com.gappein.sdk.data.db
 
-import android.util.Log
 import com.gappein.sdk.client.ChatClient
 import com.gappein.sdk.model.Channel
 import com.gappein.sdk.model.ChannelUsers
@@ -21,6 +20,10 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
 
     companion object {
         private const val USER_COLLECTION = "users"
+        private const val ID = "_id"
+        private const val DELETED = "deleted"
+        private const val LIKED = "liked"
+        private const val TRUE = "true"
         private const val MESSAGES_COLLECTION = "messages"
         private const val CHANNEL_COLLECTION = "channel"
         private const val CHANNEL_ID = "channelId"
@@ -74,7 +77,7 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
         channelReference.document(channelId)
             .collection(MESSAGES_COLLECTION)
             .document(it.id)
-            .update("_id", it.id)
+            .update(ID, it.id)
             .addOnSuccessListener { onSuccess() }
             .addOnFailureListener { onError(it) }
     }
@@ -124,9 +127,7 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
                 addChannelsToUser(participantUserReference, currentUserToken, channelId)
                 onSuccess(channelId)
             }
-
     }
-
 
     private fun addChannelsToUser(reference: DocumentReference, token: String, messageId: String) {
         reference
@@ -175,7 +176,6 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
                 val data = querySnapshot?.documents
                     ?.map {
                         return@map it.toObject(Message::class.java)
-
                     }?.sortedBy {
                         it?.timeStamp
                     } as List<Message>
@@ -198,9 +198,10 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
                 }
                 onSuccess(it.last(), users.first())
             } else {
-                getChannelUsers(channelId) { _u ->
-                    val user =
-                        _u.filter { user -> user.token != ChatClient.getInstance().getUser().token }
+                getChannelUsers(channelId) { userList ->
+                    val user = userList.filter { user ->
+                        user.token != ChatClient.getInstance().getUser().token
+                    }
                     onSuccess(Message(), user.first())
                 }
             }
@@ -259,7 +260,7 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
             .addOnSuccessListener {
                 if (it.data != null) {
                     val userData = it.data as Map<String, User>
-                    if (userData[IS_ONLINE].toString() == "true") {
+                    if (userData[IS_ONLINE].toString() == TRUE) {
                         onSuccess(true, "")
                     } else {
                         onSuccess(false, userData[LAST_ONLINE_AT].toString())
@@ -282,7 +283,6 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
             if (error != null) {
                 return@addSnapshotListener
             }
-
             val channels = querySnapshot
                 ?.documents
                 ?.map { channel ->
@@ -298,22 +298,17 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
         channelReference.document(channelId)
             .collection(MESSAGES_COLLECTION)
             .document(messageId)
-            .update("deleted", true)
-            .addOnSuccessListener { }
+            .update(DELETED, true)
+            .addOnSuccessListener { onSuccess() }
             .addOnFailureListener { }
-
-
     }
 
-    //for later implementation will check soon.
-    private fun getAllUsers(onSuccess: (List<User>) -> Unit) {
-        userReference.addSnapshotListener { value, _ ->
-            val userList = mutableListOf<User>()
-            value?.documents?.map {
-                val userMapper: Map<String, User> = it.data as Map<String, User>
-                userList.addAll(userMapper.values.toList())
-            }
-            onSuccess(userList)
-        }
+    override fun likeMessage(channelId: String, messageId: String, onSuccess: () -> Unit) {
+        channelReference.document(channelId)
+            .collection(MESSAGES_COLLECTION)
+            .document(messageId)
+            .update(LIKED, true)
+            .addOnSuccessListener { onSuccess() }
+            .addOnFailureListener { }
     }
 }

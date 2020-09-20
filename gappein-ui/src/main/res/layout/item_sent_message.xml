@@ -14,6 +14,7 @@
         android:padding="12dp"
         app:layout_constrainedWidth="true"
         android:textColor="@android:color/white"
+        android:text="dsfsdjfsdfjkdsjkfhsddsfh"
         app:layout_constraintEnd_toEndOf="parent"
         app:fontFamily="@font/nunito_bold"
         app:layout_constraintHorizontal_bias="1.0"
@@ -27,7 +28,6 @@
         android:paddingStart="12dp"
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
-        android:text="dfsfsf"
         android:visibility="visible"
         android:textColor="#9FA2A2"
         android:textSize="12sp"
@@ -36,6 +36,21 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintVertical_bias="1.0" />
+
+    <ImageView
+        android:id="@+id/likeImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:src="@drawable/ic_like"
+        android:textColor="@android:color/white"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/sentTextMessage"
+        app:layout_constraintEnd_toStartOf="@+id/sentTextMessage"
+        app:layout_constraintStart_toStartOf="@+id/sentTextMessage"
+        app:layout_constraintTop_toBottomOf="@+id/sentTextMessage"
+        app:layout_constraintVertical_bias="1.0"
+        tools:visibility="visible" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"

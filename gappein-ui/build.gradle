@@ -18,7 +18,7 @@ ext {
     siteUrl = 'https://www.gappein.com/'
     gitUrl = 'https://github.com/Gappein/Gappein-Chat-SDK.git'
 
-    libraryVersion = '1.0.0-alpha2'
+    libraryVersion = '1.0.0-alpha3'
 
     developerId = 'hi-manshu'
     developerName = 'Himanshu Singh'
@@ -31,13 +31,13 @@ ext {
 
 android {
     compileSdkVersion 30
-    buildToolsVersion "30.0.1"
+    buildToolsVersion "30.0.2"
 
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion 30
         versionCode 2
-        versionName "1.0.0-alpha2"
+        versionName "1.0.0-alpha3"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -143,7 +143,10 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     implementation "androidx.recyclerview:recyclerview:1.1.0"
-    implementation project(':gappein-sdk')
+//    implementation project(':gappein-sdk')
+
+    implementation "com.gappein.sdk:gappein-sdk:1.0.0-alpha3"
+
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     kapt 'com.github.bumptech.glide:compiler:4.11.0'
     implementation "androidx.cardview:cardview:1.0.0"

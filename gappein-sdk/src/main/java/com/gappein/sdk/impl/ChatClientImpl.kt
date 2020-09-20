@@ -102,4 +102,8 @@ class ChatClientImpl(private val storageManager: FirebaseStorageManager, private
     override fun deleteMessage(channelId: String, messageId: String,onSuccess: () -> Unit){
         dbManager.deleteMessage(channelId,messageId,onSuccess)
     }
+
+    override fun likeMessage(channelId: String, messageId: String, onSuccess: () -> Unit) {
+        dbManager.likeMessage(channelId, messageId, onSuccess)
+    }
 }
