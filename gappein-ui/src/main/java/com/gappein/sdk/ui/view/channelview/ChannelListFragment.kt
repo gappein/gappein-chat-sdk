@@ -52,7 +52,7 @@ class ChannelListFragment : Fragment(), ChatBaseView {
         super.onAttach(context)
         try {
             onUserClick = (context) as OnChannelClick
-        } catch (ex:Exception){
+        } catch (ex: Exception) {
             throw NotImplementedError("Implement OnChannelClick on your base activity")
         }
     }
@@ -64,8 +64,8 @@ class ChannelListFragment : Fragment(), ChatBaseView {
                 view.linearLayoutNoChatFound.hide()
                 view.recyclerViewChannel.show()
             } else {
-               view.linearLayoutNoChatFound.show()
-               view.recyclerViewChannel.hide()
+                view.linearLayoutNoChatFound.show()
+                view.recyclerViewChannel.hide()
             }
         }
     }
@@ -75,6 +75,8 @@ class ChannelListFragment : Fragment(), ChatBaseView {
             onUserClick.onUserClick(it)
         }, onChannelClick = { channel, user ->
             startActivity(MessageListActivity.buildIntent(requireContext(), channel.id, user))
+        }, onTextChange = {
+            adapter.filter.filter(it)
         })
         view.recyclerViewChannel.layoutManager = LinearLayoutManager(requireContext())
         view.recyclerViewChannel.adapter = adapter

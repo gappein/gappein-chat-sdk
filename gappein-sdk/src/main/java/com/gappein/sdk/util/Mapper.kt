@@ -18,3 +18,4 @@ fun Channel.toChannelList(onSuccess: (ChannelListData) -> Unit) {
         onSuccess(channelListData)
     }
 }
+
