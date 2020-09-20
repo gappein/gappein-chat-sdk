@@ -39,6 +39,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun checkIfUserIsNotRegistered() {
         val user = AppPreference.getUser()
+
         if (user != null) {
             goToNext(user)
         } else {

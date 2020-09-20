@@ -103,6 +103,14 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
     private fun setupRecyclerView() {
         adapter = MessageListAdapter(chatClient = ChatClient.getInstance(), onImageClick = {
             openImage(this, it)
+        },onMessageClick = {
+            ChatClient.getInstance().deleteMessage(channelId,it) {
+
+            }
+        },onMessageLike= {
+            ChatClient.getInstance().likeMessage(channelId,it) {
+
+            }
         })
         recyclerViewMessages.layoutManager = LinearLayoutManager(this@MessageListActivity)
         recyclerViewMessages.adapter = adapter
