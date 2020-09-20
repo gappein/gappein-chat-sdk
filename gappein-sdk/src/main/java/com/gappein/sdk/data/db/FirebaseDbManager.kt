@@ -34,4 +34,6 @@ interface FirebaseDbManager {
 
     fun deleteMessage(channelId: String,messageId: String,onSuccess: () -> Unit)
 
+    fun likeMessage(channelId: String,messageId: String,onSuccess: () -> Unit)
+
 }

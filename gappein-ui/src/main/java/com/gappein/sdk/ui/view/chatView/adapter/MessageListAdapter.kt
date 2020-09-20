@@ -13,9 +13,14 @@ import com.gappein.sdk.ui.view.chatView.viewholder.ReceiverMessageListViewHolder
 import com.gappein.sdk.ui.view.chatView.viewholder.SenderImageViewHolder
 import com.gappein.sdk.ui.view.chatView.viewholder.SenderMessageListViewHolder
 import java.util.*
-import kotlin.collections.ArrayList
 
-class MessageListAdapter(private var messages: ArrayList<Message> = arrayListOf(), private val chatClient: ChatClient, private val onImageClick: (String) -> Unit,private val onMessageClick:(String)->Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), Filterable {
+class MessageListAdapter(
+    private var messages: ArrayList<Message> = arrayListOf(),
+    private val chatClient: ChatClient,
+    private val onImageClick: (String) -> Unit,
+    private val onMessageClick: (String) -> Unit,
+    private val onMessageLike: (String) -> Unit
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), Filterable {
 
     var filteredList = mutableListOf<Message>()
 
@@ -56,24 +61,28 @@ class MessageListAdapter(private var messages: ArrayList<Message> = arrayListOf(
             VIEW_TYPE_SENDER -> (holder as SenderMessageListViewHolder).bind(
                 position,
                 filteredList.toList(),
-                onMessageClick
+                onMessageClick,
+                onMessageLike
             )
 
             VIEW_TYPE_RECEIVER -> (holder as ReceiverMessageListViewHolder).bind(
                 filteredList.toList(),
-                position
+                position,
+                onMessageLike
             )
 
             VIEW_TYPE_RECEIVER_IMAGE -> (holder as ReceiveImageViewHolder).bind(
                 filteredList[position],
                 position,
-                onImageClick
+                onImageClick,
+                onMessageLike
             )
 
             VIEW_TYPE_SENDER_IMAGE -> (holder as SenderImageViewHolder).bind(
                 filteredList[position],
                 position,
-                onImageClick
+                onImageClick,
+                onMessageLike
             )
         }
     }

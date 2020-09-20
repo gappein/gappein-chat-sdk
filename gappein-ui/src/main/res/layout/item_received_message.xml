@@ -2,10 +2,12 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:padding="4dp"
     android:layout_height="wrap_content">
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -21,8 +23,8 @@
             android:layout_height="wrap_content"
             android:paddingStart="12dp"
             android:paddingTop="4dp"
-            android:textColor="#9FA2A2"
             android:paddingBottom="4dp"
+            android:textColor="#9FA2A2"
             android:textSize="8sp"
             app:layout_constraintEnd_toStartOf="@id/guideline"
             app:layout_constraintHorizontal_bias="0.0"
@@ -32,14 +34,29 @@
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/receivedTextMessage"
             android:layout_width="wrap_content"
-            android:background="@drawable/recieved_message_background"
             android:layout_height="wrap_content"
+            android:background="@drawable/recieved_message_background"
             android:padding="12dp"
-            android:textColor="@android:color/white"
+            android:text="sdfsdbfhsdfsdvfbs"
+            android:textColor="@android:color/black"
             app:fontFamily="@font/nunito_bold" />
 
     </LinearLayout>
 
+    <ImageView
+        android:id="@+id/likeImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:src="@drawable/ic_like"
+        android:textColor="@android:color/white"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="@+id/linearLayout"
+        app:layout_constraintStart_toEndOf="@+id/linearLayout"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        app:layout_constraintVertical_bias="1.0"
+        tools:visibility="visible" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
