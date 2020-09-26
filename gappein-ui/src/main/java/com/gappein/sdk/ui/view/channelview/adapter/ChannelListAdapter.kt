@@ -77,14 +77,15 @@ class ChannelListAdapter(
                 } else {
                     val resultList = mutableListOf<Channel>()
                     for (row in channel) {
-                        Log.d(
-                            "fsdfsd",
-                            row.users.contains(User(name = charSearch.toLowerCase(Locale.ROOT)))
-                                .toString()
-                        )
-                        if (row.users.contains(User(name = charSearch.toLowerCase(Locale.ROOT)))) {
+                        val presentUser = row.users.find {
+                            it.name.toLowerCase().contains(charSearch.toLowerCase(Locale.ROOT))
+                        }
+                        Log.d("SDfsdfs",charSearch.toString())
+
+                        if (row.users.contains(presentUser)) {
                             resultList.add(row)
                         }
+
                     }
                     resultList
                 }
@@ -94,7 +95,9 @@ class ChannelListAdapter(
             }
 
             override fun publishResults(p0: CharSequence?, results: FilterResults?) {
-                channelList = (results?.values as List<Channel>).toMutableList()
+//                channelList = (results?.values as List<Channel>).toMutableList()
+
+                Log.d("sdfsdfsf",results?.values.toString())
                 notifyDataSetChanged()
             }
         }
