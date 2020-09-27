@@ -1,6 +1,5 @@
 package com.gappein.sdk.ui.view.channelview.viewholder
 
-import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -17,7 +16,11 @@ import kotlinx.android.synthetic.main.item_channel.view.*
 
 class ChannelListViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
 
-    fun bind(channel: Channel, onUserClick: (User) -> Unit, onChannelClick: (Channel, User) -> Unit) {
+    fun bind(
+        channel: Channel,
+        onUserClick: (User) -> Unit,
+        onChannelClick: (Channel, User) -> Unit
+    ) {
 
         channel.toChannelList { data ->
 
@@ -29,10 +32,11 @@ class ChannelListViewHolder(private val view: View) : RecyclerView.ViewHolder(vi
 
             view.textViewUserName.text = data.user.name
 
-            if (!data.lastMessage.deleted) {
-                view.textViewLastMessage.text = data.lastMessage.message
+            if (data.lastMessage.deleted) {
+                view.textViewLastMessage.text =
+                    view.context.getString(R.string.message_has_been_deleted)
             } else {
-                view.textViewLastMessage.text = view.context.getString(R.string.message_has_been_deleted)
+                view.textViewLastMessage.text = data.lastMessage.message
             }
 
             view.textViewLastMessageTime.text = DatesUtil.getTimeAgo(data.lastMessage.timeStamp)
