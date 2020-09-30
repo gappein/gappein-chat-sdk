@@ -308,7 +308,7 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
     override fun setTypingStatus(
         channelId: String,
         userId: String,
-        status: Boolean,
+        isUserTyping: Boolean,
         onSuccess: () -> Unit
     ) {
         channelReference.document(channelId)
@@ -326,7 +326,7 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
                         )
                     }
                 val currentUser = userList?.filter { it.token == userId }?.get(0)
-                updateTypingStatus(currentUser, status, channelId)
+                updateTypingStatus(currentUser, isUserTyping, channelId)
             }
     }
 
