@@ -9,11 +9,19 @@ import com.gappein.sdk.model.Channel
 import com.gappein.sdk.model.Message
 import com.gappein.sdk.model.User
 
-class ChatClientImpl(private val storageManager: FirebaseStorageManager, private val dbManager: FirebaseDbManager) : ChatClient {
+class ChatClientImpl(
+    private val storageManager: FirebaseStorageManager,
+    private val dbManager: FirebaseDbManager
+) : ChatClient {
 
-    private var currentUser  = User()
+    private var currentUser = User()
 
-    override fun setUser(user: User, token: String, onSuccess: (User) -> Unit, onError: (Exception) -> Unit) {
+    override fun setUser(
+        user: User,
+        token: String,
+        onSuccess: (User) -> Unit,
+        onError: (Exception) -> Unit
+    ) {
         currentUser = user
         dbManager.createUser(user, {
             onSuccess(it)
@@ -25,7 +33,12 @@ class ChatClientImpl(private val storageManager: FirebaseStorageManager, private
 
     override fun getUser() = currentUser
 
-    override fun sendMessage(messageText: String, receiver: String, onSuccess: () -> Unit, onError: (Exception) -> Unit) {
+    override fun sendMessage(
+        messageText: String,
+        receiver: String,
+        onSuccess: () -> Unit,
+        onError: (Exception) -> Unit
+    ) {
         getUserByToken(receiver, {
 
             val message = Message(
@@ -43,7 +56,13 @@ class ChatClientImpl(private val storageManager: FirebaseStorageManager, private
         })
     }
 
-    override fun sendMessage(fileUri: Uri, receiver: String, onSuccess: () -> Unit, onProgress: (Int) -> Unit, onError: (Exception) -> Unit) {
+    override fun sendMessage(
+        fileUri: Uri,
+        receiver: String,
+        onSuccess: () -> Unit,
+        onProgress: (Int) -> Unit,
+        onError: (Exception) -> Unit
+    ) {
 
         getUserByToken(receiver, {
             storageManager.uploadMessageImage(fileUri, it, getUser(), { message ->
@@ -59,11 +78,18 @@ class ChatClientImpl(private val storageManager: FirebaseStorageManager, private
 
     }
 
-    override fun getUserByToken(token: String, onSuccess: (User) -> Unit, onError: (Exception) -> Unit) {
+    override fun getUserByToken(
+        token: String,
+        onSuccess: (User) -> Unit,
+        onError: (Exception) -> Unit
+    ) {
         dbManager.getUserByToken(token, onSuccess, onError)
     }
 
-    override fun openOrCreateChannel(participantUserToken: String, onComplete: (channelId: String) -> Unit) {
+    override fun openOrCreateChannel(
+        participantUserToken: String,
+        onComplete: (channelId: String) -> Unit
+    ) {
         dbManager.getOrCreateNewChatChannels(participantUserToken, onComplete)
     }
 
@@ -95,12 +121,16 @@ class ChatClientImpl(private val storageManager: FirebaseStorageManager, private
         dbManager.setUserOnline(token)
     }
 
+    override fun setTypingStatus(channelId: String, userId: String, isUserTyping:Boolean, onSuccess: () -> Unit) {
+        dbManager.setTypingStatus(channelId, userId, isUserTyping, onSuccess)
+    }
+
     override fun getAllChannels(onSuccess: (List<Channel>) -> Unit) {
         dbManager.getAllChannels(onSuccess)
     }
 
-    override fun deleteMessage(channelId: String, messageId: String,onSuccess: () -> Unit){
-        dbManager.deleteMessage(channelId,messageId,onSuccess)
+    override fun deleteMessage(channelId: String, messageId: String, onSuccess: () -> Unit) {
+        dbManager.deleteMessage(channelId, messageId, onSuccess)
     }
 
     override fun likeMessage(channelId: String, messageId: String, onSuccess: () -> Unit) {

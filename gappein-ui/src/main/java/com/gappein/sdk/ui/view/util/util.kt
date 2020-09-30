@@ -3,6 +3,8 @@ package com.gappein.sdk.ui.view.util
 import android.database.Cursor
 import android.net.Uri
 import android.os.Environment
+import android.os.Handler
+import android.os.Looper
 import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
@@ -28,6 +30,25 @@ fun EditText.addTextChangeListener(afterTextChanged: (String) -> Unit) {
     })
 }
 
+fun EditText.addTypeChangeListener(onSuccess: (Boolean) -> Unit) {
+    val currentTypingInterval = 800;
+    var userCurrentTypingState = false
+    val handler = Handler(Looper.getMainLooper())
+    val stoppedTypingNotifier = Runnable { //part A of the magic...
+        onSuccess(false)
+        userCurrentTypingState = false
+    }
+
+    this.addTextChangeListener {
+        if (!userCurrentTypingState) {
+            onSuccess(true)
+            userCurrentTypingState = true
+        }
+        handler.removeCallbacks(stoppedTypingNotifier)
+        handler.postDelayed(stoppedTypingNotifier, currentTypingInterval.toLong())
+    }
+}
+
 @Throws(IOException::class)
 fun MessageListActivity.createImageFile(): File? {
     // Create an image file name
@@ -46,7 +67,8 @@ fun MessageListActivity.getRealPathFromUri(contentUri: Uri?): String? {
         val proj = arrayOf(MediaStore.Images.Media.DATA)
         cursor = contentUri?.let { getContentResolver().query(it, proj, null, null, null) }
         assert(cursor != null)
-        val column_index: Int = (cursor?.getColumnIndexOrThrow(MediaStore.Images.Media.DATA) ?: cursor?.moveToFirst()) as Int
+        val column_index: Int = (cursor?.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+            ?: cursor?.moveToFirst()) as Int
         cursor?.getString(column_index)
     } finally {
         if (cursor != null) {

@@ -12,4 +12,5 @@
     <string name="delete_for_all">You deleted this message</string>
     <string name="delete_by_user">Message has been deleted</string>
     <string name="message_has_been_deleted">Message has been deleted</string>
+    <string name="enter_the_name">Enter the name</string>
 </resources>

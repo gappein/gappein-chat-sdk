@@ -15,5 +15,7 @@ data class User(
 
     var name: String = "",
 
-    var isOnline: Boolean = false
+    var isOnline: Boolean = false,
+
+    var typing:String = ""
 ) : Parcelable

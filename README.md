@@ -13,7 +13,7 @@ A plug and play modular toolkit for integrating the Chat feature on top of Fireb
 - [Get Started](#installation)
 - [Installation](#installation)
 - [Initialization](#initialization)
-- [UI](#UI)
+- [UI](#ui)
 - [Developer Notes](#developer-notes)
 - [Sample App](#sample-app)
 - [Contributing](#contributing)
