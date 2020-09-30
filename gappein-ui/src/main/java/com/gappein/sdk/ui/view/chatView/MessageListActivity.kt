@@ -56,6 +56,7 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
 
     private val channelId by lazy { intent.getStringExtra(CHANNEL_ID) ?: DEFAULT_STRING }
     private val receiver by lazy { intent.getParcelableExtra(RECEIVER) ?: EMPTY_USER }
+    private val currentUser by lazy { ChatClient.getInstance().getUser() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,6 +65,21 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
         setupRecyclerView()
         fetchMessages()
         setupSendMessageListener()
+        setupTextChangeListener()
+    }
+
+    private fun setupTextChangeListener() {
+        editTextChatBox.addTypeChangeListener { isUserTyping ->
+            if (isUserTyping) {
+                ChatClient.getInstance().setTypingStatus(channelId, currentUser.token, true) {
+                    //handle onSuccess
+                }
+            } else {
+                ChatClient.getInstance().setTypingStatus(channelId, currentUser.token, false) {
+                    //handle onSuccess
+                }
+            }
+        }
     }
 
     private fun setupUI() {
@@ -103,9 +119,9 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
     private fun setupRecyclerView() {
         adapter = MessageListAdapter(chatClient = ChatClient.getInstance(), onImageClick = {
             openImage(this, it)
-        },onMessageClick = {
-            ChatClient.getInstance().deleteMessage(channelId,it) {
-
+        }, onMessageClick = {
+            ChatClient.getInstance().deleteMessage(channelId,it){
+                //Handle onSuccess of Delete
             }
         },onMessageLike= {
             ChatClient.getInstance().likeMessage(channelId,it) {
@@ -114,6 +130,7 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
         })
         recyclerViewMessages.layoutManager = LinearLayoutManager(this@MessageListActivity)
         recyclerViewMessages.adapter = adapter
+
     }
 
     private fun fetchMessages() {
@@ -140,9 +157,11 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 dispatchTakePictureIntent()
             } else {
-                Toast.makeText(this,
+                Toast.makeText(
+                    this,
                     getString(R.string.permission_deined),
-                    Toast.LENGTH_SHORT)
+                    Toast.LENGTH_SHORT
+                )
                     .show();
             }
         }

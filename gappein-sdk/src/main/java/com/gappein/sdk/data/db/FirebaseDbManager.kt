@@ -10,17 +10,26 @@ interface FirebaseDbManager {
 
     fun sendMessage(message: Message, onSuccess: () -> Unit, onError: (Exception) -> Unit)
 
-    fun getUserByToken(token: String, onSuccess: (user:User) -> Unit, onError: (Exception) -> Unit)
+    fun getUserByToken(token: String, onSuccess: (user: User) -> Unit, onError: (Exception) -> Unit)
 
-    fun getOrCreateNewChatChannels(participantUserToken: String, onSuccess: (channelId: String) -> Unit)
+    fun getOrCreateNewChatChannels(
+        participantUserToken: String,
+        onSuccess: (channelId: String) -> Unit
+    )
 
     fun getUserChannels(onSuccess: (List<Channel>) -> Unit)
 
-    fun sendMessageByToken(message: Message, sender: User, receiver: User, onSuccess: () -> Unit, onError: (Exception) -> Unit)
+    fun sendMessageByToken(
+        message: Message,
+        sender: User,
+        receiver: User,
+        onSuccess: () -> Unit,
+        onError: (Exception) -> Unit
+    )
 
-    fun getMessages(channelId: String,onSuccess: (List<Message>) -> Unit)
+    fun getMessages(channelId: String, onSuccess: (List<Message>) -> Unit)
 
-    fun getChannelUsers(channelId: String,onSuccess: (List<User>) -> Unit)
+    fun getChannelUsers(channelId: String, onSuccess: (List<User>) -> Unit)
 
     fun getLastMessageFromChannel(channelId: String, onSuccess: (Message, User) -> Unit)
 
@@ -32,7 +41,9 @@ interface FirebaseDbManager {
 
     fun getAllChannels(onSuccess: (List<Channel>) -> Unit)
 
-    fun deleteMessage(channelId: String,messageId: String,onSuccess: () -> Unit)
+    fun deleteMessage(channelId: String, messageId: String, onSuccess: () -> Unit)
+
+    fun setTypingStatus(channelId: String, userId: String, isUserTyping: Boolean, onSuccess: () -> Unit)
 
     fun likeMessage(channelId: String,messageId: String,onSuccess: () -> Unit)
 

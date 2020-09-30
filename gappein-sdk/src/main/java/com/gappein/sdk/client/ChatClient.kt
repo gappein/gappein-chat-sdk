@@ -27,14 +27,17 @@ interface ChatClient {
 
         fun setDatabaseManager(dbManager: FirebaseDbManager) = apply { this.dbManager = dbManager }
 
-        fun setStorageManager(storageManager: FirebaseStorageManager) = apply { this.storageManager = storageManager }
+        fun setStorageManager(storageManager: FirebaseStorageManager) =
+            apply { this.storageManager = storageManager }
 
         /**
          * Use this to use the methods of ChatClient
          *
          * @return Instance of ChatClient
          */
-        fun build(): ChatClient = storageManager?.let {storageManager-> dbManager?.let { dbManager -> ChatClientImpl(storageManager, dbManager).apply {
+        fun build(): ChatClient = storageManager?.let { storageManager ->
+            dbManager?.let { dbManager ->
+                ChatClientImpl(storageManager, dbManager).apply {
                     INSTANCE = this
                 }
             }
@@ -161,9 +164,11 @@ interface ChatClient {
      */
     fun setUserOnline(token: String)
 
+    fun setTypingStatus(channelId: String, userId:String, isUserTyping:Boolean, onSuccess: () -> Unit)
+
     fun getAllChannels(onSuccess: (List<Channel>) -> Unit)
 
-    fun deleteMessage(channelId: String,messageId:String,onSuccess: () -> Unit)
+    fun deleteMessage(channelId: String, messageId: String, onSuccess: () -> Unit)
 
     fun likeMessage(channelId: String,messageId: String,onSuccess: () -> Unit)
 
