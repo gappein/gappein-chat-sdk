@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.Toolbar android:id="@+id/toolbar"
+<androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/toolbar"
     android:layout_width="match_parent"
     android:layout_height="56dp"
     android:background="#0C9175"
     android:elevation="8dp"
-    app:elevation="8dp"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    app:elevation="8dp">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -29,25 +31,43 @@
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:padding="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/imageViewBack"
             app:layout_constraintStart_toEndOf="@+id/imageViewBack"
-            app:layout_constraintTop_toTopOf="@+id/imageViewBack"
-            app:layout_constraintBottom_toBottomOf="@+id/imageViewBack" />
+            app:layout_constraintTop_toTopOf="@+id/imageViewBack" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/titleToolbar"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:paddingStart="8dp"
             android:textColor="@android:color/white"
             android:textSize="16sp"
-            android:paddingStart="8dp"
-            android:gravity="center_vertical"
             android:textStyle="bold"
             app:fontFamily="@font/nunito_bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/imageViewBack"
-            app:layout_constraintBottom_toBottomOf="@+id/imageViewBack"
-            app:layout_constraintStart_toEndOf="@+id/avatarImageView" />
+            app:layout_constraintBottom_toTopOf="@+id/typingStatus"
+            app:layout_constraintStart_toEndOf="@+id/avatarImageView"
+            app:layout_constraintTop_toTopOf="@+id/imageViewBack" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/typingStatus"
+            android:layout_width="0dp"
+            tools:text="dsfsdf"
+            android:layout_height="0dp"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:alpha="0.7"
+            android:paddingStart="8dp"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:fontFamily="@font/nunito_bold"
+            app:layout_constraintTop_toBottomOf="@+id/titleToolbar"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/titleToolbar"
+            app:layout_constraintStart_toStartOf="@+id/titleToolbar" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
