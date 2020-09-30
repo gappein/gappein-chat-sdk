@@ -8,14 +8,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gappein.sdk.client.ChatClient
 import com.gappein.sdk.model.Message
 import com.gappein.sdk.ui.R
-import com.gappein.sdk.ui.view.chatView.viewholder.ReceiveImageViewHolder
-import com.gappein.sdk.ui.view.chatView.viewholder.ReceiverMessageListViewHolder
-import com.gappein.sdk.ui.view.chatView.viewholder.SenderImageViewHolder
-import com.gappein.sdk.ui.view.chatView.viewholder.SenderMessageListViewHolder
+import com.gappein.sdk.ui.view.chatView.viewholder.*
 import java.util.*
-import kotlin.collections.ArrayList
 
-class MessageListAdapter(private var messages: ArrayList<Message> = arrayListOf(), private val chatClient: ChatClient, private val onImageClick: (String) -> Unit,private val onMessageClick:(String)->Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), Filterable {
+class MessageListAdapter(
+    private val messages: ArrayList<Message> = arrayListOf(),
+    private val chatClient: ChatClient,
+    private val onImageClick: (String) -> Unit,
+    private val onMessageClick: (String) -> Unit,
+    private val onMessageLike: (String) -> Unit
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), Filterable {
 
     var filteredList = mutableListOf<Message>()
 
@@ -56,24 +58,28 @@ class MessageListAdapter(private var messages: ArrayList<Message> = arrayListOf(
             VIEW_TYPE_SENDER -> (holder as SenderMessageListViewHolder).bind(
                 position,
                 filteredList.toList(),
-                onMessageClick
+                onMessageClick,
+                onMessageLike
             )
 
             VIEW_TYPE_RECEIVER -> (holder as ReceiverMessageListViewHolder).bind(
                 filteredList.toList(),
-                position
+                position,
+                onMessageLike
             )
 
             VIEW_TYPE_RECEIVER_IMAGE -> (holder as ReceiveImageViewHolder).bind(
                 filteredList[position],
                 position,
-                onImageClick
+                onImageClick,
+                onMessageLike
             )
 
             VIEW_TYPE_SENDER_IMAGE -> (holder as SenderImageViewHolder).bind(
                 filteredList[position],
                 position,
-                onImageClick
+                onImageClick,
+                onMessageLike
             )
         }
     }
@@ -90,18 +96,18 @@ class MessageListAdapter(private var messages: ArrayList<Message> = arrayListOf(
 
     override fun getItemViewType(position: Int): Int {
         return if (filteredList[position].isUrl) {
-            if (chatClient.getUser().token == filteredList[position].receiver.token) {
-                VIEW_TYPE_RECEIVER_IMAGE
+                if (chatClient.getUser().token == filteredList[position].receiver.token) {
+                    VIEW_TYPE_RECEIVER_IMAGE
+                } else {
+                    VIEW_TYPE_SENDER_IMAGE
+                }
             } else {
-                VIEW_TYPE_SENDER_IMAGE
+                if (chatClient.getUser().token == filteredList[position].receiver.token) {
+                    VIEW_TYPE_RECEIVER
+                } else {
+                    VIEW_TYPE_SENDER
+                }
             }
-        } else {
-            if (chatClient.getUser().token == filteredList[position].receiver.token) {
-                VIEW_TYPE_RECEIVER
-            } else {
-                VIEW_TYPE_SENDER
-            }
-        }
     }
 
     override fun getFilter(): Filter {

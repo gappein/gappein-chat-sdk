@@ -132,4 +132,8 @@ class ChatClientImpl(
     override fun deleteMessage(channelId: String, messageId: String, onSuccess: () -> Unit) {
         dbManager.deleteMessage(channelId, messageId, onSuccess)
     }
+
+    override fun likeMessage(channelId: String, messageId: String, onSuccess: () -> Unit) {
+        dbManager.likeMessage(channelId, messageId, onSuccess)
+    }
 }

@@ -123,6 +123,10 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
             ChatClient.getInstance().deleteMessage(channelId,it){
                 //Handle onSuccess of Delete
             }
+        },onMessageLike= {
+            ChatClient.getInstance().likeMessage(channelId,it) {
+
+            }
         })
         recyclerViewMessages.layoutManager = LinearLayoutManager(this@MessageListActivity)
         recyclerViewMessages.adapter = adapter

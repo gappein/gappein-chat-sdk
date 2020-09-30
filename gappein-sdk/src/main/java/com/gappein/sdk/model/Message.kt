@@ -17,6 +17,8 @@ data class Message(
 
         val deleted:Boolean = false,
 
-        val typing:String = ""
+        val typing:String = "",
+
+        val liked:Boolean = false
 )
 

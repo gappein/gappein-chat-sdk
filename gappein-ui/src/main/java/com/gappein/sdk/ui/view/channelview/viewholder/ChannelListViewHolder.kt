@@ -1,5 +1,6 @@
 package com.gappein.sdk.ui.view.channelview.viewholder
 
+import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -28,7 +29,7 @@ class ChannelListViewHolder(private val view: View) : RecyclerView.ViewHolder(vi
 
             view.textViewUserName.text = data.user.name
 
-            if (data.lastMessage.deleted) {
+            if (!data.lastMessage.deleted) {
                 view.textViewLastMessage.text = data.lastMessage.message
             } else {
                 view.textViewLastMessage.text = view.context.getString(R.string.message_has_been_deleted)
