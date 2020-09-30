@@ -104,12 +104,14 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
         adapter = MessageListAdapter(chatClient = ChatClient.getInstance(), onImageClick = {
             openImage(this, it)
         },onMessageClick = {
-            ChatClient.getInstance().deleteMessage(channelId,it) {
+            ChatClient.getInstance().setTypingStatus(it,"HimanshuSinghTestAccount",true){
 
             }
+
         })
         recyclerViewMessages.layoutManager = LinearLayoutManager(this@MessageListActivity)
         recyclerViewMessages.adapter = adapter
+
     }
 
     private fun fetchMessages() {

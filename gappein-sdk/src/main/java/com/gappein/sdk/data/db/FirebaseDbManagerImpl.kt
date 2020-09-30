@@ -1,9 +1,7 @@
 package com.gappein.sdk.data.db
 
-import android.util.Log
 import com.gappein.sdk.client.ChatClient
 import com.gappein.sdk.model.Channel
-import com.gappein.sdk.model.ChannelUsers
 import com.gappein.sdk.model.Message
 import com.gappein.sdk.model.User
 import com.google.firebase.firestore.DocumentReference
@@ -28,6 +26,7 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
         private const val NAME = "name"
         private const val IMAGE_URL = "profileImageUrl"
         private const val IS_ONLINE = "isOnline"
+        private const val DELETED = "deleted"
         private const val LAST_ONLINE_AT = "lastOnlineAt"
     }
 
@@ -114,8 +113,11 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
                     onSuccess(it[CHANNEL_ID] as String)
                     return@addOnSuccessListener
                 }
+                val userMap = HashMap<String, User>()
                 getUserByToken(participantUserToken, { user ->
-                    channelReference.document(channelId).set(ChannelUsers(currentUser, user))
+                    userMap[participantUserToken] = user
+                    userMap[currentUserToken] = currentUser
+                    channelReference.document(channelId).set(userMap)
                 }, {
 
                 })
@@ -298,11 +300,44 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
         channelReference.document(channelId)
             .collection(MESSAGES_COLLECTION)
             .document(messageId)
-            .update("deleted", true)
-            .addOnSuccessListener { }
+            .update(DELETED, true)
+            .addOnSuccessListener { onSuccess() }
             .addOnFailureListener { }
+    }
 
+    override fun setTypingStatus(
+        channelId: String,
+        userId: String,
+        status: Boolean,
+        onSuccess: () -> Unit
+    ) {
+        channelReference.document(channelId)
+            .get()
+            .addOnSuccessListener {
+                val userData = it.data
+                val userList = userData
+                    ?.flatMap { user ->
+                        listOf(user.value as HashMap<String, Any>)
+                    }?.map { userMap ->
+                        return@map User(
+                            token = userMap[TOKEN] as String,
+                            name = userMap[NAME] as String,
+                            profileImageUrl = userMap[IMAGE_URL] as String,
+                        )
+                    }
+                val currentUser = userList?.filter { it.token == userId }?.get(0)
+                updateTypingStatus(currentUser, status, channelId)
+            }
+    }
 
+    private fun updateTypingStatus(currentUser: User?, isUserTyping: Boolean, channelId: String) {
+        if (isUserTyping) {
+            channelReference.document(channelId)
+                .update("${currentUser?.token}.typing", "${currentUser?.name} is typing..")
+        } else {
+            channelReference.document(channelId)
+                .update("${currentUser?.token}.typing", "-")
+        }
     }
 
     //for later implementation will check soon.
