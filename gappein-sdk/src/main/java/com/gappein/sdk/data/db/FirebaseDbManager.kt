@@ -43,8 +43,19 @@ interface FirebaseDbManager {
 
     fun deleteMessage(channelId: String, messageId: String, onSuccess: () -> Unit)
 
-    fun setTypingStatus(channelId: String, userId: String, isUserTyping: Boolean, onSuccess: () -> Unit)
+    fun setTypingStatus(
+        channelId: String,
+        userId: String,
+        isUserTyping: Boolean,
+        onSuccess: () -> Unit
+    )
 
-    fun likeMessage(channelId: String,messageId: String,onSuccess: () -> Unit)
+    fun getTypingStatus(
+        channelId: String,
+        participantUserId: String,
+        onSuccess: (String) -> Unit
+    )
+
+    fun likeMessage(channelId: String, messageId: String, onSuccess: () -> Unit)
 
 }

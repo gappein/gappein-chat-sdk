@@ -172,5 +172,9 @@ interface ChatClient {
 
     fun likeMessage(channelId: String,messageId: String,onSuccess: () -> Unit)
 
-
+    fun getTypingStatus(
+        channelId: String,
+        participantUserId: String,
+        onSuccess: (String) -> Unit
+    )
 }

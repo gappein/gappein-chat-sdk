@@ -2,6 +2,7 @@ package com.gappein.sdk.ui.component
 
 import android.content.Context
 import android.util.AttributeSet
+import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
 import androidx.annotation.MenuRes
@@ -12,6 +13,8 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.gappein.sdk.client.ChatClient
 import com.gappein.sdk.ui.R
 import com.gappein.sdk.ui.base.ChatBaseView
+import com.gappein.sdk.ui.view.util.hide
+import com.gappein.sdk.ui.view.util.show
 import kotlinx.android.synthetic.main.header_view.view.*
 
 class GappeinHeader : LinearLayout, ChatBaseView {
@@ -34,7 +37,17 @@ class GappeinHeader : LinearLayout, ChatBaseView {
     }
 
     fun init(channelId: String) {
+
+
         getClient().getChannelRecipientUser(channelId) {
+            getClient().getTypingStatus(channelId, it.token) { typingStatus ->
+                if (typingStatus != "-") {
+                    view.typingStatus.show()
+                    view.typingStatus.text = typingStatus
+                } else {
+                    view.typingStatus.hide()
+                }
+            }
             view.titleToolbar.text = it.name
 
             Glide.with(view)

@@ -136,4 +136,12 @@ class ChatClientImpl(
     override fun likeMessage(channelId: String, messageId: String, onSuccess: () -> Unit) {
         dbManager.likeMessage(channelId, messageId, onSuccess)
     }
+
+    override fun getTypingStatus(
+        channelId: String,
+        participantUserId: String,
+        onSuccess: (String) -> Unit
+    ) {
+        dbManager.getTypingStatus(channelId, participantUserId, onSuccess)
+    }
 }

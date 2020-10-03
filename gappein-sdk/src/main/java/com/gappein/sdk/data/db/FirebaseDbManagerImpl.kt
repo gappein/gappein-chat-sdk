@@ -1,5 +1,6 @@
 package com.gappein.sdk.data.db
 
+import android.util.Log
 import com.gappein.sdk.client.ChatClient
 import com.gappein.sdk.model.Channel
 import com.gappein.sdk.model.Message
@@ -30,6 +31,7 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
         private const val IMAGE_URL = "profileImageUrl"
         private const val IS_ONLINE = "isOnline"
         private const val DELETED = "deleted"
+        private const val TYPING = "typing"
         private const val LAST_ONLINE_AT = "lastOnlineAt"
     }
 
@@ -127,8 +129,20 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
                 addChannelsToUser(currentUserReference, participantUserToken, channelId)
 
                 addChannelsToUser(participantUserReference, currentUserToken, channelId)
+                addTypingCollection(participantUserToken, channelId)
+                addTypingCollection(currentUserToken, channelId)
                 onSuccess(channelId)
             }
+    }
+
+    private fun addTypingCollection(
+        token: String,
+        channelId: String
+    ) {
+        channelReference.document(channelId)
+            .collection("typing")
+            .document(token)
+            .set(mapOf("typing" to "-"))
     }
 
     private fun addChannelsToUser(reference: DocumentReference, token: String, messageId: String) {
@@ -225,6 +239,7 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
                         return@map User(
                             token = userMap[TOKEN] as String,
                             name = userMap[NAME] as String,
+                            typing = userMap[TYPING] as String,
                             profileImageUrl = userMap[IMAGE_URL] as String,
                         )
                     }
@@ -246,6 +261,7 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
                         return@map User(
                             token = userMap[TOKEN] as String,
                             name = userMap[NAME] as String,
+                            typing = userMap[TYPING] as String,
                             profileImageUrl = userMap[IMAGE_URL] as String,
                         )
                     }?.forEach { user ->
@@ -311,32 +327,33 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
         isUserTyping: Boolean,
         onSuccess: () -> Unit
     ) {
+        val currentUser = ChatClient.getInstance().getUser()
+        updateTypingStatus(currentUser, isUserTyping, channelId)
+    }
+
+    override fun getTypingStatus(
+        channelId: String,
+        participantUserId: String,
+        onSuccess: (String) -> Unit
+    ) {
         channelReference.document(channelId)
-            .get()
-            .addOnSuccessListener {
-                val userData = it.data
-                val userList = userData
-                    ?.flatMap { user ->
-                        listOf(user.value as HashMap<String, Any>)
-                    }?.map { userMap ->
-                        return@map User(
-                            token = userMap[TOKEN] as String,
-                            name = userMap[NAME] as String,
-                            profileImageUrl = userMap[IMAGE_URL] as String,
-                        )
-                    }
-                val currentUser = userList?.filter { it.token == userId }?.get(0)
-                updateTypingStatus(currentUser, isUserTyping, channelId)
+            .collection("typing")
+            .document(participantUserId)
+            .addSnapshotListener { value, _ ->
+                onSuccess(value?.get("typing").toString())
             }
     }
 
-    private fun updateTypingStatus(currentUser: User?, isUserTyping: Boolean, channelId: String) {
+    private fun updateTypingStatus(currentUser: User, isUserTyping: Boolean, channelId: String) {
+        val userCurrentReference = channelReference.document(channelId)
+            .collection("typing")
+            .document(currentUser.token)
         if (isUserTyping) {
-            channelReference.document(channelId)
-                .update("${currentUser?.token}.typing", "${currentUser?.name} is typing..")
+            userCurrentReference
+                .update("typing", "${currentUser?.name?.capitalize()} is typing..")
         } else {
-            channelReference.document(channelId)
-                .update("${currentUser?.token}.typing", "-")
+            userCurrentReference
+                .update("typing", "-")
         }
     }
 
