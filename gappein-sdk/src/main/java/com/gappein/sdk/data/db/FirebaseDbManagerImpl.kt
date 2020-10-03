@@ -238,7 +238,6 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
                         return@map User(
                             token = userMap[TOKEN] as String,
                             name = userMap[NAME] as String,
-                            typing = userMap[TYPING] as String,
                             profileImageUrl = userMap[IMAGE_URL] as String,
                         )
                     }
@@ -260,7 +259,6 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
                         return@map User(
                             token = userMap[TOKEN] as String,
                             name = userMap[NAME] as String,
-                            typing = userMap[TYPING] as String,
                             profileImageUrl = userMap[IMAGE_URL] as String,
                         )
                     }?.forEach { user ->

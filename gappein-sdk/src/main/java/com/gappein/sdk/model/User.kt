@@ -17,7 +17,5 @@ data class User(
 
     val isOnline: Boolean = false,
 
-    val typing: String = "",
-
     val textStatus: String = ""
 ) : Parcelable
