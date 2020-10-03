@@ -12,20 +12,11 @@ interface FirebaseDbManager {
 
     fun getUserByToken(token: String, onSuccess: (user: User) -> Unit, onError: (Exception) -> Unit)
 
-    fun getOrCreateNewChatChannels(
-        participantUserToken: String,
-        onSuccess: (channelId: String) -> Unit
-    )
+    fun getOrCreateNewChatChannels(participantUserToken: String, onSuccess: (channelId: String) -> Unit)
 
     fun getUserChannels(onSuccess: (List<Channel>) -> Unit)
 
-    fun sendMessageByToken(
-        message: Message,
-        sender: User,
-        receiver: User,
-        onSuccess: () -> Unit,
-        onError: (Exception) -> Unit
-    )
+    fun sendMessageByToken(message: Message, sender: User, receiver: User, onSuccess: () -> Unit, onError: (Exception) -> Unit)
 
     fun getMessages(channelId: String, onSuccess: (List<Message>) -> Unit)
 
@@ -43,19 +34,14 @@ interface FirebaseDbManager {
 
     fun deleteMessage(channelId: String, messageId: String, onSuccess: () -> Unit)
 
-    fun setTypingStatus(
-        channelId: String,
-        userId: String,
-        isUserTyping: Boolean,
-        onSuccess: () -> Unit
-    )
+    fun setTypingStatus(channelId: String, userId: String, isUserTyping: Boolean, onSuccess: () -> Unit)
 
-    fun getTypingStatus(
-        channelId: String,
-        participantUserId: String,
-        onSuccess: (String) -> Unit
-    )
+    fun getTypingStatus(channelId: String, participantUserId: String, onSuccess: (String) -> Unit)
 
     fun likeMessage(channelId: String, messageId: String, onSuccess: () -> Unit)
+
+    fun setUserStatus(status: String, onSuccess: () -> Unit, onError: (Exception) -> Unit)
+
+    fun getUserStatus(token: String, onSuccess: (String) -> Unit, onError: (Exception) -> Unit)
 
 }

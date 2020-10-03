@@ -164,17 +164,17 @@ interface ChatClient {
      */
     fun setUserOnline(token: String)
 
-    fun setTypingStatus(channelId: String, userId:String, isUserTyping:Boolean, onSuccess: () -> Unit)
-
     fun getAllChannels(onSuccess: (List<Channel>) -> Unit)
 
     fun deleteMessage(channelId: String, messageId: String, onSuccess: () -> Unit)
 
     fun likeMessage(channelId: String,messageId: String,onSuccess: () -> Unit)
 
-    fun getTypingStatus(
-        channelId: String,
-        participantUserId: String,
-        onSuccess: (String) -> Unit
-    )
+    fun getTypingStatus(channelId: String, participantUserId: String, onSuccess: (String) -> Unit)
+
+    fun setTypingStatus(channelId: String, userId:String, isUserTyping:Boolean, onSuccess: () -> Unit)
+
+    fun setUserStatus(status:String,onSuccess: () -> Unit,onError: (Exception) -> Unit)
+
+    fun getUserStatus(token: String = getUser().token ,onSuccess: (String) -> Unit,onError: (Exception) -> Unit)
 }

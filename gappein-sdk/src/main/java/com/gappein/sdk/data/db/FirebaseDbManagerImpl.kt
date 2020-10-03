@@ -1,6 +1,5 @@
 package com.gappein.sdk.data.db
 
-import android.util.Log
 import com.gappein.sdk.client.ChatClient
 import com.gappein.sdk.model.Channel
 import com.gappein.sdk.model.Message
@@ -23,6 +22,7 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
         private const val ID = "_id"
         private const val LIKED = "liked"
         private const val TRUE = "true"
+        private const val STATUS = "textStatus"
         private const val MESSAGES_COLLECTION = "messages"
         private const val CHANNEL_COLLECTION = "channel"
         private const val CHANNEL_ID = "channelId"
@@ -362,5 +362,37 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
             .update(LIKED, true)
             .addOnSuccessListener { onSuccess() }
             .addOnFailureListener { }
+    }
+
+    override fun setUserStatus(
+        status: String,
+        onSuccess: () -> Unit,
+        onError: (Exception) -> Unit
+    ) {
+        val currentUser = ChatClient.getInstance().getUser()
+        userReference.document(currentUser.token)
+            .update(STATUS, status)
+            .addOnFailureListener {
+                onError(it)
+            }.addOnSuccessListener {
+                onSuccess()
+            }
+
+    }
+
+    override fun getUserStatus(
+        token: String,
+        onSuccess: (String) -> Unit,
+        onError: (Exception) -> Unit
+    ) {
+        userReference.document(token)
+            .addSnapshotListener { value, error ->
+                if (error != null) {
+                    onError(error)
+                    return@addSnapshotListener
+                }
+                val status = value?.data?.get(STATUS) as String
+                onSuccess(status)
+            }
     }
 }

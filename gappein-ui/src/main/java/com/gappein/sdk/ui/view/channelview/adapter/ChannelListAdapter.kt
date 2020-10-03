@@ -80,7 +80,6 @@ class ChannelListAdapter(
                         val presentUser = row.users.find {
                             it.name.toLowerCase().contains(charSearch.toLowerCase(Locale.ROOT))
                         }
-                        Log.d("SDfsdfs",charSearch.toString())
 
                         if (row.users.contains(presentUser)) {
                             resultList.add(row)
@@ -97,7 +96,6 @@ class ChannelListAdapter(
             override fun publishResults(p0: CharSequence?, results: FilterResults?) {
 //                channelList = (results?.values as List<Channel>).toMutableList()
 
-                Log.d("sdfsdfsf",results?.values.toString())
                 notifyDataSetChanged()
             }
         }

@@ -121,8 +121,21 @@ class ChatClientImpl(
         dbManager.setUserOnline(token)
     }
 
-    override fun setTypingStatus(channelId: String, userId: String, isUserTyping:Boolean, onSuccess: () -> Unit) {
+    override fun setTypingStatus(
+        channelId: String,
+        userId: String,
+        isUserTyping: Boolean,
+        onSuccess: () -> Unit
+    ) {
         dbManager.setTypingStatus(channelId, userId, isUserTyping, onSuccess)
+    }
+
+    override fun setUserStatus(status: String, onSuccess: () -> Unit,onError: (Exception) -> Unit) {
+        dbManager.setUserStatus(status, onSuccess,onError)
+    }
+
+    override fun getUserStatus(token: String, onSuccess: (String) -> Unit, onError: (Exception) -> Unit) {
+        dbManager.getUserStatus(token, onSuccess,onError)
     }
 
     override fun getAllChannels(onSuccess: (List<Channel>) -> Unit) {
