@@ -29,7 +29,7 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
         private const val TOKEN = "token"
         private const val NAME = "name"
         private const val IMAGE_URL = "profileImageUrl"
-        private const val IS_ONLINE = "isOnline"
+        private const val IS_ONLINE = "online"
         private const val DELETED = "deleted"
         private const val TYPING = "typing"
         private const val LAST_ONLINE_AT = "lastOnlineAt"
@@ -127,7 +127,6 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
 
                 })
                 addChannelsToUser(currentUserReference, participantUserToken, channelId)
-
                 addChannelsToUser(participantUserReference, currentUserToken, channelId)
                 addTypingCollection(participantUserToken, channelId)
                 addTypingCollection(currentUserToken, channelId)
@@ -140,9 +139,9 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
         channelId: String
     ) {
         channelReference.document(channelId)
-            .collection("typing")
+            .collection(TYPING)
             .document(token)
-            .set(mapOf("typing" to "-"))
+            .set(mapOf(TYPING to "-"))
     }
 
     private fun addChannelsToUser(reference: DocumentReference, token: String, messageId: String) {
@@ -274,17 +273,16 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
 
     override fun isUserOnline(token: String, onSuccess: (Boolean, String) -> Unit) {
         val userChannelReference = userReference.document(token)
-        userChannelReference.get()
-            .addOnSuccessListener {
-                if (it.data != null) {
-                    val userData = it.data as Map<String, User>
-                    if (userData[IS_ONLINE].toString() == TRUE) {
-                        onSuccess(true, "")
-                    } else {
-                        onSuccess(false, userData[LAST_ONLINE_AT].toString())
-                    }
+        userChannelReference.addSnapshotListener { value, error ->
+            if (value != null && value.data != null) {
+                val userData = value.data as Map<String, User>
+                if (userData[IS_ONLINE].toString() == TRUE) {
+                    onSuccess(true, "")
+                } else {
+                    onSuccess(false, userData[LAST_ONLINE_AT].toString())
                 }
             }
+        }
     }
 
     override fun setUserOnline(token: String) {
@@ -337,23 +335,23 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
         onSuccess: (String) -> Unit
     ) {
         channelReference.document(channelId)
-            .collection("typing")
+            .collection(TYPING)
             .document(participantUserId)
             .addSnapshotListener { value, _ ->
-                onSuccess(value?.get("typing").toString())
+                onSuccess(value?.get(TYPING).toString())
             }
     }
 
     private fun updateTypingStatus(currentUser: User, isUserTyping: Boolean, channelId: String) {
         val userCurrentReference = channelReference.document(channelId)
-            .collection("typing")
+            .collection(TYPING)
             .document(currentUser.token)
         if (isUserTyping) {
             userCurrentReference
-                .update("typing", "${currentUser?.name?.capitalize()} is typing..")
+                .update(TYPING, "${currentUser?.name?.capitalize()} is typing..")
         } else {
             userCurrentReference
-                .update("typing", "-")
+                .update(TYPING, "-")
         }
     }
 
