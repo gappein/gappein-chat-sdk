@@ -130,12 +130,40 @@ class ChatClientImpl(
         dbManager.setTypingStatus(channelId, userId, isUserTyping, onSuccess)
     }
 
-    override fun setUserStatus(status: String, onSuccess: () -> Unit,onError: (Exception) -> Unit) {
-        dbManager.setUserStatus(status, onSuccess,onError)
+    override fun setChatBackground(
+        channelId: String,
+        backgroundUrl: Uri,
+        onSuccess: () -> Unit,
+        onProgress: (Int) -> Unit,
+        onError: (Exception) -> Unit
+    ) {
+        storageManager.uploadChatBackgroundImage(backgroundUrl, channelId, {
+            dbManager.setChatBackground(channelId, it, onSuccess, onError)
+        }, {
+            onProgress(it)
+        }, {
+            onError(it)
+        })
     }
 
-    override fun getUserStatus(token: String, onSuccess: (String) -> Unit, onError: (Exception) -> Unit) {
-        dbManager.getUserStatus(token, onSuccess,onError)
+    override fun getChatBackground(channelId: String, onSuccess: (String) -> Unit) {
+        dbManager.getChatBackground(channelId, onSuccess)
+    }
+
+    override fun setUserStatus(
+        status: String,
+        onSuccess: () -> Unit,
+        onError: (Exception) -> Unit
+    ) {
+        dbManager.setUserStatus(status, onSuccess, onError)
+    }
+
+    override fun getUserStatus(
+        token: String,
+        onSuccess: (String) -> Unit,
+        onError: (Exception) -> Unit
+    ) {
+        dbManager.getUserStatus(token, onSuccess, onError)
     }
 
     override fun getAllChannels(onSuccess: (List<Channel>) -> Unit) {

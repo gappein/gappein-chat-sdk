@@ -38,6 +38,10 @@ interface FirebaseDbManager {
 
     fun getTypingStatus(channelId: String, participantUserId: String, onSuccess: (String) -> Unit)
 
+    fun setChatBackground(channelId: String, backgroundUrl: String, onSuccess: () -> Unit,onError: (Exception) -> Unit)
+
+    fun getChatBackground(channelId: String, onSuccess: (String) -> Unit)
+
     fun likeMessage(channelId: String, messageId: String, onSuccess: () -> Unit)
 
     fun setUserStatus(status: String, onSuccess: () -> Unit, onError: (Exception) -> Unit)

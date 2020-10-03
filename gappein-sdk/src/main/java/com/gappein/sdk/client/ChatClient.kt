@@ -174,6 +174,10 @@ interface ChatClient {
 
     fun setTypingStatus(channelId: String, userId:String, isUserTyping:Boolean, onSuccess: () -> Unit)
 
+    fun setChatBackground(channelId: String, backgroundUrl: Uri, onSuccess: () -> Unit,onProgress: (Int) -> Unit,onError: (Exception) -> Unit)
+
+    fun getChatBackground(channelId: String, onSuccess: (String) -> Unit)
+
     fun setUserStatus(status:String,onSuccess: () -> Unit,onError: (Exception) -> Unit)
 
     fun getUserStatus(token: String = getUser().token ,onSuccess: (String) -> Unit,onError: (Exception) -> Unit)

@@ -32,6 +32,7 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
         private const val IS_ONLINE = "online"
         private const val DELETED = "deleted"
         private const val TYPING = "typing"
+        private const val CHAT_BACKGROUND = "chat_background"
         private const val LAST_ONLINE_AT = "lastOnlineAt"
     }
 
@@ -103,7 +104,6 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
         onSuccess: (channelId: String) -> Unit
     ) {
 
-        val userChannelReference = channelReference.document(participantUserToken)
         val currentUser = ChatClient.getInstance().getUser()
         val currentUserToken = currentUser.token
         val currentUserReference = userReference.document(currentUserToken)
@@ -111,33 +111,39 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
 
         val userList = listOf(participantUserToken, currentUserToken)
         val channelId = userList.sorted().toString()
+        val userChannelReference = channelReference.document(channelId)
 
         userChannelReference.get()
             .addOnSuccessListener {
                 if (it.exists()) {
-                    onSuccess(it[CHANNEL_ID] as String)
-                    return@addOnSuccessListener
-                }
-                val userMap = HashMap<String, User>()
-                getUserByToken(participantUserToken, { user ->
-                    userMap[participantUserToken] = user
-                    userMap[currentUserToken] = currentUser
-                    channelReference.document(channelId).set(userMap)
-                }, {
+                    onSuccess(channelId as String)
+                } else {
+                    val userMap = HashMap<String, User>()
+                    getUserByToken(participantUserToken, { user ->
+                        userMap[participantUserToken] = user
+                        userMap[currentUserToken] = currentUser
+                        channelReference.document(channelId).set(userMap)
+                    }, {
 
-                })
-                addChannelsToUser(currentUserReference, participantUserToken, channelId)
-                addChannelsToUser(participantUserReference, currentUserToken, channelId)
-                addTypingCollection(participantUserToken, channelId)
-                addTypingCollection(currentUserToken, channelId)
-                onSuccess(channelId)
+                    })
+                    addChannelsToUser(currentUserReference, participantUserToken, channelId)
+                    addChannelsToUser(participantUserReference, currentUserToken, channelId)
+                    addTypingCollection(participantUserToken, channelId)
+                    addTypingCollection(currentUserToken, channelId)
+                    addBackgroundCollection(channelId)
+                    onSuccess(channelId)
+                }
             }
     }
 
-    private fun addTypingCollection(
-        token: String,
-        channelId: String
-    ) {
+    private fun addBackgroundCollection(channelId: String) {
+        channelReference.document(channelId)
+            .collection(CHAT_BACKGROUND)
+            .document(channelId)
+            .set(mapOf(CHAT_BACKGROUND to "-"))
+    }
+
+    private fun addTypingCollection(token: String, channelId: String) {
         channelReference.document(channelId)
             .collection(TYPING)
             .document(token)
@@ -337,6 +343,27 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
             .document(participantUserId)
             .addSnapshotListener { value, _ ->
                 onSuccess(value?.get(TYPING).toString())
+            }
+    }
+
+    override fun setChatBackground(
+        channelId: String,
+        backgroundUrl: String,
+        onSuccess: () -> Unit,
+        onError: (Exception) -> Unit
+    ) {
+        channelReference.document(channelId)
+            .collection(CHAT_BACKGROUND)
+            .document(channelId)
+            .update(CHAT_BACKGROUND,"dsbfjhbsdf")
+    }
+
+    override fun getChatBackground(channelId: String, onSuccess: (String) -> Unit) {
+        channelReference.document(channelId)
+            .collection(CHAT_BACKGROUND)
+            .document(channelId)
+            .addSnapshotListener { value, _ ->
+                onSuccess(value?.data?.get(CHAT_BACKGROUND).toString())
             }
     }
 

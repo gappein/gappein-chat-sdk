@@ -63,4 +63,28 @@ class FirebaseStorageManagerImpl : FirebaseStorageManager {
                 onError(it)
             }
     }
+
+    override fun uploadChatBackgroundImage(
+        file: Uri,
+        channelId: String,
+        onSuccess: (String) -> Unit,
+        onProgress: (Int) -> Unit,
+        onError: (Exception) -> Unit
+    ) {
+        val messagePath = "${channelId}/${System.currentTimeMillis()}"
+        val reference = storageReference.child(messagePath)
+        reference.putFile(file)
+            .addOnSuccessListener {
+                reference.downloadUrl.addOnSuccessListener {
+                    onSuccess(it.toString())
+                }
+            }
+            .addOnProgressListener {
+                val progress = (100.0 * it.bytesTransferred / it.totalByteCount)
+                onProgress(progress.toInt())
+            }
+            .addOnFailureListener {
+                onError(it)
+            }
+    }
 }
