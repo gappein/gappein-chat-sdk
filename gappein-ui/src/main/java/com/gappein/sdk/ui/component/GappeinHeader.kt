@@ -37,8 +37,6 @@ class GappeinHeader : LinearLayout, ChatBaseView {
     }
 
     fun init(channelId: String) {
-
-
         getClient().getChannelRecipientUser(channelId) {
             getClient().getTypingStatus(channelId, it.token) { typingStatus ->
                 if (typingStatus != "-") {

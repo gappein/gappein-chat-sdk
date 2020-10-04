@@ -8,6 +8,8 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.QuerySnapshot
+import java.util.*
+import kotlin.collections.HashMap
 
 
 @Suppress("UNCHECKED_CAST")
@@ -355,7 +357,9 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
         channelReference.document(channelId)
             .collection(CHAT_BACKGROUND)
             .document(channelId)
-            .update(CHAT_BACKGROUND,"dsbfjhbsdf")
+            .update(CHAT_BACKGROUND, backgroundUrl)
+            .addOnSuccessListener { onSuccess() }
+            .addOnFailureListener { onError(it) }
     }
 
     override fun getChatBackground(channelId: String, onSuccess: (String) -> Unit) {
@@ -373,7 +377,7 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
             .document(currentUser.token)
         if (isUserTyping) {
             userCurrentReference
-                .update(TYPING, "${currentUser?.name?.capitalize()} is typing..")
+                .update(TYPING, "${currentUser.name.capitalize(Locale.ROOT)} is typing..")
         } else {
             userCurrentReference
                 .update(TYPING, "-")
