@@ -1,6 +1,5 @@
 package com.gappein.sdk.ui.view.channelview.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Filter

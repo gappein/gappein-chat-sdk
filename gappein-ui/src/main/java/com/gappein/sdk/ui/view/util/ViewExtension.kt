@@ -18,8 +18,8 @@ fun View.hide() {
 fun SearchView.addFilter(menuItem: MenuItem, onQueryChange: (String) -> Unit) {
     this.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
         override fun onQueryTextSubmit(query: String?): Boolean {
-            menuItem.collapseActionView();
-            return false;
+            menuItem.collapseActionView()
+            return false
         }
 
         override fun onQueryTextChange(newText: String?): Boolean {

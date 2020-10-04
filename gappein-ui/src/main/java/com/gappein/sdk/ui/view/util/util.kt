@@ -31,7 +31,7 @@ fun EditText.addTextChangeListener(afterTextChanged: (String) -> Unit) {
 }
 
 fun EditText.addTypeChangeListener(onSuccess: (Boolean) -> Unit) {
-    val currentTypingInterval = 800;
+    val currentTypingInterval = 800
     var userCurrentTypingState = false
     val handler = Handler(Looper.getMainLooper())
     val stoppedTypingNotifier = Runnable { //part A of the magic...
@@ -65,14 +65,12 @@ fun MessageListActivity.getRealPathFromUri(contentUri: Uri?): String? {
     var cursor: Cursor? = null
     return try {
         val proj = arrayOf(MediaStore.Images.Media.DATA)
-        cursor = contentUri?.let { getContentResolver().query(it, proj, null, null, null) }
+        cursor = contentUri?.let { contentResolver.query(it, proj, null, null, null) }
         assert(cursor != null)
         val column_index: Int = (cursor?.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
             ?: cursor?.moveToFirst()) as Int
         cursor?.getString(column_index)
     } finally {
-        if (cursor != null) {
-            cursor.close()
-        }
+        cursor?.close()
     }
 }

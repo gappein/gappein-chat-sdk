@@ -118,7 +118,7 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
         userChannelReference.get()
             .addOnSuccessListener {
                 if (it.exists()) {
-                    onSuccess(channelId as String)
+                    onSuccess(channelId)
                 } else {
                     val userMap = HashMap<String, User>()
                     getUserByToken(participantUserToken, { user ->
@@ -279,7 +279,7 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
 
     override fun isUserOnline(token: String, onSuccess: (Boolean, String) -> Unit) {
         val userChannelReference = userReference.document(token)
-        userChannelReference.addSnapshotListener { value, error ->
+        userChannelReference.addSnapshotListener { value, _ ->
             if (value != null && value.data != null) {
                 val userData = value.data as Map<String, User>
                 if (userData[IS_ONLINE].toString() == TRUE) {

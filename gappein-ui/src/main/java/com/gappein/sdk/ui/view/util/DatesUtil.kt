@@ -13,7 +13,7 @@ object DatesUtil {
 
     private fun currentDate(): Date {
         val calendar: Calendar = Calendar.getInstance()
-        return calendar.getTime()
+        return calendar.time
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -25,11 +25,11 @@ object DatesUtil {
 
 
     private fun getTimeAgo(date: Date): String? {
-        var time: Long = date.getTime()
+        var time: Long = date.time
         if (time < 1000000000000L) {
             time *= 1000
         }
-        val now: Long = currentDate().getTime()
+        val now: Long = currentDate().time
         if (time > now || time <= 0) {
             return "in the future"
         }

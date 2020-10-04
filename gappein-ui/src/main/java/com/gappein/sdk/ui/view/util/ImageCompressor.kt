@@ -62,11 +62,9 @@ class ImageCompressor(context: Context) {
                 fileOutputStream
             )
         } finally {
-            if (fileOutputStream != null) {
-                fileOutputStream.run {
-                    flush()
-                    close()
-                }
+            fileOutputStream?.run {
+                flush()
+                close()
             }
         }
         return File(destinationPath)

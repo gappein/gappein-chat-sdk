@@ -64,8 +64,8 @@ class ChatClientImpl(
         onError: (Exception) -> Unit
     ) {
 
-        getUserByToken(receiver, {
-            storageManager.uploadMessageImage(fileUri, it, getUser(), { message ->
+        getUserByToken(receiver, {user->
+            storageManager.uploadMessageImage(fileUri, user, getUser(), { message ->
                 sendMessage(message, receiver, { onSuccess() }, { onError(it) })
             }, { progress ->
                 if (progress == 100) {

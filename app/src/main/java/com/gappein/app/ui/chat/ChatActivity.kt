@@ -13,8 +13,6 @@ class ChatActivity : AppCompatActivity(),OnChannelClick {
 
     companion object {
 
-        private const val LIST_ALL_CHANNELS = "list_all_channels"
-
         fun buildIntent(context: Context)= Intent(context, ChatActivity::class.java)
     }
 

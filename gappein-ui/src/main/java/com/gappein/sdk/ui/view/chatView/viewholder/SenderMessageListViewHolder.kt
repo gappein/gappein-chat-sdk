@@ -2,7 +2,6 @@ package com.gappein.sdk.ui.view.chatView.viewholder
 
 import android.graphics.Color
 import android.graphics.Typeface
-import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.gappein.sdk.model.Message

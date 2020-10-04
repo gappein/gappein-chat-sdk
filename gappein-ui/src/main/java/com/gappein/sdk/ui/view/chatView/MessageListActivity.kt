@@ -104,13 +104,13 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
         }
 
         imageButtonAttach.setOnClickListener {
-            checkForPermission(Manifest.permission.CAMERA, CAMERA_PERMISSION_CODE);
+            checkForPermission(Manifest.permission.CAMERA, CAMERA_PERMISSION_CODE)
         }
     }
 
     private fun checkForPermission(camera: String, requestCode: Int) {
         if (ContextCompat.checkSelfPermission(this, camera) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, arrayOf(camera), requestCode);
+            ActivityCompat.requestPermissions(this, arrayOf(camera), requestCode)
         } else {
             dispatchTakePictureIntent()
         }
@@ -162,7 +162,7 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
                     getString(R.string.permission_deined),
                     Toast.LENGTH_SHORT
                 )
-                    .show();
+                    .show()
             }
         }
     }

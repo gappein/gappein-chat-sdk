@@ -24,7 +24,7 @@ class LoginActivity : AppCompatActivity() {
 
     companion object {
         private const val RC_SIGN_IN = 100
-        private const val TAG = "LoginActivityy"
+        private const val TAG = "LoginActivity"
         private const val TEST_TOKEN = "HimanshuSinghTestAccount"
     }
 
@@ -72,13 +72,13 @@ class LoginActivity : AppCompatActivity() {
                 val account = task.getResult(ApiException::class.java)
                 account?.idToken?.let { firebaseAuthWithGoogle(it) }
             } catch (ignored: ApiException) {
-                Log.d(TAG,ignored.stackTraceToString().toString())
+                Log.d(TAG, ignored.stackTraceToString())
             }
         }
     }
 
     private fun firebaseAuthWithGoogle(idToken: String) {
-        Log.d(TAG,idToken.toString())
+        Log.d(TAG, idToken)
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         auth.signInWithCredential(credential)
             .addOnCompleteListener(this) { task ->

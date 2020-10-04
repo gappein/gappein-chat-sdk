@@ -1,6 +1,5 @@
 package com.gappein.sdk.ui.view.channelview.viewholder
 
-import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
