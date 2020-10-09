@@ -72,7 +72,7 @@ class LoginActivity : AppCompatActivity() {
                 val account = task.getResult(ApiException::class.java)
                 account?.idToken?.let { firebaseAuthWithGoogle(it) }
             } catch (ignored: ApiException) {
-                Log.d(TAG, ignored.stackTraceToString())
+                Log.d(TAG, "--- Error caught: " + ignored.stackTraceToString())
             }
         }
     }

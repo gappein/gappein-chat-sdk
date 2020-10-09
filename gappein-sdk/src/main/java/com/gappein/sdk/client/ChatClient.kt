@@ -94,6 +94,21 @@ interface ChatClient {
     )
 
     /**
+    * Use to send GIFs
+    *
+    * @param gif - String - link for the gif
+    * @param receiver - String - token of the receiving User
+    * @param onSuccess - Success callback
+    * @param onError - Error callback
+    */
+    fun sendGif(
+        url: String,
+        receiver: String,
+        onSuccess: () -> Unit,
+        onError: (Exception) -> Unit
+    )
+
+    /**
      * Use to get User for the respective token
      *
      * @param token - String - token of the User you want to fetch

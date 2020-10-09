@@ -5,7 +5,7 @@ data class Message(
 
         var timeStamp: Long? = System.currentTimeMillis(),
 
-        val _id:String ="",
+        val _id: String = "",
 
         val message: String = "",
 
@@ -13,12 +13,14 @@ data class Message(
 
         val receiver: User = User(),
 
+        val gifUrl: String = "",
+
         var isUrl: Boolean = false,
 
-        val deleted:Boolean = false,
+        val deleted: Boolean = false,
 
-        val typing:String = "",
+        val typing: String = "",
 
-        val liked:Boolean = false
+        val liked: Boolean = false
 )
 

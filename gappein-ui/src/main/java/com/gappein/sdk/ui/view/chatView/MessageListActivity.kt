@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -22,7 +23,14 @@ import com.gappein.sdk.ui.base.ChatBaseView
 import com.gappein.sdk.ui.view.chatView.adapter.MessageListAdapter
 import com.gappein.sdk.ui.view.chatView.imageviewer.openImage
 import com.gappein.sdk.ui.view.util.*
+import com.giphy.sdk.core.models.Media
+import com.giphy.sdk.ui.GPHContentType
+import com.giphy.sdk.ui.GPHSettings
+import com.giphy.sdk.ui.themes.GPHTheme
+import com.giphy.sdk.ui.themes.GridType
+import com.giphy.sdk.ui.views.GiphyDialogFragment
 import kotlinx.android.synthetic.main.activity_message.*
+import kotlinx.android.synthetic.main.item_image_received_message.*
 import java.io.File
 import java.io.IOException
 
@@ -32,6 +40,7 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
     private var photoFile: File? = null
     private lateinit var adapter: MessageListAdapter
     private val chats = mutableListOf<Message>()
+    val TAG = "MessageActivity"
 
     companion object {
         private const val REQUEST_TAKE_PHOTO = 1
@@ -41,6 +50,7 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
         private const val DEFAULT_STRING = ""
         private val EMPTY_USER = User()
         private const val CAMERA_PERMISSION_CODE = 100
+//        const val API_KEY = "aNfHztXC7KA73PjHGgzHN9rYvuSFrJye"
 
         /**
          * Returns intent of MessageListActivity
@@ -54,6 +64,22 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
             }
     }
 
+    private val mediaTypeConfig = arrayOf(
+        GPHContentType.gif,
+        GPHContentType.sticker,
+        GPHContentType.text,
+        GPHContentType.recents
+    )
+
+    private val settings = GPHSettings(
+        gridType = GridType.waterfall,
+        useBlurredBackground = false,
+        theme = GPHTheme.Light,
+        stickerColumnCount = 3,
+        mediaTypeConfig = mediaTypeConfig
+    )
+
+
     private val channelId by lazy { intent.getStringExtra(CHANNEL_ID) ?: DEFAULT_STRING }
     private val receiver by lazy { intent.getParcelableExtra(RECEIVER) ?: EMPTY_USER }
     private val currentUser by lazy { ChatClient.getInstance().getUser() }
@@ -66,6 +92,29 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
         fetchMessages()
         setupSendMessageListener()
         setupTextChangeListener()
+        gifSend.setOnClickListener {
+            val gifDialog = GiphyDialogFragment.newInstance(settings)
+            gifDialog.gifSelectionListener = gifSelectionListener()
+            gifDialog.show(supportFragmentManager, "gifs_dialog")
+        }
+    }
+
+    private fun gifSelectionListener() = object : GiphyDialogFragment.GifSelectionListener {
+        override fun onGifSelected(
+            media: Media,
+            searchTerm: String?,
+            selectedContentType: GPHContentType
+        ) {
+            Log.d(TAG, "onGifSelected")
+        }
+
+        override fun onDismissed(selectedContentType: GPHContentType) {
+            Log.d(TAG, "onDismissed")
+        }
+
+        override fun didSearchTerm(term: String) {
+            Log.d(TAG, "didSearchTerm $term")
+        }
     }
 
     private fun setupTextChangeListener() {
@@ -213,6 +262,10 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
                 })
             }
         }
+    }
+
+    private fun sendGifMessage(gifUrl: String) {
+
     }
 
     override fun getClient() = ChatClient.getInstance()

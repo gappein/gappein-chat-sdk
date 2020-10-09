@@ -1,5 +1,6 @@
 package com.gappein.sdk
 
+import android.content.Context
 import com.gappein.sdk.client.ChatClient
 import com.gappein.sdk.data.db.FirebaseDbManager
 import com.gappein.sdk.data.db.FirebaseDbManagerImpl
@@ -7,6 +8,7 @@ import com.gappein.sdk.data.storage.FirebaseStorageManager
 import com.gappein.sdk.data.storage.FirebaseStorageManagerImpl
 import com.gappein.sdk.impl.GappeinImpl
 import com.gappein.sdk.model.User
+import com.giphy.sdk.ui.Giphy
 
 interface Gappein {
 
@@ -17,7 +19,8 @@ interface Gappein {
         private var INSTANCE: Gappein? = null
 
         @JvmStatic
-        fun getInstance(): Gappein = INSTANCE ?: throw IllegalStateException("Gappein.initialize() must be called before obtaining Gappein instance")
+        fun getInstance(): Gappein = INSTANCE
+            ?: throw IllegalStateException("Gappein.initialize() must be called before obtaining Gappein instance")
 
 
         /**
@@ -27,7 +30,7 @@ interface Gappein {
          */
 
         @JvmStatic
-        fun initialize(): Gappein {
+        fun initialize(context: Context, apiKey: String): Gappein {
             return GappeinImpl(
                 ChatClient.Builder()
                     .setDatabaseManager(firebaseDbManager)
@@ -35,8 +38,8 @@ interface Gappein {
                     .build()
             ).apply {
                 INSTANCE = this
+                Giphy.configure(context, apiKey)
             }
-
         }
 
     }

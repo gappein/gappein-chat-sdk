@@ -64,7 +64,7 @@ class ChatClientImpl(
         onError: (Exception) -> Unit
     ) {
 
-        getUserByToken(receiver, {user->
+        getUserByToken(receiver, { user ->
             storageManager.uploadMessageImage(fileUri, user, getUser(), { message ->
                 sendMessage(message, receiver, { onSuccess() }, { onError(it) })
             }, { progress ->
@@ -76,6 +76,24 @@ class ChatClientImpl(
             }, { exception -> onError(exception) })
         }, { exception -> onError(exception) })
 
+    }
+
+    override fun sendGif(
+        gifUrl: String,
+        receiver: String,
+        onSuccess: () -> Unit,
+        onError: (Exception) -> Unit
+    ) {
+        getUserByToken(receiver, {
+            val message = Message(
+                timeStamp = System.currentTimeMillis(),
+                gifUrl = gifUrl,
+                receiver = it,
+                sender = getUser()
+            )
+        }, {
+            onError(it)
+        })
     }
 
     override fun getUserByToken(
