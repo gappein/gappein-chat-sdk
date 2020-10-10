@@ -13,8 +13,6 @@ data class Message(
 
         val receiver: User = User(),
 
-        val gifUrl: String = "",
-
         var isUrl: Boolean = false,
 
         val deleted: Boolean = false,

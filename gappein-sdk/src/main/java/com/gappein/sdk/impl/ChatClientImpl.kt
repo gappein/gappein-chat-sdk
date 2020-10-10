@@ -78,24 +78,6 @@ class ChatClientImpl(
 
     }
 
-    override fun sendGif(
-        gifUrl: String,
-        receiver: String,
-        onSuccess: () -> Unit,
-        onError: (Exception) -> Unit
-    ) {
-        getUserByToken(receiver, {
-            val message = Message(
-                timeStamp = System.currentTimeMillis(),
-                gifUrl = gifUrl,
-                receiver = it,
-                sender = getUser()
-            )
-        }, {
-            onError(it)
-        })
-    }
-
     override fun getUserByToken(
         token: String,
         onSuccess: (User) -> Unit,

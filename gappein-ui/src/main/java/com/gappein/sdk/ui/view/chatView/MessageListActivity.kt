@@ -31,6 +31,7 @@ import com.giphy.sdk.ui.themes.GridType
 import com.giphy.sdk.ui.views.GiphyDialogFragment
 import kotlinx.android.synthetic.main.activity_message.*
 import kotlinx.android.synthetic.main.item_image_received_message.*
+import timber.log.Timber
 import java.io.File
 import java.io.IOException
 
@@ -105,15 +106,16 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
             searchTerm: String?,
             selectedContentType: GPHContentType
         ) {
-            Log.d(TAG, "onGifSelected")
+            Timber.d("onGifSelected %s", media.url)
+            media.url?.let { setupGifMessageListener(it) }
         }
 
         override fun onDismissed(selectedContentType: GPHContentType) {
-            Log.d(TAG, "onDismissed")
+            Timber.d("onDismissed")
         }
 
         override fun didSearchTerm(term: String) {
-            Log.d(TAG, "didSearchTerm $term")
+            Timber.d("didSearchTerm %s", term)
         }
     }
 
@@ -154,6 +156,21 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
 
         imageButtonAttach.setOnClickListener {
             checkForPermission(Manifest.permission.CAMERA, CAMERA_PERMISSION_CODE)
+        }
+    }
+
+    private fun setupGifMessageListener(gifUrl: String) {
+        buttonSend.setOnClickListener {
+            if (gifUrl.isNotEmpty()) {
+                ChatClient.getInstance().sendMessage(gifUrl, receiver.token, {
+                    editTextChatBox.text.clear()
+                }, {
+                    Timber.d("--- Caught Exception Message: %s", it.message)
+                })
+            }
+        }
+        toolbar.setOnBackPressed {
+            onBackPressed()
         }
     }
 
@@ -262,10 +279,6 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
                 })
             }
         }
-    }
-
-    private fun sendGifMessage(gifUrl: String) {
-
     }
 
     override fun getClient() = ChatClient.getInstance()
