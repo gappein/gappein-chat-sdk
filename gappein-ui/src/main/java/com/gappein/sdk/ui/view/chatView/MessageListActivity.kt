@@ -15,6 +15,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.gappein.sdk.Gappein
 import com.gappein.sdk.client.ChatClient
 import com.gappein.sdk.model.Message
 import com.gappein.sdk.model.User
@@ -165,12 +166,16 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
     }
 
     // Function to setup GiphyDialogFragment
+    // Hides the button if Giphy API Key is not provided
     private fun setupGifMessageListener() {
-
-        gifSend.setOnClickListener {
-            val gifDialog = GiphyDialogFragment.newInstance(settings)
-            gifDialog.gifSelectionListener = gifSelectionListener()
-            gifDialog.show(supportFragmentManager, "gifs_dialog")
+        if (Gappein.isAPIProvided != "") {
+            gifSend.setOnClickListener {
+                val gifDialog = GiphyDialogFragment.newInstance(settings)
+                gifDialog.gifSelectionListener = gifSelectionListener()
+                gifDialog.show(supportFragmentManager, "gifs_dialog")
+            }
+        } else {
+            gifSend.hide()
         }
     }
 

@@ -17,6 +17,7 @@ interface Gappein {
         private val firebaseDbManager: FirebaseDbManager = FirebaseDbManagerImpl()
         private val firebaseStorageManager: FirebaseStorageManager = FirebaseStorageManagerImpl()
         private var INSTANCE: Gappein? = null
+        public var isAPIProvided : String = ""
 
         @JvmStatic
         fun getInstance(): Gappein = INSTANCE
@@ -31,6 +32,8 @@ interface Gappein {
 
         @JvmStatic
         fun initialize(context: Context, apiKey: String = ""): Gappein {
+
+
             return GappeinImpl(
                 ChatClient.Builder()
                     .setDatabaseManager(firebaseDbManager)
@@ -39,8 +42,21 @@ interface Gappein {
             ).apply {
                 INSTANCE = this
                 if(apiKey.isNotEmpty()) {
+                    isAPIProvided = "YES"
                     Giphy.configure(context, apiKey)
                 }
+            }
+        }
+
+        @JvmStatic
+        fun initialize(): Gappein {
+            return GappeinImpl(
+                ChatClient.Builder()
+                    .setDatabaseManager(firebaseDbManager)
+                    .setStorageManager(firebaseStorageManager)
+                    .build()
+            ).apply {
+                INSTANCE = this
             }
         }
 
