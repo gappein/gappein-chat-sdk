@@ -30,8 +30,6 @@ import com.giphy.sdk.ui.themes.GPHTheme
 import com.giphy.sdk.ui.themes.GridType
 import com.giphy.sdk.ui.views.GiphyDialogFragment
 import kotlinx.android.synthetic.main.activity_message.*
-import kotlinx.android.synthetic.main.item_image_received_message.*
-import timber.log.Timber
 import java.io.File
 import java.io.IOException
 
@@ -52,7 +50,6 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
         private val EMPTY_USER = User()
         private const val CAMERA_PERMISSION_CODE = 100
 //        const val API_KEY = "aNfHztXC7KA73PjHGgzHN9rYvuSFrJye"
-
         /**
          * Returns intent of MessageListActivity
          *
@@ -100,22 +97,28 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
         }
     }
 
+    // Function to grab the GIF
     private fun gifSelectionListener() = object : GiphyDialogFragment.GifSelectionListener {
         override fun onGifSelected(
             media: Media,
             searchTerm: String?,
             selectedContentType: GPHContentType
         ) {
-            Timber.d("onGifSelected %s", media.url)
-            media.url?.let { setupGifMessageListener(it) }
+//            GPHCore.gifById(media.id) { result, e ->
+//                if (result != null) {
+//                    result.data?.embedUrl?.let { setupGifMessageListener(it) }
+//                }
+//                e.let {}
+//            }
+            media.embedUrl?.let { setupGifMessageListener(it) }
         }
 
         override fun onDismissed(selectedContentType: GPHContentType) {
-            Timber.d("onDismissed")
+            Log.d(TAG, "onDismissed")
         }
 
         override fun didSearchTerm(term: String) {
-            Timber.d("didSearchTerm %s", term)
+            Log.d(TAG, "didSearchTerm " + term)
         }
     }
 
@@ -159,15 +162,14 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
         }
     }
 
+    // Function to send the GIF through sendMessage()
     private fun setupGifMessageListener(gifUrl: String) {
-        buttonSend.setOnClickListener {
-            if (gifUrl.isNotEmpty()) {
-                ChatClient.getInstance().sendMessage(gifUrl, receiver.token, {
-                    editTextChatBox.text.clear()
-                }, {
-                    Timber.d("--- Caught Exception Message: %s", it.message)
-                })
-            }
+        if (gifUrl.isNotEmpty()) {
+            ChatClient.getInstance().sendMessage(gifUrl, receiver.token, {
+                Log.d(TAG, "--- Sent message: " + gifUrl)
+            }, {
+                Log.d(TAG, "--- Caught Exception Message: " + it.message)
+            })
         }
         toolbar.setOnBackPressed {
             onBackPressed()
