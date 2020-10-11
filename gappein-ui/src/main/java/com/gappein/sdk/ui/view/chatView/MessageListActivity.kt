@@ -63,21 +63,6 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
             }
     }
 
-    private val mediaTypeConfig = arrayOf(
-        GPHContentType.gif,
-        GPHContentType.sticker,
-        GPHContentType.text,
-        GPHContentType.recents
-    )
-
-    private val settings = GPHSettings(
-        gridType = GridType.waterfall,
-        useBlurredBackground = false,
-        theme = GPHTheme.Light,
-        stickerColumnCount = 3,
-        mediaTypeConfig = mediaTypeConfig
-    )
-
 
     private val channelId by lazy { intent.getStringExtra(CHANNEL_ID) ?: DEFAULT_STRING }
     private val receiver by lazy { intent.getParcelableExtra(RECEIVER) ?: EMPTY_USER }
@@ -170,7 +155,7 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
     private fun setupGifMessageListener() {
         if (Gappein.isAPIProvided != "") {
             gifSend.setOnClickListener {
-                val gifDialog = GiphyDialogFragment.newInstance(settings)
+                val gifDialog = GiphyDialogFragment.newInstance(GiphyUtil.settings)
                 gifDialog.gifSelectionListener = gifSelectionListener()
                 gifDialog.show(supportFragmentManager, "gifs_dialog")
             }
