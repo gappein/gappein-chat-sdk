@@ -5,7 +5,7 @@ data class Message(
 
         var timeStamp: Long? = System.currentTimeMillis(),
 
-        val _id: String = "",
+        val _id:String ="",
 
         val message: String = "",
 

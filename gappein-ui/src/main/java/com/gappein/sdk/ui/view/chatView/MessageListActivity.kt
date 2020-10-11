@@ -90,14 +90,10 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
         fetchMessages()
         setupSendMessageListener()
         setupTextChangeListener()
-        gifSend.setOnClickListener {
-            val gifDialog = GiphyDialogFragment.newInstance(settings)
-            gifDialog.gifSelectionListener = gifSelectionListener()
-            gifDialog.show(supportFragmentManager, "gifs_dialog")
-        }
+        setupGifMessageListener()
     }
 
-    // Function to grab the GIF
+    // Function to pass the Gif into the sendMessage() fun
     private fun gifSelectionListener() = object : GiphyDialogFragment.GifSelectionListener {
         override fun onGifSelected(
             media: Media,
@@ -110,7 +106,13 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
 //                }
 //                e.let {}
 //            }
-            media.embedUrl?.let { setupGifMessageListener(it) }
+            media.embedUrl?.let {
+                ChatClient.getInstance().sendMessage(it, receiver.token, {
+                    Log.d(TAG, "--- Sent message: " + media.embedUrl)
+                }, {
+                    Log.d(TAG, "--- Caught Exception Message: " + it.message)
+                })
+            }
         }
 
         override fun onDismissed(selectedContentType: GPHContentType) {
@@ -162,17 +164,13 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
         }
     }
 
-    // Function to send the GIF through sendMessage()
-    private fun setupGifMessageListener(gifUrl: String) {
-        if (gifUrl.isNotEmpty()) {
-            ChatClient.getInstance().sendMessage(gifUrl, receiver.token, {
-                Log.d(TAG, "--- Sent message: " + gifUrl)
-            }, {
-                Log.d(TAG, "--- Caught Exception Message: " + it.message)
-            })
-        }
-        toolbar.setOnBackPressed {
-            onBackPressed()
+    // Function to setup GiphyDialogFragment
+    private fun setupGifMessageListener() {
+
+        gifSend.setOnClickListener {
+            val gifDialog = GiphyDialogFragment.newInstance(settings)
+            gifDialog.gifSelectionListener = gifSelectionListener()
+            gifDialog.show(supportFragmentManager, "gifs_dialog")
         }
     }
 
