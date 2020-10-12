@@ -48,21 +48,21 @@
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
         android:id="@+id/container"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/input_background"
+        android:minHeight="60dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:minHeight="60dp">
+        app:layout_constraintStart_toStartOf="parent">
 
         <View
             android:id="@+id/divider"
             android:layout_width="0dp"
             android:layout_height="1dp"
-            android:background="#9FA2A2"
             android:alpha="0.2"
+            android:background="#9FA2A2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -71,6 +71,7 @@
             android:id="@+id/editTextChatBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
             android:layout_weight="1"
             android:background="@null"
             android:fontFamily="@font/nunito_regular"
@@ -81,29 +82,31 @@
             android:paddingEnd="16dp"
             android:textColor="@android:color/black"
             android:textColorHint="@color/hint_color"
-            app:layout_constraintEnd_toStartOf="@+id/imageButtonAttach"
+            app:layout_constraintEnd_toStartOf="@+id/gifSend"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/divider" />
+            tools:layout_editor_absoluteY="1dp" />
 
         <ImageView
             android:id="@+id/imageButtonAttach"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:src="@drawable/ic_attachment"
+            android:layout_marginEnd="8dp"
             android:alpha="0.6"
+            android:src="@drawable/ic_attachment"
             app:layout_constraintBottom_toBottomOf="@+id/buttonSend"
             app:layout_constraintEnd_toStartOf="@+id/buttonSend"
-            app:layout_constraintTop_toTopOf="@+id/buttonSend" />
+            app:layout_constraintTop_toTopOf="@+id/buttonSend"
+            app:layout_constraintVertical_bias="0.484" />
 
         <ImageView
             android:id="@+id/buttonSend"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
-            android:paddingStart="12dp"
+            android:paddingStart="6dp"
             android:paddingTop="6dp"
-            android:paddingEnd="12dp"
+            android:paddingEnd="6dp"
             android:paddingBottom="6dp"
             android:src="@drawable/ic_send_button"
             android:textColor="@color/hint_color"
@@ -111,8 +114,17 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <ImageView
+            android:id="@+id/gifSend"
+            android:layout_width="32dp"
+            android:layout_height="34dp"
+            android:layout_marginEnd="13dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/imageButtonAttach"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_gif_24px" />
 
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

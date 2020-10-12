@@ -9,11 +9,11 @@ import com.gappein.sdk.model.User
 import com.gappein.sdk.ui.view.channelview.ChannelListFragment
 import com.gappein.sdk.ui.view.channelview.`interface`.OnChannelClick
 
-class ChatActivity : AppCompatActivity(),OnChannelClick {
+class ChatActivity : AppCompatActivity(), OnChannelClick {
 
     companion object {
 
-        fun buildIntent(context: Context)= Intent(context, ChatActivity::class.java)
+        fun buildIntent(context: Context) = Intent(context, ChatActivity::class.java)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
