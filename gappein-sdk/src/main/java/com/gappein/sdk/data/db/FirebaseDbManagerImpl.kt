@@ -236,9 +236,7 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
         channelReference.document(channelId)
             .get()
             .addOnSuccessListener {
-
                 val userData = it.data
-
                 val userList = userData
                     ?.flatMap { user ->
                         listOf(user.value as HashMap<String, Any>)
@@ -257,9 +255,7 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
         channelReference.document(channelId)
             .get()
             .addOnSuccessListener {
-
                 val userData = it.data
-
                 userData
                     ?.flatMap { user ->
                         listOf(user.value as HashMap<String, Any>)
@@ -294,9 +290,7 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
     override fun setUserOnline(token: String) {
         val userChannelReference = userReference.document(token)
         userChannelReference.update(IS_ONLINE, true)
-            .addOnSuccessListener {
-
-            }
+            .addOnSuccessListener {}
     }
 
     override fun getAllChannels(onSuccess: (List<Channel>) -> Unit) {

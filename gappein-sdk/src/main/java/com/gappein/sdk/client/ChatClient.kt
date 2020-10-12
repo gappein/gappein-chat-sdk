@@ -24,8 +24,11 @@ interface ChatClient {
 
         private var dbManager: FirebaseDbManager? = null
         private var storageManager: FirebaseStorageManager? = null
+        private var apiKey: String = ""
 
         fun setDatabaseManager(dbManager: FirebaseDbManager) = apply { this.dbManager = dbManager }
+
+        fun setApiKey(apiKey: String) = apply { this.apiKey = apiKey }
 
         fun setStorageManager(storageManager: FirebaseStorageManager) =
             apply { this.storageManager = storageManager }
@@ -37,7 +40,7 @@ interface ChatClient {
          */
         fun build(): ChatClient = storageManager?.let { storageManager ->
             dbManager?.let { dbManager ->
-                ChatClientImpl(storageManager, dbManager).apply {
+                ChatClientImpl(storageManager, dbManager,apiKey).apply {
                     INSTANCE = this
                 }
             }
@@ -60,6 +63,8 @@ interface ChatClient {
      * @return object of User.kt
      */
     fun getUser(): User
+
+    fun getApiKey(): String
 
     /**
      * Use to send text message
@@ -168,17 +173,32 @@ interface ChatClient {
 
     fun deleteMessage(channelId: String, messageId: String, onSuccess: () -> Unit)
 
-    fun likeMessage(channelId: String,messageId: String,onSuccess: () -> Unit)
+    fun likeMessage(channelId: String, messageId: String, onSuccess: () -> Unit)
 
     fun getTypingStatus(channelId: String, participantUserId: String, onSuccess: (String) -> Unit)
 
-    fun setTypingStatus(channelId: String, userId:String, isUserTyping:Boolean, onSuccess: () -> Unit)
+    fun setTypingStatus(
+        channelId: String,
+        userId: String,
+        isUserTyping: Boolean,
+        onSuccess: () -> Unit
+    )
 
-    fun setChatBackground(channelId: String, backgroundUrl: Uri, onSuccess: () -> Unit,onProgress: (Int) -> Unit,onError: (Exception) -> Unit)
+    fun setChatBackground(
+        channelId: String,
+        backgroundUrl: Uri,
+        onSuccess: () -> Unit,
+        onProgress: (Int) -> Unit,
+        onError: (Exception) -> Unit
+    )
 
     fun getChatBackground(channelId: String, onSuccess: (String) -> Unit)
 
-    fun setUserStatus(status:String,onSuccess: () -> Unit,onError: (Exception) -> Unit)
+    fun setUserStatus(status: String, onSuccess: () -> Unit, onError: (Exception) -> Unit)
 
-    fun getUserStatus(token: String = getUser().token ,onSuccess: (String) -> Unit,onError: (Exception) -> Unit)
+    fun getUserStatus(
+        token: String = getUser().token,
+        onSuccess: (String) -> Unit,
+        onError: (Exception) -> Unit
+    )
 }

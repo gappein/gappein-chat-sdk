@@ -7,7 +7,6 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -15,7 +14,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.gappein.sdk.Gappein
 import com.gappein.sdk.client.ChatClient
 import com.gappein.sdk.model.Message
 import com.gappein.sdk.model.User
@@ -23,12 +21,9 @@ import com.gappein.sdk.ui.R
 import com.gappein.sdk.ui.base.ChatBaseView
 import com.gappein.sdk.ui.view.chatView.adapter.MessageListAdapter
 import com.gappein.sdk.ui.view.chatView.imageviewer.openImage
+import com.gappein.sdk.ui.view.chatView.util.gifSelectionListener
+import com.gappein.sdk.ui.view.chatView.util.giphySettings
 import com.gappein.sdk.ui.view.util.*
-import com.giphy.sdk.core.models.Media
-import com.giphy.sdk.ui.GPHContentType
-import com.giphy.sdk.ui.GPHSettings
-import com.giphy.sdk.ui.themes.GPHTheme
-import com.giphy.sdk.ui.themes.GridType
 import com.giphy.sdk.ui.views.GiphyDialogFragment
 import kotlinx.android.synthetic.main.activity_message.*
 import java.io.File
@@ -47,10 +42,11 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
         private const val REQUEST_GALLERY_PHOTO = 2
         private const val CHANNEL_ID = "channelId"
         private const val RECEIVER = "receiver"
+        private const val GIF_DIALOG = "gifs_dialog"
         private const val DEFAULT_STRING = ""
         private val EMPTY_USER = User()
         private const val CAMERA_PERMISSION_CODE = 100
-//        const val API_KEY = "aNfHztXC7KA73PjHGgzHN9rYvuSFrJye"
+
         /**
          * Returns intent of MessageListActivity
          *
@@ -67,6 +63,7 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
     private val channelId by lazy { intent.getStringExtra(CHANNEL_ID) ?: DEFAULT_STRING }
     private val receiver by lazy { intent.getParcelableExtra(RECEIVER) ?: EMPTY_USER }
     private val currentUser by lazy { ChatClient.getInstance().getUser() }
+    private val currentApiKey by lazy { ChatClient.getInstance().getApiKey() ?: DEFAULT_STRING }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,40 +71,9 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
         setupUI()
         setupRecyclerView()
         fetchMessages()
+        setupGifMessageListener()
         setupSendMessageListener()
         setupTextChangeListener()
-        setupGifMessageListener()
-    }
-
-    // Function to pass the Gif into the sendMessage() fun
-    private fun gifSelectionListener() = object : GiphyDialogFragment.GifSelectionListener {
-        override fun onGifSelected(
-            media: Media,
-            searchTerm: String?,
-            selectedContentType: GPHContentType
-        ) {
-//            GPHCore.gifById(media.id) { result, e ->
-//                if (result != null) {
-//                    result.data?.embedUrl?.let { setupGifMessageListener(it) }
-//                }
-//                e.let {}
-//            }
-            media.embedUrl?.let {
-                ChatClient.getInstance().sendMessage(it, receiver.token, {
-                    Log.d(TAG, "--- Sent message: " + media.embedUrl)
-                }, {
-                    Log.d(TAG, "--- Caught Exception Message: " + it.message)
-                })
-            }
-        }
-
-        override fun onDismissed(selectedContentType: GPHContentType) {
-            Log.d(TAG, "onDismissed")
-        }
-
-        override fun didSearchTerm(term: String) {
-            Log.d(TAG, "didSearchTerm " + term)
-        }
     }
 
     private fun setupTextChangeListener() {
@@ -150,14 +116,18 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
         }
     }
 
-    // Function to setup GiphyDialogFragment
-    // Hides the button if Giphy API Key is not provided
     private fun setupGifMessageListener() {
-        if (Gappein.isAPIProvided != "") {
+        if (currentApiKey.isNotEmpty()) {
             gifSend.setOnClickListener {
-                val gifDialog = GiphyDialogFragment.newInstance(GiphyUtil.settings)
-                gifDialog.gifSelectionListener = gifSelectionListener()
-                gifDialog.show(supportFragmentManager, "gifs_dialog")
+                val gifDialog = GiphyDialogFragment.newInstance(giphySettings)
+                gifDialog.gifSelectionListener = gifSelectionListener {
+                    ChatClient.getInstance().sendMessage(it, receiver.token, {
+                        gifDialog.dismiss()
+                    }, {
+
+                    })
+                }
+                gifDialog.show(supportFragmentManager, GIF_DIALOG)
             }
         } else {
             gifSend.hide()

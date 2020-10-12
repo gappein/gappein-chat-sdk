@@ -12,7 +12,7 @@ class App : Application() {
         // like so -> Gappein.initialize(this, "API KEY here")
         // OR
         // Don't pass any parameters, if you don't want to use Giphy.
-        Gappein.initialize()
+        Gappein.initialize(this,"aNfHztXC7KA73PjHGgzHN9rYvuSFrJye")
     }
 
 }

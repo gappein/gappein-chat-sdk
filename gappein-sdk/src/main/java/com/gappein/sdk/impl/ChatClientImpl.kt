@@ -11,7 +11,8 @@ import com.gappein.sdk.model.User
 
 class ChatClientImpl(
     private val storageManager: FirebaseStorageManager,
-    private val dbManager: FirebaseDbManager
+    private val dbManager: FirebaseDbManager,
+    private val apiKey: String
 ) : ChatClient {
 
     private var currentUser = User()
@@ -30,8 +31,9 @@ class ChatClientImpl(
         })
     }
 
-
     override fun getUser() = currentUser
+
+    override fun getApiKey() = apiKey
 
     override fun sendMessage(
         messageText: String,
@@ -40,7 +42,6 @@ class ChatClientImpl(
         onError: (Exception) -> Unit
     ) {
         getUserByToken(receiver, {
-
             val message = Message(
                 timeStamp = System.currentTimeMillis(),
                 message = messageText,
@@ -48,9 +49,7 @@ class ChatClientImpl(
                 receiver = it,
                 sender = getUser()
             )
-
             dbManager.sendMessageByToken(message, getUser(), it, onSuccess, onError)
-
         }, {
             onError(it)
         })
