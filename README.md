@@ -29,10 +29,7 @@ To get started you need to first create a Firebase project for your app and add 
 Add the dependencies to the `build.gradle`
 
 ```groovy
-implementation "com.gappein.sdk:gappein-sdk:1.0.0-beta1" 
-implementation "com.google.firebase:firebase-core:17.5.1"
-implementation "com.google.firebase:firebase-storage:19.2.0"
-implementation "com.google.firebase:firebase-firestore:21.7.1"
+implementation "com.gappein.sdk:gappein-sdk:1.0.0-beta1"
 ```
 
 # Initialization
