@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.gappein.sdk.client.ChatClient
 import com.gappein.sdk.model.Message
 import com.gappein.sdk.ui.view.util.hide
 import com.gappein.sdk.ui.view.util.onDoubleTapListener
@@ -26,12 +27,19 @@ class SenderImageViewHolder(private val view: View) : RecyclerView.ViewHolder(vi
         view.sentImageMessage.setOnClickListener { onImageClick.invoke(message.message) }
 
         if (message.message.contains(GIPHY)) {
-            val _message = message.message
-            val listOfMessages = _message.split(SPACE_SPLITTER)
+            if (ChatClient.getInstance().getApiKey().isNotEmpty()) {
+                val _message = message.message
+                val listOfMessages = _message.split(SPACE_SPLITTER)
 
-            view.gifView.setMediaWithId(listOfMessages.last())
-            view.gifView.show()
-            view.sentImageMessage.hide()
+                view.gifView.setMediaWithId(listOfMessages.last())
+                view.gifView.show()
+                view.sentImageMessage.hide()
+            } else {
+                view.run {
+                    gifView.hide()
+                    sentImageMessage.hide()
+                }
+            }
         } else {
             Glide.with(view)
                 .load(message.message)
