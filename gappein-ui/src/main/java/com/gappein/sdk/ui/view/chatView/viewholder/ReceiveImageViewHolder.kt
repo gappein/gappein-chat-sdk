@@ -51,8 +51,7 @@ class ReceiveImageViewHolder(private val view: View) : RecyclerView.ViewHolder(v
 
         view.likeImageView.visibility = if (message.liked) View.VISIBLE else View.INVISIBLE
 
-        view.receivedImageMessage.setOnClickListener
-        { onImageClick.invoke(message.message) }
+        view.receivedImageMessage.setOnClickListener{ onImageClick.invoke(message.message) }
 
         if (!message.deleted) {
             view.onDoubleTapListener {
