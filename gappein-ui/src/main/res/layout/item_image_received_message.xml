@@ -39,6 +39,7 @@
         app:layout_constraintStart_toStartOf="@+id/imageBackGround"
         app:layout_constraintTop_toTopOf="@+id/imageBackGround"
         tools:srcCompat="@tools:sample/avatars" />
+
     <ImageView
         android:id="@+id/likeImageView"
         android:layout_width="wrap_content"
