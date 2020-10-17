@@ -35,7 +35,6 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
     private var photoFile: File? = null
     private lateinit var adapter: MessageListAdapter
     private val chats = mutableListOf<Message>()
-    val TAG = "MessageActivity"
 
     companion object {
         private const val REQUEST_TAKE_PHOTO = 1
@@ -46,6 +45,7 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
         private const val DEFAULT_STRING = ""
         private val EMPTY_USER = User()
         private const val CAMERA_PERMISSION_CODE = 100
+        private const val TAG = "MessageActivity"
 
         /**
          * Returns intent of MessageListActivity
@@ -59,11 +59,10 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
             }
     }
 
-
     private val channelId by lazy { intent.getStringExtra(CHANNEL_ID) ?: DEFAULT_STRING }
     private val receiver by lazy { intent.getParcelableExtra(RECEIVER) ?: EMPTY_USER }
     private val currentUser by lazy { ChatClient.getInstance().getUser() }
-    private val currentApiKey by lazy { ChatClient.getInstance().getApiKey() ?: DEFAULT_STRING }
+    private val currentApiKey by lazy { ChatClient.getInstance().getApiKey() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -112,7 +111,7 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
         }
 
         imageButtonAttach.setOnClickListener {
-            checkForPermission(Manifest.permission.CAMERA, CAMERA_PERMISSION_CODE)
+            Manifest.permission.CAMERA.checkForPermission(CAMERA_PERMISSION_CODE)
         }
     }
 
@@ -121,7 +120,7 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
             gifSend.setOnClickListener {
                 val gifDialog = GiphyDialogFragment.newInstance(giphySettings)
                 gifDialog.gifSelectionListener = gifSelectionListener {
-                    ChatClient.getInstance().sendMessage(it, receiver.token, {
+                    ChatClient.getInstance().sendMessage("giphy $it", receiver.token, {
                         gifDialog.dismiss()
                     }, {
 
@@ -134,9 +133,13 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
         }
     }
 
-    private fun checkForPermission(camera: String, requestCode: Int) {
-        if (ContextCompat.checkSelfPermission(this, camera) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, arrayOf(camera), requestCode)
+    private fun String.checkForPermission(requestCode: Int) {
+        if (ContextCompat.checkSelfPermission(
+                this@MessageListActivity,
+                this
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(this@MessageListActivity, arrayOf(this), requestCode)
         } else {
             dispatchTakePictureIntent()
         }
@@ -187,8 +190,7 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
                     this,
                     getString(R.string.permission_deined),
                     Toast.LENGTH_SHORT
-                )
-                    .show()
+                ).show()
             }
         }
     }
@@ -242,5 +244,4 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
     }
 
     override fun getClient() = ChatClient.getInstance()
-
 }

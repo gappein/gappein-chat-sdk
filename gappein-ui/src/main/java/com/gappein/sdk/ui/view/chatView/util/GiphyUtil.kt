@@ -29,12 +29,10 @@ fun gifSelectionListener(onSelected: (String) -> Unit) =
             searchTerm: String?,
             selectedContentType: GPHContentType
         ) {
-            onSelected(media.embedUrl.toString())
+            onSelected(media.id)
         }
 
-        override fun onDismissed(selectedContentType: GPHContentType) {
-        }
+        override fun onDismissed(selectedContentType: GPHContentType) {}
 
-        override fun didSearchTerm(term: String) {
-        }
+        override fun didSearchTerm(term: String) {}
     }

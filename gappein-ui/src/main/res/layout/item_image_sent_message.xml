@@ -10,7 +10,7 @@
         android:id="@+id/imageBackGround"
         android:layout_width="0dp"
         android:layout_height="200dp"
-        android:background="@drawable/sent_message_background"
+        android:background="#0C9175"
         android:padding="4dp"
         android:textColor="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
@@ -30,6 +30,18 @@
         app:layout_constraintStart_toStartOf="@+id/imageBackGround"
         app:layout_constraintTop_toTopOf="@+id/imageBackGround" />
 
+    <com.giphy.sdk.ui.views.GPHMediaView
+        android:id="@+id/gifView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        android:layout_margin="4dp"
+        android:elevation="4dp"
+        app:layout_constraintBottom_toBottomOf="@+id/imageBackGround"
+        app:layout_constraintEnd_toEndOf="@+id/imageBackGround"
+        app:layout_constraintStart_toStartOf="@+id/imageBackGround"
+        app:layout_constraintTop_toTopOf="@+id/imageBackGround"
+        tools:srcCompat="@tools:sample/avatars" />
     <ImageView
         android:id="@+id/likeImageView"
         android:layout_width="wrap_content"

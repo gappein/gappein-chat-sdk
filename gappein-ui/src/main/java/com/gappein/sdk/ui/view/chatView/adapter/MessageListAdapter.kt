@@ -22,14 +22,15 @@ class MessageListAdapter(
     var filteredList = mutableListOf<Message>()
 
     companion object {
-        private const val VIEW_TYPE_SENDER = 1
+        private const val VIEW_TYPE_SENDER_TEXT = 1
         private const val VIEW_TYPE_SENDER_IMAGE = 2
-        private const val VIEW_TYPE_RECEIVER = 3
+        private const val VIEW_TYPE_RECEIVER_TEXT = 3
         private const val VIEW_TYPE_RECEIVER_IMAGE = 4
+        private const val GIPHY = "giphy"
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return if (viewType == VIEW_TYPE_SENDER) {
+        return if (viewType == VIEW_TYPE_SENDER_TEXT) {
             SenderMessageListViewHolder(
                 LayoutInflater.from(parent.context)
                     .inflate(R.layout.item_sent_message, parent, false)
@@ -55,14 +56,14 @@ class MessageListAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (getItemViewType(position)) {
 
-            VIEW_TYPE_SENDER -> (holder as SenderMessageListViewHolder).bind(
+            VIEW_TYPE_SENDER_TEXT -> (holder as SenderMessageListViewHolder).bind(
                 position,
                 filteredList.toList(),
                 onMessageClick,
                 onMessageLike
             )
 
-            VIEW_TYPE_RECEIVER -> (holder as ReceiverMessageListViewHolder).bind(
+            VIEW_TYPE_RECEIVER_TEXT -> (holder as ReceiverMessageListViewHolder).bind(
                 filteredList.toList(),
                 position,
                 onMessageLike
@@ -70,14 +71,12 @@ class MessageListAdapter(
 
             VIEW_TYPE_RECEIVER_IMAGE -> (holder as ReceiveImageViewHolder).bind(
                 filteredList[position],
-                position,
                 onImageClick,
                 onMessageLike
             )
 
             VIEW_TYPE_SENDER_IMAGE -> (holder as SenderImageViewHolder).bind(
                 filteredList[position],
-                position,
                 onImageClick,
                 onMessageLike
             )
@@ -95,7 +94,7 @@ class MessageListAdapter(
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (filteredList[position].isUrl) {
+        return if (filteredList[position].isUrl || filteredList[position].message.contains(GIPHY)) {
                 if (chatClient.getUser().token == filteredList[position].receiver.token) {
                     VIEW_TYPE_RECEIVER_IMAGE
                 } else {
@@ -103,9 +102,9 @@ class MessageListAdapter(
                 }
             } else {
                 if (chatClient.getUser().token == filteredList[position].receiver.token) {
-                    VIEW_TYPE_RECEIVER
+                    VIEW_TYPE_RECEIVER_TEXT
                 } else {
-                    VIEW_TYPE_SENDER
+                    VIEW_TYPE_SENDER_TEXT
                 }
             }
     }
