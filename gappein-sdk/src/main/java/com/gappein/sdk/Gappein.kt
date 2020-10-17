@@ -39,19 +39,7 @@ interface Gappein {
                     .build()
             ).apply {
                 INSTANCE = this
-                Giphy.configure(context, apiKey)
-            }
-        }
-
-        @JvmStatic
-        fun initialize(): Gappein {
-            return GappeinImpl(
-                ChatClient.Builder()
-                    .setDatabaseManager(firebaseDbManager)
-                    .setStorageManager(firebaseStorageManager)
-                    .build()
-            ).apply {
-                INSTANCE = this
+                Giphy.configure(context.applicationContext, apiKey)
             }
         }
     }

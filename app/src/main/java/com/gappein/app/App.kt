@@ -8,11 +8,7 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
         AppPreference.init(this)
-        // Pass the Giphy API key along with context to initialize the Giphy SDK,
-        // like so -> Gappein.initialize(this, "API KEY here")
-        // OR
-        // Don't pass any parameters, if you don't want to use Giphy.
-        Gappein.initialize(this,"aNfHztXC7KA73PjHGgzHN9rYvuSFrJye")
+        Gappein.initialize(this)
     }
 
 }
