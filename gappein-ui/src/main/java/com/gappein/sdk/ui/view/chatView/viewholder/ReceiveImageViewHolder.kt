@@ -46,7 +46,6 @@ class ReceiveImageViewHolder(private val view: View) : RecyclerView.ViewHolder(v
                 .into(view.receivedImageMessage)
             view.receivedImageMessage.show()
             view.gifView.hide()
-
         }
 
         view.likeImageView.visibility = if (message.liked) View.VISIBLE else View.INVISIBLE

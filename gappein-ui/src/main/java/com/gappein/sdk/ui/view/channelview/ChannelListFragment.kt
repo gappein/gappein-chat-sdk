@@ -75,8 +75,6 @@ class ChannelListFragment : Fragment(), ChatBaseView {
             onUserClick.onUserClick(it)
         }, onChannelClick = { channel, user ->
             startActivity(MessageListActivity.buildIntent(requireContext(), channel.id, user))
-        }, onTextChange = {
-            adapter.filter.filter(it)
         })
         view.recyclerViewChannel.layoutManager = LinearLayoutManager(requireContext())
         view.recyclerViewChannel.adapter = adapter
