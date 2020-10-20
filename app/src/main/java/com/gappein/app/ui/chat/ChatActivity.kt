@@ -12,7 +12,7 @@ import com.gappein.sdk.ui.view.channelview.`interface`.OnChannelClick
 class ChatActivity : AppCompatActivity(), OnChannelClick {
 
     companion object {
-
+        @JvmStatic
         fun buildIntent(context: Context) = Intent(context, ChatActivity::class.java)
     }
 

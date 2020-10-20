@@ -25,7 +25,7 @@ class LoginActivity : AppCompatActivity() {
     companion object {
         private const val RC_SIGN_IN = 100
         private const val TAG = "LoginActivity"
-        private const val TEST_TOKEN = "HimanshuSinghTestAccount"
+        private const val TEST_TOKEN = "Himanshu"
     }
 
     private lateinit var auth: FirebaseAuth

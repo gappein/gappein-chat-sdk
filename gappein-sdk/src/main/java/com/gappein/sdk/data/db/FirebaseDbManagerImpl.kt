@@ -34,6 +34,7 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
         private const val IS_ONLINE = "online"
         private const val DELETED = "deleted"
         private const val TYPING = "typing"
+        private const val EXTRA_DATA = "extraData"
         private const val CHAT_BACKGROUND = "chat_background"
         private const val LAST_ONLINE_AT = "lastOnlineAt"
     }
@@ -54,11 +55,7 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
             }
     }
 
-    override fun sendMessage(
-        message: Message,
-        onSuccess: () -> Unit,
-        onError: (Exception) -> Unit
-    ) {
+    override fun sendMessage(message: Message, onSuccess: () -> Unit, onError: (Exception) -> Unit) {
 
         val userList = listOf(message.sender.token, message.receiver.token)
         val channelId = userList.sorted().toString()
@@ -66,18 +63,11 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
         channelReference.document(channelId)
             .collection(MESSAGES_COLLECTION)
             .add(message)
-            .addOnSuccessListener {
-                updateMessage(channelId, it, onSuccess, onError)
-            }
+            .addOnSuccessListener { updateMessage(channelId, it, onSuccess, onError) }
             .addOnFailureListener { onError(it) }
     }
 
-    private fun updateMessage(
-        channelId: String,
-        it: DocumentReference,
-        onSuccess: () -> Unit,
-        onError: (Exception) -> Unit
-    ) {
+    private fun updateMessage(channelId: String, it: DocumentReference, onSuccess: () -> Unit, onError: (Exception) -> Unit) {
         channelReference.document(channelId)
             .collection(MESSAGES_COLLECTION)
             .document(it.id)
@@ -86,11 +76,7 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
             .addOnFailureListener { onError(it) }
     }
 
-    override fun getUserByToken(
-        token: String,
-        onSuccess: (User) -> Unit,
-        onError: (Exception) -> Unit
-    ) {
+    override fun getUserByToken(token: String, onSuccess: (User) -> Unit, onError: (Exception) -> Unit) {
         userReference
             .get()
             .addOnSuccessListener { result ->
@@ -101,10 +87,7 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
             .addOnFailureListener { exception -> onError(exception) }
     }
 
-    override fun getOrCreateNewChatChannels(
-        participantUserToken: String,
-        onSuccess: (channelId: String) -> Unit
-    ) {
+    override fun getOrCreateNewChatChannels(participantUserToken: String, onSuccess: (channelId: String) -> Unit) {
 
         val currentUser = ChatClient.getInstance().getUser()
         val currentUserToken = currentUser.token
@@ -138,8 +121,10 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
             }
     }
 
+
     private fun addBackgroundCollection(channelId: String) {
-        channelReference.document(channelId)
+        channelReference
+            .document(channelId)
             .collection(CHAT_BACKGROUND)
             .document(channelId)
             .set(mapOf(CHAT_BACKGROUND to "-"))
@@ -229,7 +214,6 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
                 }
             }
         }
-
     }
 
     override fun getChannelUsers(channelId: String, onSuccess: (List<User>) -> Unit) {
