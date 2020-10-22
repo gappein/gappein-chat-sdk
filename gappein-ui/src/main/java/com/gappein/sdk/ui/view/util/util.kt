@@ -69,7 +69,7 @@ fun MessageListActivity.getRealPathFromUri(contentUri: Uri?): String? {
         assert(cursor != null)
         val column_index: Int = (cursor?.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
             ?: cursor?.moveToFirst()) as Int
-        cursor?.getString(column_index)
+        if (cursor?.moveToFirst() == true) cursor.getString(column_index) else null
     } finally {
         cursor?.close()
     }

@@ -109,11 +109,11 @@ class LoginActivity : AppCompatActivity() {
     private fun goToNext(currentUser: User) {
         Gappein.getInstance().setUser(
             currentUser,
-            token = currentUser.token, {
+            token = currentUser.token, onSuccess = {
                 ChatClient.getInstance().openOrCreateChannel(TEST_TOKEN) {
                     startActivity(ChatActivity.buildIntent(this))
                 }
-            }, {
+            }, onError = {
 
             }
         )

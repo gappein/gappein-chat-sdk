@@ -45,6 +45,7 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
         private const val DEFAULT_STRING = ""
         private val EMPTY_USER = User()
         private const val CAMERA_PERMISSION_CODE = 100
+        private const val GALLERY_PERMISSION_CODE = 101
         private const val TAG = "MessageActivity"
 
         /**
@@ -111,7 +112,7 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
         }
 
         imageButtonAttach.setOnClickListener {
-            Manifest.permission.CAMERA.checkForPermission(CAMERA_PERMISSION_CODE)
+            Manifest.permission.WRITE_EXTERNAL_STORAGE.checkForPermission(GALLERY_PERMISSION_CODE)
         }
     }
 
@@ -139,9 +140,9 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
                 this
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            ActivityCompat.requestPermissions(this@MessageListActivity, arrayOf(this), requestCode)
+            ActivityCompat.requestPermissions(this@MessageListActivity, arrayOf(this, Manifest.permission.READ_EXTERNAL_STORAGE), requestCode)
         } else {
-            dispatchTakePictureIntent()
+            dispatchGalleryIntent()
         }
     }
 
@@ -197,20 +198,39 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
 
     private fun dispatchTakePictureIntent() {
         val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        if (takePictureIntent.resolveActivity(packageManager) != null) {
+        takePictureIntent.resolveActivity(packageManager)?.let {
             var photoFile: File? = null
             try {
                 photoFile = createImageFile()
             } catch (ex: IOException) {
                 ex.printStackTrace()
             }
-            if (photoFile != null) {
-                val photoURI: Uri = FileProvider.getUriForFile(this, "Gappein.provider", photoFile)
-                this.photoFile = photoFile
+            photoFile?.let { file ->
+                val photoURI: Uri = FileProvider.getUriForFile(this, "Gappein.provider", file)
+                this.photoFile = file
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
                 startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO)
             }
         }
+    }
+
+    private fun dispatchGalleryIntent() {
+        val galleryIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        startActivityForResult(galleryIntent, REQUEST_GALLERY_PHOTO)
+//        galleryIntent.resolveActivity(packageManager)?.let {
+//            var gallery: File? = null
+//            try {
+//                gallery = createImageFile()
+//            } catch (ex: IOException) {
+//                ex.printStackTrace()
+//            }
+//            if (gallery != null) {
+//                val photoURI: Uri = FileProvider.getUriForFile(this, "Gappein.provider", gallery)
+//                this.photoFile = gallery
+//                galleryIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+//                startActivityForResult(galleryIntent, REQUEST_TAKE_PHOTO)
+//            }
+//        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -229,9 +249,8 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
     }
 
     private fun sendImageMessage(photo: File?) {
-        if (photo != null) {
-            val file = ImageCompressor(this).compressToFile(photo)
-            file?.toUri()?.let {
+        photo?.let { file ->
+            ImageCompressor(this).compressToFile(file)?.toUri()?.let {
                 ChatClient.getInstance().sendMessage(it, receiver.token, {
                     progress.hide()
                 }, {
