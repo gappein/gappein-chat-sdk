@@ -20,10 +20,12 @@ import com.gappein.sdk.model.User
 import com.gappein.sdk.ui.R
 import com.gappein.sdk.ui.base.ChatBaseView
 import com.gappein.sdk.ui.view.chatView.adapter.MessageListAdapter
+import com.gappein.sdk.ui.view.chatView.attachments.AttachmentDialogFragment
 import com.gappein.sdk.ui.view.chatView.imageviewer.openImage
 import com.gappein.sdk.ui.view.chatView.util.gifSelectionListener
 import com.gappein.sdk.ui.view.chatView.util.giphySettings
 import com.gappein.sdk.ui.view.util.*
+import com.gappein.sdk.ui.view.util.AttachmentUtils.AttachmentOptions.*
 import com.giphy.sdk.ui.views.GiphyDialogFragment
 import kotlinx.android.synthetic.main.activity_message.*
 import java.io.File
@@ -112,7 +114,16 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
         }
 
         imageButtonAttach.setOnClickListener {
-            Manifest.permission.WRITE_EXTERNAL_STORAGE.checkForPermission(GALLERY_PERMISSION_CODE)
+            AttachmentDialogFragment { option ->
+                onOptionSelected(option)
+            }.show(supportFragmentManager, "AttachmentFragment")
+        }
+    }
+
+    private fun onOptionSelected(option: String) {
+        when (option) {
+            CameraOption().optionName -> Manifest.permission.CAMERA.checkForPermission(CAMERA_PERMISSION_CODE)
+            GalleryOption().optionName -> Manifest.permission.WRITE_EXTERNAL_STORAGE.checkForPermission(GALLERY_PERMISSION_CODE)
         }
     }
 
@@ -140,9 +151,16 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
                 this
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            ActivityCompat.requestPermissions(this@MessageListActivity, arrayOf(this, Manifest.permission.READ_EXTERNAL_STORAGE), requestCode)
+            ActivityCompat.requestPermissions(this@MessageListActivity, arrayOf(this), requestCode)
         } else {
-            dispatchGalleryIntent()
+            when (requestCode) {
+                CAMERA_PERMISSION_CODE -> {
+                    dispatchTakePictureIntent()
+                }
+                GALLERY_PERMISSION_CODE -> {
+                    dispatchGalleryIntent()
+                }
+            }
         }
     }
 
@@ -217,20 +235,6 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
     private fun dispatchGalleryIntent() {
         val galleryIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         startActivityForResult(galleryIntent, REQUEST_GALLERY_PHOTO)
-//        galleryIntent.resolveActivity(packageManager)?.let {
-//            var gallery: File? = null
-//            try {
-//                gallery = createImageFile()
-//            } catch (ex: IOException) {
-//                ex.printStackTrace()
-//            }
-//            if (gallery != null) {
-//                val photoURI: Uri = FileProvider.getUriForFile(this, "Gappein.provider", gallery)
-//                this.photoFile = gallery
-//                galleryIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
-//                startActivityForResult(galleryIntent, REQUEST_TAKE_PHOTO)
-//            }
-//        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
