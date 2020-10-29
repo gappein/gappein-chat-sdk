@@ -2,12 +2,14 @@ package com.gappein.sdk.ui.view.chatView
 
 import android.Manifest
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -25,7 +27,6 @@ import com.gappein.sdk.ui.view.chatView.imageviewer.openImage
 import com.gappein.sdk.ui.view.chatView.util.gifSelectionListener
 import com.gappein.sdk.ui.view.chatView.util.giphySettings
 import com.gappein.sdk.ui.view.util.*
-import com.gappein.sdk.ui.view.util.AttachmentUtils.AttachmentOptions.*
 import com.giphy.sdk.ui.views.GiphyDialogFragment
 import kotlinx.android.synthetic.main.activity_message.*
 import java.io.File
@@ -37,6 +38,9 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
     private var photoFile: File? = null
     private lateinit var adapter: MessageListAdapter
     private val chats = mutableListOf<Message>()
+    private val attachmentDialogFragment: AttachmentDialogFragment = AttachmentDialogFragment { option ->
+        onOptionSelected(option)
+    }
 
     companion object {
         private const val REQUEST_TAKE_PHOTO = 1
@@ -114,9 +118,7 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
         }
 
         imageButtonAttach.setOnClickListener {
-            AttachmentDialogFragment { option ->
-                onOptionSelected(option)
-            }.show(supportFragmentManager, "AttachmentFragment")
+            attachmentDialogFragment.show(supportFragmentManager, "AttachmentFragment")
         }
     }
 
@@ -153,16 +155,49 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
         ) {
             ActivityCompat.requestPermissions(this@MessageListActivity, arrayOf(this), requestCode)
         } else {
-            when (requestCode) {
-                CAMERA_PERMISSION_CODE -> {
-                    dispatchTakePictureIntent()
-                }
-                GALLERY_PERMISSION_CODE -> {
-                    dispatchGalleryIntent()
-                }
+            launchIntent(requestCode)
+        }
+    }
+
+    private fun launchIntent(requestCode: Int) {
+        when (requestCode) {
+            CAMERA_PERMISSION_CODE -> {
+                dispatchTakePictureIntent()
+            }
+            GALLERY_PERMISSION_CODE -> {
+                dispatchGalleryIntent()
             }
         }
     }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray,
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            launchIntent(requestCode)
+        } else {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, permissions.first())) {
+               givePermissionClarification(requestCode, permissions.first())
+            }
+        }
+    }
+
+    private fun givePermissionClarification(requestCode: Int, permission: String) {
+        val message = when (requestCode) {
+            CAMERA_PERMISSION_CODE -> getString(R.string.camera_permission_clarification)
+            GALLERY_PERMISSION_CODE -> getString(R.string.gallery_permission_clarification)
+            else -> throw IllegalArgumentException("Invalid Permission Request code")
+        }
+        AlertDialog.Builder(this).apply {
+            setMessage(message)
+            setPositiveButton("Yes") { _, _ -> permission.checkForPermission(requestCode) }
+            setNegativeButton("No") { _, _ -> }
+        }.show()
+    }
+
 
     private fun setupRecyclerView() {
         adapter = MessageListAdapter(chatClient = ChatClient.getInstance(), onImageClick = {
@@ -194,26 +229,6 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
         }
     }
 
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray,
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == CAMERA_PERMISSION_CODE) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                dispatchTakePictureIntent()
-            } else {
-                Toast.makeText(
-                    this,
-                    getString(R.string.permission_deined),
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        }
-    }
-
     private fun dispatchTakePictureIntent() {
         val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         takePictureIntent.resolveActivity(packageManager)?.let {
@@ -240,7 +255,7 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == RESULT_OK) {
-
+            attachmentDialogFragment.dismiss()
             if (requestCode == REQUEST_TAKE_PHOTO) {
                 sendImageMessage(photoFile)
 

@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gappein.sdk.ui.R
-import com.gappein.sdk.ui.view.util.AttachmentUtils.AttachmentOptions.*
 import com.gappein.sdk.ui.view.util.CameraOption
 import com.gappein.sdk.ui.view.util.GalleryOption
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
