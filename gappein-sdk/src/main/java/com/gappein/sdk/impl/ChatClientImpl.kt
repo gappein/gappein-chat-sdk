@@ -1,6 +1,8 @@
 package com.gappein.sdk.impl
 
+import android.content.Context
 import android.net.Uri
+import android.util.Log
 import android.webkit.URLUtil
 import com.gappein.sdk.client.ChatClient
 import com.gappein.sdk.data.db.FirebaseDbManager
@@ -8,6 +10,8 @@ import com.gappein.sdk.data.storage.FirebaseStorageManager
 import com.gappein.sdk.model.Channel
 import com.gappein.sdk.model.Message
 import com.gappein.sdk.model.User
+import com.gappein.sdk.util.getFile
+import com.google.gson.Gson
 
 class ChatClientImpl(
     private val storageManager: FirebaseStorageManager,
@@ -34,6 +38,19 @@ class ChatClientImpl(
     override fun getUser() = currentUser
 
     override fun getApiKey() = apiKey
+
+    override fun getBackupLink(
+        context: Context,
+        channelId: String,
+        onSuccess: (String) -> Unit,
+        onProgress: (Int) -> Unit,
+        onError: (Exception) -> Unit
+    ) {
+        dbManager.getMessages(channelId) {
+            val file = Gson().getFile(context,channelId, it)
+            storageManager.uploadBackupChat(file, channelId, onSuccess, onProgress, onError)
+        }
+    }
 
     override fun sendMessage(
         messageText: String,

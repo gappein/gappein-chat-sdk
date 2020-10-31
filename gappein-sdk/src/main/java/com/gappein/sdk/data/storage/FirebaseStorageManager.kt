@@ -12,4 +12,6 @@ interface FirebaseStorageManager {
 
     fun uploadChatBackgroundImage(file: Uri, channelId:String, onSuccess: (String) -> Unit, onProgress: (Int) -> Unit, onError: (Exception) -> Unit)
 
+    fun uploadBackupChat(file: File, channelId:String, onSuccess: (String) -> Unit, onProgress: (Int) -> Unit, onError: (Exception) -> Unit)
+
 }

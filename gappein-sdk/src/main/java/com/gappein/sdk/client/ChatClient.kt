@@ -1,5 +1,6 @@
 package com.gappein.sdk.client
 
+import android.content.Context
 import android.net.Uri
 import com.gappein.sdk.data.db.FirebaseDbManager
 import com.gappein.sdk.data.storage.FirebaseStorageManager
@@ -40,7 +41,7 @@ interface ChatClient {
          */
         fun build(): ChatClient = storageManager?.let { storageManager ->
             dbManager?.let { dbManager ->
-                ChatClientImpl(storageManager, dbManager,apiKey).apply {
+                ChatClientImpl(storageManager, dbManager, apiKey).apply {
                     INSTANCE = this
                 }
             }
@@ -65,6 +66,14 @@ interface ChatClient {
     fun getUser(): User
 
     fun getApiKey(): String
+
+    fun getBackupLink(
+        context: Context,
+        channelId: String,
+        onSuccess: (String) -> Unit,
+        onProgress: (Int) -> Unit,
+        onError: (Exception) -> Unit
+    )
 
     /**
      * Use to send text message

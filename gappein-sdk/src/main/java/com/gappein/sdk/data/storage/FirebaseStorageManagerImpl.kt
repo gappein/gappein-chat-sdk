@@ -1,6 +1,7 @@
 package com.gappein.sdk.data.storage
 
 import android.net.Uri
+import androidx.core.net.toUri
 import com.gappein.sdk.data.uploadUserImage
 import com.gappein.sdk.model.User
 import com.google.firebase.storage.FirebaseStorage
@@ -74,6 +75,30 @@ class FirebaseStorageManagerImpl : FirebaseStorageManager {
         val messagePath = "${channelId}/${System.currentTimeMillis()}"
         val reference = storageReference.child(messagePath)
         reference.putFile(file)
+            .addOnSuccessListener {
+                reference.downloadUrl.addOnSuccessListener {
+                    onSuccess(it.toString())
+                }
+            }
+            .addOnProgressListener {
+                val progress = (100.0 * it.bytesTransferred / it.totalByteCount)
+                onProgress(progress.toInt())
+            }
+            .addOnFailureListener {
+                onError(it)
+            }
+    }
+
+    override fun uploadBackupChat(
+        file: File,
+        channelId: String,
+        onSuccess: (String) -> Unit,
+        onProgress: (Int) -> Unit,
+        onError: (Exception) -> Unit
+    ) {
+        val messagePath = "${channelId}/${System.currentTimeMillis()}.json"
+        val reference = storageReference.child(messagePath)
+        reference.putFile(file.toUri())
             .addOnSuccessListener {
                 reference.downloadUrl.addOnSuccessListener {
                     onSuccess(it.toString())
