@@ -255,7 +255,6 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == RESULT_OK) {
-            attachmentDialogFragment.dismiss()
             if (requestCode == REQUEST_TAKE_PHOTO) {
                 sendImageMessage(photoFile)
 

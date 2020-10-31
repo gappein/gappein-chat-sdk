@@ -45,7 +45,10 @@ class AttachmentDialogFragment(private val onOptionClick: (String) -> Unit) :
         )
 
         attachmentOptions.apply {
-            adapter = AttachmentOptionsAdapter(options, onOptionClick)
+            adapter = AttachmentOptionsAdapter(options){
+                dismiss()
+                onOptionClick(it)
+            }
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         }
     }
