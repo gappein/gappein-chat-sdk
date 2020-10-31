@@ -55,7 +55,11 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
             }
     }
 
-    override fun sendMessage(message: Message, onSuccess: () -> Unit, onError: (Exception) -> Unit) {
+    override fun sendMessage(
+        message: Message,
+        onSuccess: () -> Unit,
+        onError: (Exception) -> Unit
+    ) {
 
         val userList = listOf(message.sender.token, message.receiver.token)
         val channelId = userList.sorted().toString()
@@ -67,7 +71,12 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
             .addOnFailureListener { onError(it) }
     }
 
-    private fun updateMessage(channelId: String, it: DocumentReference, onSuccess: () -> Unit, onError: (Exception) -> Unit) {
+    private fun updateMessage(
+        channelId: String,
+        it: DocumentReference,
+        onSuccess: () -> Unit,
+        onError: (Exception) -> Unit
+    ) {
         channelReference.document(channelId)
             .collection(MESSAGES_COLLECTION)
             .document(it.id)
@@ -76,7 +85,11 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
             .addOnFailureListener { onError(it) }
     }
 
-    override fun getUserByToken(token: String, onSuccess: (User) -> Unit, onError: (Exception) -> Unit) {
+    override fun getUserByToken(
+        token: String,
+        onSuccess: (User) -> Unit,
+        onError: (Exception) -> Unit
+    ) {
         userReference
             .get()
             .addOnSuccessListener { result ->
@@ -87,7 +100,10 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
             .addOnFailureListener { exception -> onError(exception) }
     }
 
-    override fun getOrCreateNewChatChannels(participantUserToken: String, onSuccess: (channelId: String) -> Unit) {
+    override fun getOrCreateNewChatChannels(
+        participantUserToken: String,
+        onSuccess: (channelId: String) -> Unit
+    ) {
 
         val currentUser = ChatClient.getInstance().getUser()
         val currentUserToken = currentUser.token
@@ -193,6 +209,37 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
                     addAll(data)
                     onSuccess(this)
                 }
+            }
+    }
+
+    override fun getBackupMessages(channelId: String, onSuccess: (List<Message>) -> Unit) {
+        channelReference.document(channelId)
+            .collection(MESSAGES_COLLECTION)
+            .addSnapshotListener { querySnapshot: QuerySnapshot?, _: FirebaseFirestoreException? ->
+                val messages = mutableListOf<Message>()
+                val data = querySnapshot?.documents
+                    ?.map {
+                        return@map it.toObject(Message::class.java)
+                    }?.sortedBy {
+                        it?.timeStamp
+                    } as List<Message>
+                messages.clear()
+                data.forEach {
+                    messages.add(
+                        Message(
+                            _id = it._id,
+                            deleted = it.deleted,
+                            isUrl = it.isUrl,
+                            liked = it.liked,
+                            message = it.message,
+                            receiver = it.receiver.copy(token = ""),
+                            sender = it.sender.copy(token = ""),
+                            timeStamp = it.timeStamp,
+                            typing = ""
+                        )
+                    )
+                }
+                onSuccess(messages)
             }
     }
 

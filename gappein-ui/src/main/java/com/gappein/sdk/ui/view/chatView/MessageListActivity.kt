@@ -2,14 +2,11 @@ package com.gappein.sdk.ui.view.chatView
 
 import android.Manifest
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -39,9 +36,10 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
     private var photoFile: File? = null
     private lateinit var adapter: MessageListAdapter
     private val chats = mutableListOf<Message>()
-    private val attachmentDialogFragment: AttachmentDialogFragment = AttachmentDialogFragment { option ->
-        onOptionSelected(option)
-    }
+    private val attachmentDialogFragment: AttachmentDialogFragment =
+        AttachmentDialogFragment { option ->
+            onOptionSelected(option)
+        }
 
     companion object {
         private const val REQUEST_TAKE_PHOTO = 1
@@ -125,8 +123,12 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
 
     private fun onOptionSelected(option: String) {
         when (option) {
-            CameraOption().optionName -> Manifest.permission.CAMERA.checkForPermission(CAMERA_PERMISSION_CODE)
-            GalleryOption().optionName -> Manifest.permission.WRITE_EXTERNAL_STORAGE.checkForPermission(GALLERY_PERMISSION_CODE)
+            CameraOption().optionName -> Manifest.permission.CAMERA.checkForPermission(
+                CAMERA_PERMISSION_CODE
+            )
+            GalleryOption().optionName -> Manifest.permission.WRITE_EXTERNAL_STORAGE.checkForPermission(
+                GALLERY_PERMISSION_CODE
+            )
         }
     }
 
@@ -181,7 +183,7 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
             launchIntent(requestCode)
         } else {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, permissions.first())) {
-               givePermissionClarification(requestCode, permissions.first())
+                givePermissionClarification(requestCode, permissions.first())
             }
         }
     }

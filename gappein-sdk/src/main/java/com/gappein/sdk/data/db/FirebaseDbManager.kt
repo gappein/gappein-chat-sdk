@@ -20,6 +20,8 @@ interface FirebaseDbManager {
 
     fun getMessages(channelId: String, onSuccess: (List<Message>) -> Unit)
 
+    fun getBackupMessages(channelId: String, onSuccess: (List<Message>) -> Unit)
+
     fun getChannelUsers(channelId: String, onSuccess: (List<User>) -> Unit)
 
     fun getLastMessageFromChannel(channelId: String, onSuccess: (Message, User) -> Unit)

@@ -46,7 +46,7 @@ class ChatClientImpl(
         onProgress: (Int) -> Unit,
         onError: (Exception) -> Unit
     ) {
-        dbManager.getMessages(channelId) {
+        dbManager.getBackupMessages(channelId) {
             val file = Gson().getFile(context,channelId, it)
             storageManager.uploadBackupChat(file, channelId, onSuccess, onProgress, onError)
         }
