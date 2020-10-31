@@ -1,4 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Text Attributes -->
     <dimen name="_8dp">8sp</dimen>
+
+    <!-- Space Attributes -->
+    <dimen name="space_x">4dp</dimen>
+    <dimen name="space_2x">8dp</dimen>
+    <dimen name="space_3x">12dp</dimen>
+    <dimen name="space_4x">16dp</dimen>
+    <dimen name="space_5x">20dp</dimen>
+    <dimen name="options_image_size">56dp</dimen>
+    <dimen name="options_peek_height">300dp</dimen>
 </resources>
