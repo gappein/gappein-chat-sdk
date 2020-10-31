@@ -4,9 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gappein.sdk.ui.R
-import com.gappein.sdk.ui.view.util.AttachmentUtils.AttachmentOptions.*
 import com.gappein.sdk.ui.view.util.CameraOption
 import com.gappein.sdk.ui.view.util.GalleryOption
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -18,6 +18,13 @@ import kotlinx.android.synthetic.main.bottom_sheet_modal.*
 
 class AttachmentDialogFragment(private val onOptionClick: (String) -> Unit) :
     BottomSheetDialogFragment() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        retainInstance = true
+        setStyle(DialogFragment.STYLE_NORMAL, R.style.OptionSheetDialogTheme)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

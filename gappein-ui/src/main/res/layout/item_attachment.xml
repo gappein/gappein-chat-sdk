@@ -2,14 +2,31 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
-    android:padding="16dp"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:paddingStart="@dimen/space_x"
+    android:paddingEnd="@dimen/space_2x"
+    android:paddingTop="@dimen/space_4x"
+    android:paddingBottom="@dimen/space_3x"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ImageView
+        android:layout_width="@dimen/options_image_size"
+        android:layout_height="@dimen/options_image_size"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/tv_attachment_option_name"
+        android:layout_marginBottom="4dp"
+        android:id="@+id/iv_attachment_option"
+        tools:ignore="contentDescription"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_x"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv_attachment_option"
         android:id="@+id/tv_attachment_option_name"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
