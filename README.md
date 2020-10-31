@@ -29,7 +29,7 @@ To get started you need to first create a Firebase project for your app and add 
 Add the dependencies to the `build.gradle`
 
 ```groovy
-implementation "com.gappein.sdk:gappein-sdk:1.0.0-beta1"
+implementation "com.gappein.sdk:gappein-sdk:1.0.0-beta2"
 ```
 
 # Initialization
@@ -69,7 +69,7 @@ You can either build your own UI or use our UI SDK to create a beautiful chat ex
 To use our UI SDK add the following to your app's `build.gradle` -
 
 ```groovy
-implementation "com.gappein.sdk:gappein-ui:1.0.0-beta1"
+implementation "com.gappein.sdk:gappein-ui:1.0.0-beta2"
 ```
 
 To open the Channel List Fragment add the following code -
