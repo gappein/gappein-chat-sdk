@@ -2,7 +2,6 @@ package com.gappein.sdk.impl
 
 import android.content.Context
 import android.net.Uri
-import android.util.Log
 import android.webkit.URLUtil
 import com.gappein.sdk.client.ChatClient
 import com.gappein.sdk.data.db.FirebaseDbManager
@@ -133,8 +132,8 @@ class ChatClientImpl(
         dbManager.isUserOnline(token, onSuccess)
     }
 
-    override fun setUserOnline(token: String) {
-        dbManager.setUserOnline(token)
+    override fun setUserOnline(token: String,status:Boolean) {
+        dbManager.setUserOnline(token,status)
     }
 
     override fun setTypingStatus(

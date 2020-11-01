@@ -176,7 +176,7 @@ interface ChatClient {
      *
      * @param token - String - token of the User you want to show online
      */
-    fun setUserOnline(token: String)
+    fun setUserOnline(token: String,status:Boolean)
 
     fun getAllChannels(onSuccess: (List<Channel>) -> Unit)
 

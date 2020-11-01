@@ -318,9 +318,9 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
         }
     }
 
-    override fun setUserOnline(token: String) {
+    override fun setUserOnline(token: String, status: Boolean) {
         val userChannelReference = userReference.document(token)
-        userChannelReference.update(IS_ONLINE, true)
+        userChannelReference.update(IS_ONLINE, status)
             .addOnSuccessListener {}
     }
 
