@@ -7,5 +7,5 @@
 
 _**Gappein**_ is a new Chat SDK in town!
 
-A plug and play modular toolkit for integrating the Chat feature on top of Firebase! 🔥 :fire
+A plug and play modular toolkit for integrating the Chat feature on top of Firebase! 🔥
 
