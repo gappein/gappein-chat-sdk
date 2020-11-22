@@ -8,6 +8,8 @@ Gappein is a new Chat SDK in town!
 
 A plug and play modular toolkit for integrating the Chat feature on top of Firebase!
 
+## To check for detail documentation [Click here](https://gappein.github.io/Gappein-Chat-SDK/#/)
+
 # Table of contents
 
 - [Get Started](#installation)
