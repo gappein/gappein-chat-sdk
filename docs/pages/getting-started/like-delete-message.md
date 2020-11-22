@@ -11,7 +11,9 @@ ChatClient.getInstance().likeMessage("channelId", "messageId") {
 ## Delete Message 🗑️
 
 ```kotlin
-ChatClient.getInstance().deleteMessage("channelId", "messageId") {
-    // Handle on Suceess
-}
+ ChatClient.getInstance().deleteMessage(channelId, message, {
+        //Handle OnSuccess of Delete
+     }, {
+        //Handle Exception of Delete
+})
 ```

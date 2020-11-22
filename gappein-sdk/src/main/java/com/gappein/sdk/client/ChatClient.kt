@@ -180,7 +180,7 @@ interface ChatClient {
 
     fun getAllChannels(onSuccess: (List<Channel>) -> Unit)
 
-    fun deleteMessage(channelId: String, messageId: String, onSuccess: () -> Unit)
+    fun deleteMessage(channelId: String, message:Message, onSuccess: () -> Unit,onError: (Exception) -> Unit)
 
     fun likeMessage(channelId: String, messageId: String, onSuccess: () -> Unit)
 

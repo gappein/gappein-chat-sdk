@@ -15,7 +15,7 @@ class MessageListAdapter(
     private val messages: ArrayList<Message> = arrayListOf(),
     private val chatClient: ChatClient,
     private val onImageClick: (String) -> Unit,
-    private val onMessageClick: (String) -> Unit,
+    private val onMessageClick: (Message) -> Unit,
     private val onMessageLike: (String) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), Filterable {
 

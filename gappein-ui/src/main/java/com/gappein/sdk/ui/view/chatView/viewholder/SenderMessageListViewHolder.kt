@@ -17,7 +17,7 @@ class SenderMessageListViewHolder(private val view: View) : RecyclerView.ViewHol
     fun bind(
         position: Int,
         messages: List<Message>,
-        onMessageClick: (String) -> Unit,
+        onMessageClick: (Message) -> Unit,
         onMessageLike: (String) -> Unit
     ) {
 
@@ -37,7 +37,7 @@ class SenderMessageListViewHolder(private val view: View) : RecyclerView.ViewHol
             }
         }
         view.sentTextMessage.setOnClickListener {
-            onMessageClick(messages[position]._id)
+            onMessageClick(messages[position])
         }
 
         if (!messages[position].deleted) {

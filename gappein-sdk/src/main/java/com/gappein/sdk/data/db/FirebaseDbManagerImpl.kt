@@ -4,6 +4,7 @@ import com.gappein.sdk.client.ChatClient
 import com.gappein.sdk.model.Channel
 import com.gappein.sdk.model.Message
 import com.gappein.sdk.model.User
+import com.gappein.sdk.model.isCurrentUser
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
@@ -16,7 +17,9 @@ import kotlin.collections.HashMap
 class FirebaseDbManagerImpl : FirebaseDbManager {
 
     private val database: FirebaseFirestore = FirebaseFirestore.getInstance()
+
     private val channelReference = database.collection(CHANNEL_COLLECTION)
+
     private val userReference = database.collection(USER_COLLECTION)
 
     companion object {
@@ -341,13 +344,22 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
         }
     }
 
-    override fun deleteMessage(channelId: String, messageId: String, onSuccess: () -> Unit) {
-        channelReference.document(channelId)
-            .collection(MESSAGES_COLLECTION)
-            .document(messageId)
-            .update(DELETED, true)
-            .addOnSuccessListener { onSuccess() }
-            .addOnFailureListener { }
+    override fun deleteMessage(
+        channelId: String,
+        message: Message,
+        onSuccess: () -> Unit,
+        onError: (Exception) -> Unit
+    ) {
+        if (message.sender.isCurrentUser()) {
+            channelReference.document(channelId)
+                .collection(MESSAGES_COLLECTION)
+                .document(message._id)
+                .update(DELETED, true)
+                .addOnSuccessListener { onSuccess() }
+                .addOnFailureListener { onError(it) }
+        } else {
+            onError(Exception("You don't have permission to delete this message"))
+        }
     }
 
     override fun setTypingStatus(
