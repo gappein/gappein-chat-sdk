@@ -24,7 +24,9 @@ interface ChatClient {
     class Builder {
 
         private var dbManager: FirebaseDbManager? = null
+
         private var storageManager: FirebaseStorageManager? = null
+
         private var apiKey: String = ""
 
         fun setDatabaseManager(dbManager: FirebaseDbManager) = apply { this.dbManager = dbManager }

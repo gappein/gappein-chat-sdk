@@ -14,13 +14,17 @@ interface Gappein {
 
     companion object {
 
-        private val firebaseDbManager: FirebaseDbManager = FirebaseDbManagerImpl()
-        private val firebaseStorageManager: FirebaseStorageManager = FirebaseStorageManagerImpl()
+        private val firebaseDbManager: FirebaseDbManager by lazy { FirebaseDbManagerImpl() }
+
+        private val firebaseStorageManager: FirebaseStorageManager by lazy { FirebaseStorageManagerImpl() }
+
         private var INSTANCE: Gappein? = null
+
         private const val EMPTY_STRING = ""
 
         @JvmStatic
-        fun getInstance(): Gappein = INSTANCE ?: throw IllegalStateException("Gappein.initialize() must be called before obtaining Gappein instance")
+        fun getInstance(): Gappein = INSTANCE
+            ?: throw IllegalStateException("Gappein.initialize() must be called before obtaining Gappein instance")
 
 
         /**

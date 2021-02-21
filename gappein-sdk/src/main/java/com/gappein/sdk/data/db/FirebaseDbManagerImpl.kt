@@ -5,10 +5,8 @@ import com.gappein.sdk.model.Channel
 import com.gappein.sdk.model.Message
 import com.gappein.sdk.model.User
 import com.gappein.sdk.model.isCurrentUser
-import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.FirebaseFirestoreException
-import com.google.firebase.firestore.QuerySnapshot
+import com.gappein.sdk.util.updateDocument
+import com.google.firebase.firestore.*
 import java.util.*
 import kotlin.collections.HashMap
 
@@ -18,7 +16,7 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
 
     private val database: FirebaseFirestore = FirebaseFirestore.getInstance()
 
-    private val channelReference = database.collection(CHANNEL_COLLECTION)
+    private val channelReference: CollectionReference = database.collection(CHANNEL_COLLECTION)
 
     private val userReference = database.collection(USER_COLLECTION)
 
@@ -27,6 +25,7 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
         private const val ID = "_id"
         private const val LIKED = "liked"
         private const val TRUE = "true"
+        private const val IS_ONLINE = "online"
         private const val STATUS = "textStatus"
         private const val MESSAGES_COLLECTION = "messages"
         private const val CHANNEL_COLLECTION = "channel"
@@ -34,7 +33,6 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
         private const val TOKEN = "token"
         private const val NAME = "name"
         private const val IMAGE_URL = "profileImageUrl"
-        private const val IS_ONLINE = "online"
         private const val DELETED = "deleted"
         private const val TYPING = "typing"
         private const val EXTRA_DATA = "extraData"
@@ -44,18 +42,17 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
 
     override fun createUser(user: User, onSuccess: (User) -> Unit, onError: (Exception) -> Unit) {
 
-        val reference = userReference.document(user.token)
+        val reference: DocumentReference = userReference.document(user.token)
 
-        reference.get()
-            .addOnSuccessListener { _user ->
-                if (!_user.exists()) {
-                    reference.set(user)
-                        .addOnSuccessListener { onSuccess(user) }
-                        .addOnFailureListener { onError(it) }
-                } else {
-                    onSuccess(user)
-                }
+        reference.get().addOnSuccessListener { _user ->
+            if (!_user.exists()) {
+                reference.set(user)
+                    .addOnSuccessListener { onSuccess(user) }
+                    .addOnFailureListener { onError(it) }
+            } else {
+                onSuccess(user)
             }
+        }
     }
 
     override fun sendMessage(
@@ -65,6 +62,7 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
     ) {
 
         val userList = listOf(message.sender.token, message.receiver.token)
+
         val channelId = userList.sorted().toString()
 
         channelReference.document(channelId)
@@ -83,9 +81,13 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
         channelReference.document(channelId)
             .collection(MESSAGES_COLLECTION)
             .document(it.id)
-            .update(ID, it.id)
-            .addOnSuccessListener { onSuccess() }
-            .addOnFailureListener { onError(it) }
+            .updateDocument(Pair(ID, it.id)){ isSuccessful, exception ->
+                if (isSuccessful) {
+                    onSuccess()
+                } else {
+                    exception?.let { onError(it) }
+                }
+            }
     }
 
     override fun getUserByToken(
@@ -437,13 +439,13 @@ class FirebaseDbManagerImpl : FirebaseDbManager {
     ) {
         val currentUser = ChatClient.getInstance().getUser()
         userReference.document(currentUser.token)
-            .update(STATUS, status)
-            .addOnFailureListener {
-                onError(it)
-            }.addOnSuccessListener {
-                onSuccess()
+            .updateDocument(Pair(STATUS, status)) { isSuccessful, exception ->
+                if (isSuccessful) {
+                    onSuccess()
+                } else {
+                    exception?.let { onError(it) }
+                }
             }
-
     }
 
     override fun getUserStatus(
