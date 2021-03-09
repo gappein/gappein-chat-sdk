@@ -2,12 +2,12 @@ package com.gappein.sdk.client
 
 import android.content.Context
 import android.net.Uri
-import com.gappein.sdk.data.db.FirebaseDbManager
 import com.gappein.sdk.data.storage.FirebaseStorageManager
 import com.gappein.sdk.impl.ChatClientImpl
 import com.gappein.sdk.model.Channel
 import com.gappein.sdk.model.Message
 import com.gappein.sdk.model.User
+import com.gappein.sdk.service.GappeinDbService
 
 interface ChatClient {
 
@@ -23,13 +23,11 @@ interface ChatClient {
 
     class Builder {
 
-        private var dbManager: FirebaseDbManager? = null
+        private val gappeinDbService: GappeinDbService = GappeinDbService()
 
         private var storageManager: FirebaseStorageManager? = null
 
         private var apiKey: String = ""
-
-        fun setDatabaseManager(dbManager: FirebaseDbManager) = apply { this.dbManager = dbManager }
 
         fun setApiKey(apiKey: String) = apply { this.apiKey = apiKey }
 
@@ -42,10 +40,8 @@ interface ChatClient {
          * @return Instance of ChatClient
          */
         fun build(): ChatClient = storageManager?.let { storageManager ->
-            dbManager?.let { dbManager ->
-                ChatClientImpl(storageManager, dbManager, apiKey).apply {
-                    INSTANCE = this
-                }
+            ChatClientImpl(storageManager, gappeinDbService, apiKey).apply {
+                INSTANCE = this
             }
         } as ChatClient
     }
@@ -124,7 +120,7 @@ interface ChatClient {
      * @param participantUserToken - String - token of the User you want to open channel with
      * @param onComplete - on Complete callback
      */
-    fun openOrCreateChannel(participantUserToken: String, onComplete: (channelId: String) -> Unit)
+    fun openOrCreateChannel(participantUserToken: String, onComplete: (channelId: String) -> Unit, onError: (Exception) -> Unit)
 
     /**
      * Use to get all channels of the current user
@@ -178,13 +174,25 @@ interface ChatClient {
      *
      * @param token - String - token of the User you want to show online
      */
-    fun setUserOnline(token: String,status:Boolean)
+    fun setUserOnline(
+        status: Boolean,
+        onSuccess: () -> Unit,
+        onError: (Exception) -> Unit
+    )
 
     fun getAllChannels(onSuccess: (List<Channel>) -> Unit)
 
-    fun deleteMessage(channelId: String, message:Message, onSuccess: () -> Unit,onError: (Exception) -> Unit)
+    fun deleteMessage(
+        channelId: String,
+        message: Message,
+        onSuccess: () -> Unit,
+        onError: (Exception) -> Unit
+    )
 
-    fun likeMessage(channelId: String, messageId: String, onSuccess: () -> Unit)
+    fun likeMessage(
+        channelId: String, messageId: String, onSuccess: () -> Unit,
+        onError: (Exception) -> Unit
+    )
 
     fun getTypingStatus(channelId: String, participantUserId: String, onSuccess: (String) -> Unit)
 

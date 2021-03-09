@@ -4,17 +4,17 @@ import android.content.Context
 import android.net.Uri
 import android.webkit.URLUtil
 import com.gappein.sdk.client.ChatClient
-import com.gappein.sdk.data.db.FirebaseDbManager
 import com.gappein.sdk.data.storage.FirebaseStorageManager
 import com.gappein.sdk.model.Channel
 import com.gappein.sdk.model.Message
 import com.gappein.sdk.model.User
+import com.gappein.sdk.service.GappeinDbService
 import com.gappein.sdk.util.getFile
 import com.google.gson.Gson
 
 class ChatClientImpl(
     private val storageManager: FirebaseStorageManager,
-    private val dbManager: FirebaseDbManager,
+    private val dbManager: GappeinDbService,
     private val apiKey: String
 ) : ChatClient {
 
@@ -27,7 +27,7 @@ class ChatClientImpl(
         onError: (Exception) -> Unit
     ) {
         currentUser = user
-        dbManager.createUser(user, {
+        dbManager.userService.createUser(user, {
             onSuccess(it)
         }, {
             onError(it)
@@ -45,8 +45,8 @@ class ChatClientImpl(
         onProgress: (Int) -> Unit,
         onError: (Exception) -> Unit
     ) {
-        dbManager.getBackupMessages(channelId) {
-            val file = Gson().getFile(context,channelId, it)
+        dbManager.channelService.getBackupMessages(channelId) {
+            val file = Gson().getFile(context, channelId, it)
             storageManager.uploadBackupChat(file, channelId, onSuccess, onProgress, onError)
         }
     }
@@ -65,7 +65,7 @@ class ChatClientImpl(
                 receiver = it,
                 sender = getUser()
             )
-            dbManager.sendMessageByToken(message, getUser(), it, onSuccess, onError)
+            dbManager.channelService.sendMessageByToken(message, getUser(), it, onSuccess, onError)
         }, {
             onError(it)
         })
@@ -98,42 +98,51 @@ class ChatClientImpl(
         onSuccess: (User) -> Unit,
         onError: (Exception) -> Unit
     ) {
-        dbManager.getUserByToken(token, onSuccess, onError)
+        dbManager.userService.getUserByToken(token, onSuccess, onError)
     }
 
     override fun openOrCreateChannel(
         participantUserToken: String,
-        onComplete: (channelId: String) -> Unit
+        onComplete: (channelId: String) -> Unit,
+        onError: (Exception) -> Unit
     ) {
-        dbManager.getOrCreateNewChatChannels(participantUserToken, onComplete)
+        dbManager.channelService.getOrCreateNewChatChannels(
+            participantUserToken,
+            onComplete,
+            onError
+        )
     }
 
     override fun getUserChannels(onSuccess: (List<Channel>) -> Unit) {
-        dbManager.getUserChannels(onSuccess)
+        dbManager.channelService.getUserChannels(onSuccess)
     }
 
     override fun getMessages(channelId: String, onSuccess: (List<Message>) -> Unit) {
-        dbManager.getMessages(channelId, onSuccess)
+        dbManager.channelService.getMessages(channelId, onSuccess)
     }
 
     override fun getChannelUsers(channelId: String, onSuccess: (List<User>) -> Unit) {
-        dbManager.getChannelUsers(channelId, onSuccess)
+        dbManager.channelService.getChannelUsers(channelId, onSuccess)
     }
 
     override fun getChannelRecipientUser(channelId: String, onSuccess: (User) -> Unit) {
-        dbManager.getChannelRecipientUser(channelId, onSuccess)
+        dbManager.channelService.getChannelRecipientUser(channelId, onSuccess)
     }
 
     override fun getLastMessageFromChannel(channelId: String, onSuccess: (Message, User) -> Unit) {
-        dbManager.getLastMessageFromChannel(channelId, onSuccess)
+        dbManager.channelService.getLastMessageFromChannel(channelId, onSuccess)
     }
 
     override fun isUserOnline(token: String, onSuccess: (Boolean, String) -> Unit) {
-        dbManager.isUserOnline(token, onSuccess)
+        dbManager.channelService.isUserOnline(token, onSuccess)
     }
 
-    override fun setUserOnline(token: String,status:Boolean) {
-        dbManager.setUserOnline(token,status)
+    override fun setUserOnline(
+        status: Boolean,
+        onSuccess: () -> Unit,
+        onError: (Exception) -> Unit
+    ) {
+        dbManager.userService.setUserOnline(status, onSuccess, onError)
     }
 
     override fun setTypingStatus(
@@ -142,7 +151,7 @@ class ChatClientImpl(
         isUserTyping: Boolean,
         onSuccess: () -> Unit
     ) {
-        dbManager.setTypingStatus(channelId, userId, isUserTyping, onSuccess)
+        dbManager.channelService.setTypingStatus(channelId, userId, isUserTyping, onSuccess)
     }
 
     override fun setChatBackground(
@@ -153,7 +162,7 @@ class ChatClientImpl(
         onError: (Exception) -> Unit
     ) {
         storageManager.uploadChatBackgroundImage(backgroundUrl, channelId, {
-            dbManager.setChatBackground(channelId, it, onSuccess, onError)
+            dbManager.channelService.setChatBackground(channelId, it, onSuccess, onError)
         }, {
             onProgress(it)
         }, {
@@ -162,7 +171,7 @@ class ChatClientImpl(
     }
 
     override fun getChatBackground(channelId: String, onSuccess: (String) -> Unit) {
-        dbManager.getChatBackground(channelId, onSuccess)
+        dbManager.channelService.getChatBackground(channelId, onSuccess)
     }
 
     override fun setUserStatus(
@@ -170,7 +179,7 @@ class ChatClientImpl(
         onSuccess: () -> Unit,
         onError: (Exception) -> Unit
     ) {
-        dbManager.setUserStatus(status, onSuccess, onError)
+        dbManager.userService.setUserStatus(status, onSuccess, onError)
     }
 
     override fun getUserStatus(
@@ -178,11 +187,11 @@ class ChatClientImpl(
         onSuccess: (String) -> Unit,
         onError: (Exception) -> Unit
     ) {
-        dbManager.getUserStatus(token, onSuccess, onError)
+        dbManager.userService.getUserStatus(token, onSuccess, onError)
     }
 
     override fun getAllChannels(onSuccess: (List<Channel>) -> Unit) {
-        dbManager.getAllChannels(onSuccess)
+        dbManager.channelService.getAllChannels(onSuccess)
     }
 
     override fun deleteMessage(
@@ -191,11 +200,16 @@ class ChatClientImpl(
         onSuccess: () -> Unit,
         onError: (Exception) -> Unit
     ) {
-        dbManager.deleteMessage(channelId, message, onSuccess, onError)
+        dbManager.channelService.deleteMessage(channelId, message, onSuccess, onError)
     }
 
-    override fun likeMessage(channelId: String, messageId: String, onSuccess: () -> Unit) {
-        dbManager.likeMessage(channelId, messageId, onSuccess)
+    override fun likeMessage(
+        channelId: String,
+        messageId: String,
+        onSuccess: () -> Unit,
+        onError: (Exception) -> Unit
+    ) {
+        dbManager.channelService.likeMessage(channelId, messageId, onSuccess, onError)
     }
 
     override fun getTypingStatus(
@@ -203,6 +217,6 @@ class ChatClientImpl(
         participantUserId: String,
         onSuccess: (String) -> Unit
     ) {
-        dbManager.getTypingStatus(channelId, participantUserId, onSuccess)
+        dbManager.channelService.getTypingStatus(channelId, participantUserId, onSuccess)
     }
 }

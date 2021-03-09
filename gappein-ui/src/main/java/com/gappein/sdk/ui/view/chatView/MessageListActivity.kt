@@ -212,7 +212,9 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
                 //Handle Exception of Delete
             })
         }, onMessageLike = {
-            ChatClient.getInstance().likeMessage(channelId, it) {
+            ChatClient.getInstance().likeMessage(channelId, it,{
+
+            }) {
 
             }
         })

@@ -2,7 +2,6 @@ package com.gappein.sdk.service.user
 
 import com.gappein.sdk.client.ChatClient
 import com.gappein.sdk.model.User
-import com.gappein.sdk.service.GappeinDbService
 import com.gappein.sdk.util.*
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -10,7 +9,7 @@ import com.google.firebase.firestore.FirebaseFirestore
  * Created by Himanshu Singh on 21-02-2021.
  * hello2himanshusingh@gmail.com
  */
-class UserServiceImpl : UserService, GappeinDbService {
+class UserServiceImpl : UserService {
 
     companion object {
 
@@ -126,4 +125,5 @@ class UserServiceImpl : UserService, GappeinDbService {
                 }
             }
     }
+    
 }

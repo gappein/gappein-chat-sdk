@@ -2,8 +2,6 @@ package com.gappein.sdk
 
 import android.content.Context
 import com.gappein.sdk.client.ChatClient
-import com.gappein.sdk.data.db.FirebaseDbManager
-import com.gappein.sdk.data.db.FirebaseDbManagerImpl
 import com.gappein.sdk.data.storage.FirebaseStorageManager
 import com.gappein.sdk.data.storage.FirebaseStorageManagerImpl
 import com.gappein.sdk.impl.GappeinImpl
@@ -13,8 +11,6 @@ import com.giphy.sdk.ui.Giphy
 interface Gappein {
 
     companion object {
-
-        private val firebaseDbManager: FirebaseDbManager by lazy { FirebaseDbManagerImpl() }
 
         private val firebaseStorageManager: FirebaseStorageManager by lazy { FirebaseStorageManagerImpl() }
 
@@ -37,7 +33,6 @@ interface Gappein {
         fun initialize(context: Context, apiKey: String = EMPTY_STRING): Gappein {
             return GappeinImpl(
                 ChatClient.Builder()
-                    .setDatabaseManager(firebaseDbManager)
                     .setApiKey(apiKey)
                     .setStorageManager(firebaseStorageManager)
                     .build()

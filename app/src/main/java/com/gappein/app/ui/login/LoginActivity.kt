@@ -29,6 +29,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private lateinit var auth: FirebaseAuth
+
     private lateinit var googleSignInClient: GoogleSignInClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -110,8 +111,9 @@ class LoginActivity : AppCompatActivity() {
         Gappein.getInstance().setUser(
             currentUser,
             token = currentUser.token, onSuccess = {
-                ChatClient.getInstance().openOrCreateChannel(TEST_TOKEN) {
+                ChatClient.getInstance().openOrCreateChannel(TEST_TOKEN, {
                     startActivity(ChatActivity.buildIntent(this))
+                }) {
                 }
             }, onError = {
 

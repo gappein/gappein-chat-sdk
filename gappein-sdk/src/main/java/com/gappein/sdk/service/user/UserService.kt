@@ -23,5 +23,4 @@ interface UserService {
     fun setUserStatus(status: String, onSuccess: () -> Unit, onError: (Exception) -> Unit)
 
     fun getUserStatus(token: String, onSuccess: (String) -> Unit, onError: (Exception) -> Unit)
-
 }
