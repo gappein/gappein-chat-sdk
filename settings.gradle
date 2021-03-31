@@ -1,3 +1,4 @@
+include ':gappein-compose'
 include ':gappein-ui'
 include ':gappein-sdk'
 include ':app'
