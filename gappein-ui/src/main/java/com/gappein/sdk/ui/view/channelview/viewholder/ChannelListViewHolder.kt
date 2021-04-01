@@ -40,7 +40,6 @@ class ChannelListViewHolder(private val view: View) : RecyclerView.ViewHolder(vi
             } else {
                 view.textViewLastMessage.text = data.lastMessage.message
             }
-
             view.textViewLastMessageTime.text = DatesUtil.getTimeAgo(data.lastMessage.timeStamp)
 
             view.imageViewAvatar.setOnClickListener {

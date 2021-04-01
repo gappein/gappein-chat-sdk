@@ -17,3 +17,14 @@ fun Channel.toChannelList(onSuccess: (ChannelListData) -> Unit) {
     }
 }
 
+fun Channel.toChannelList(client: ChatClient, onSuccess: (ChannelListData) -> Unit) {
+    val channelId = this.id
+    client.getLastMessageFromChannel(channelId) { message, user ->
+        val channelListData = ChannelListData(
+            id = channelId,
+            user = user,
+            lastMessage = message
+        )
+        onSuccess(channelListData)
+    }
+}

@@ -33,6 +33,7 @@ class ChannelListFragment : Fragment(), ChatBaseView {
     }
 
     private lateinit var adapter: ChannelListAdapter
+
     private lateinit var onUserClick: OnChannelClick
 
     override fun onCreateView(
@@ -80,6 +81,6 @@ class ChannelListFragment : Fragment(), ChatBaseView {
         view.recyclerViewChannel.adapter = adapter
     }
 
-    override fun getClient() = ChatClient.getInstance()
+    override fun getClient(): ChatClient = ChatClient.getInstance()
 
 }
