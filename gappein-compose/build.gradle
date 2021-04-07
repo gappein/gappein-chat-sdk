@@ -26,10 +26,13 @@ android {
 
     kotlinOptions {
         jvmTarget = "1.8"
+        useIR = true
+        freeCompilerArgs += ["-P", "plugin:androidx.compose.compiler.plugins.kotlin:suppressKotlinVersionCompatibilityCheck=true"]
     }
 
     composeOptions {
         kotlinCompilerExtensionVersion '1.0.0-beta01'
+
     }
 
     buildTypes {

@@ -12,7 +12,9 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.gappein.compose.viewmodel.channel.ChannelViewModel
+import com.gappein.compose.viewmodel.channel.ChannelViewModelFactory
 import com.gappein.sdk.client.ChatClient
 
 /**
@@ -21,17 +23,22 @@ import com.gappein.sdk.client.ChatClient
  */
 @Composable
 fun ChannelList(
-    channelViewModel: ChannelViewModel
+    channelViewModel: ChannelViewModel = viewModel(
+        factory = ChannelViewModelFactory(ChatClient.getInstance())
+    )
 ) {
+    channelViewModel.init()
     val state by channelViewModel.userChannels.observeAsState()
+
     val userChannels = state ?: emptyList()
+
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
         if (userChannels.isEmpty()) {
             return
         } else {
-            LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(8.dp)) {
+            LazyColumn(modifier = Modifier.fillMaxSize(), contentPadding = PaddingValues(8.dp)) {
                 items(items = userChannels) { channel ->
                     ChannelListItem(channel)
                     Divider()

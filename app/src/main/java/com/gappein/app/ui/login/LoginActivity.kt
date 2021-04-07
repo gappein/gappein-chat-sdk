@@ -35,14 +35,14 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-        checkIfUserIsNotRegistered()
+        setupOnClickListener()
     }
 
     private fun checkIfUserIsNotRegistered() {
         val user = AppPreference.getUser()
 
         if (user != null) {
-            goToNext(user)
+            setupOnClickListener()
         } else {
             setupGoogleSignIn()
             setupOnClickListener()
@@ -51,8 +51,15 @@ class LoginActivity : AppCompatActivity() {
 
     private fun setupOnClickListener() {
         buttonLogin.setOnClickListener {
-            val signInIntent = googleSignInClient.signInIntent
-            startActivityForResult(signInIntent, RC_SIGN_IN)
+            val currentUser = User(
+                token = "eTCwHFMrfjMoX3vfYxQrrpIINYs2",
+                profileImageUrl = "https://lh3.googleusercontent.com/a-/AOh14Ghy8H-FJrgWB2TcxHCOKWxWEQB4AiklYADGTydu4nE=s96-c",
+                name = "Himanshu Singh",
+                createdAt = Date()
+            )
+            AppPreference.setUser(currentUser)
+            goToNext(currentUser)
+
         }
     }
 
@@ -72,6 +79,8 @@ class LoginActivity : AppCompatActivity() {
             try {
                 val account = task.getResult(ApiException::class.java)
                 account?.idToken?.let { firebaseAuthWithGoogle(it) }
+                Log.d("Sddsdssd", account?.idToken.toString())
+                Log.d("Sddsdssd", account?.email.toString())
             } catch (ignored: ApiException) {
                 Log.d(TAG, "--- Error caught: " + ignored.stackTraceToString())
             }
@@ -94,7 +103,6 @@ class LoginActivity : AppCompatActivity() {
     private fun setupUser(user: FirebaseUser?) {
 
         if (user != null) {
-
             val currentUser = User(
                 token = user.uid,
                 profileImageUrl = user.photoUrl.toString(),
@@ -114,9 +122,12 @@ class LoginActivity : AppCompatActivity() {
                 ChatClient.getInstance().openOrCreateChannel(TEST_TOKEN, {
                     startActivity(ChatActivity.buildIntent(this))
                 }) {
+                    Log.d("Sddsdssd1", currentUser.toString())
+                    Log.d("Sddsdssd2", it.message.toString())
                 }
             }, onError = {
-
+                Log.d("Sddsdssd3", currentUser.toString())
+                Log.d("Sddsdssd4", it.message.toString())
             }
         )
     }

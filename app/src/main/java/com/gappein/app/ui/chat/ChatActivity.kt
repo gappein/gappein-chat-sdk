@@ -3,6 +3,7 @@ package com.gappein.app.ui.chat
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -15,7 +16,7 @@ import com.gappein.sdk.model.User
 import com.gappein.sdk.ui.view.channelview.ChannelListFragment
 import com.gappein.sdk.ui.view.channelview.`interface`.OnChannelClick
 
-class ChatActivity : AppCompatActivity(), OnChannelClick {
+class ChatActivity : ComponentActivity(), OnChannelClick {
 
     companion object {
         @JvmStatic
@@ -28,7 +29,6 @@ class ChatActivity : AppCompatActivity(), OnChannelClick {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        channelViewModel.init()
         setContent {
             ChannelList(channelViewModel)
         }
@@ -37,10 +37,10 @@ class ChatActivity : AppCompatActivity(), OnChannelClick {
     }
 
     private fun setupFragment() {
-        supportFragmentManager
-            .beginTransaction()
-            .add(R.id.container, ChannelListFragment.newInstance(), ChannelListFragment.TAG)
-            .commit()
+//        supportFragmentManager
+//            .beginTransaction()
+//            .add(R.id.container, ChannelListFragment.newInstance(), ChannelListFragment.TAG)
+//            .commit()
     }
 
     override fun onUserClick(user: User) {
