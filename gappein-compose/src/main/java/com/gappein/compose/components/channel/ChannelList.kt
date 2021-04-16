@@ -6,11 +6,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Divider
+import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.gappein.compose.viewmodel.channel.ChannelViewModel
@@ -36,7 +37,9 @@ fun ChannelList(
         modifier = Modifier.fillMaxSize()
     ) {
         if (userChannels.isEmpty()) {
-            return
+            TextButton(onClick = { }) {
+                Text(text = "Create Chat.")
+            }
         } else {
             LazyColumn(modifier = Modifier.fillMaxSize(), contentPadding = PaddingValues(8.dp)) {
                 items(items = userChannels) { channel ->
@@ -46,10 +49,4 @@ fun ChannelList(
             }
         }
     }
-}
-
-@Preview
-@Composable
-fun Hey() {
-    ChannelList(channelViewModel = ChannelViewModel(ChatClient.getInstance()))
 }

@@ -40,7 +40,10 @@ class LoginActivity : AppCompatActivity() {
 
     private fun checkIfUserIsNotRegistered() {
         val user = AppPreference.getUser()
-
+        Log.d("ppppppppppppppppp",user.toString())
+        if (user != null) {
+            goToNext(user)
+        }
         if (user != null) {
             setupOnClickListener()
         } else {
@@ -59,7 +62,6 @@ class LoginActivity : AppCompatActivity() {
             )
             AppPreference.setUser(currentUser)
             goToNext(currentUser)
-
         }
     }
 
@@ -119,12 +121,7 @@ class LoginActivity : AppCompatActivity() {
         Gappein.getInstance().setUser(
             currentUser,
             token = currentUser.token, onSuccess = {
-                ChatClient.getInstance().openOrCreateChannel(TEST_TOKEN, {
-                    startActivity(ChatActivity.buildIntent(this))
-                }) {
-                    Log.d("Sddsdssd1", currentUser.toString())
-                    Log.d("Sddsdssd2", it.message.toString())
-                }
+                startActivity(ChatActivity.buildIntent(this))
             }, onError = {
                 Log.d("Sddsdssd3", currentUser.toString())
                 Log.d("Sddsdssd4", it.message.toString())
