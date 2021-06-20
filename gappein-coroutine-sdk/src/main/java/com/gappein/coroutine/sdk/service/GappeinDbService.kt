@@ -3,6 +3,7 @@ package com.gappein.coroutine.sdk.service
 import com.gappein.coroutine.sdk.service.channel.ChannelService
 import com.gappein.coroutine.sdk.service.channel.ChannelServiceImpl
 import com.gappein.coroutine.sdk.service.user.UserService
+import com.gappein.coroutine.sdk.service.user.UserServiceImpl
 
 /**
  * Created by Himanshu Singh on 21-02-2021.

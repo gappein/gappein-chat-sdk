@@ -74,5 +74,4 @@ interface ChannelService {
 
     fun isUserOnline(token: String, onSuccess: (Boolean, String) -> Unit)
 
-
 }

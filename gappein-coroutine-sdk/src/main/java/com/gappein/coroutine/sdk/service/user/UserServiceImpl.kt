@@ -10,9 +10,14 @@ import kotlin.coroutines.suspendCoroutine
 
 class UserServiceImpl : UserService {
 
-    companion object {
+    private val database: FirebaseFirestore by lazy { FirebaseFirestore.getInstance() }
 
-        private val currentUser by lazy { ChatClient.getInstance().getUser() }
+    private val userDatabaseReference by lazy { database.collection(USER_COLLECTION) }
+
+    private val currentUser by lazy { ChatClient.getInstance().getUser() }
+
+
+    companion object {
 
         const val TRUE = "true"
 
@@ -23,10 +28,6 @@ class UserServiceImpl : UserService {
         const val LAST_ONLINE_AT = "lastOnlineAt"
 
         private const val USER_COLLECTION = "users"
-
-        private val database: FirebaseFirestore by lazy { FirebaseFirestore.getInstance() }
-
-        private val userDatabaseReference by lazy { database.collection(USER_COLLECTION) }
 
     }
 
