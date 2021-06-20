@@ -10,68 +10,38 @@ import com.gappein.coroutine.sdk.model.User
  */
 interface ChannelService {
 
-    fun sendMessage(message: Message, onSuccess: () -> Unit, onError: (Exception) -> Unit)
+    suspend fun sendMessage(message: Message): Boolean
 
-    fun getOrCreateNewChatChannels(
-        participantUserToken: String,
-        onSuccess: (channelId: String) -> Unit,
-        onError: (Exception) -> Unit
-    )
+    suspend fun getOrCreateNewChatChannels(participantUserToken: String): String
 
-    fun getUserChannels(onSuccess: (List<Channel>) -> Unit)
+    suspend fun getUserChannels(): List<Channel>
 
-    fun sendMessageByToken(
-        message: Message,
-        sender: User,
-        receiver: User,
-        onSuccess: () -> Unit,
-        onError: (Exception) -> Unit
-    )
+    suspend fun sendMessageByToken(message: Message, sender: User, receiver: User): Boolean
 
-    fun getMessages(channelId: String, onSuccess: (List<Message>) -> Unit)
+    suspend fun getMessages(channelId: String): List<Message>
 
-    fun getBackupMessages(channelId: String, onSuccess: (List<Message>) -> Unit)
+    suspend fun getBackupMessages(channelId: String): List<Message>
 
-    fun getChannelUsers(channelId: String, onSuccess: (List<User>) -> Unit)
+    suspend fun getChannelUsers(channelId: String): List<User>
 
-    fun getLastMessageFromChannel(channelId: String, onSuccess: (Message, User) -> Unit)
+    suspend fun getLastMessageFromChannel(channelId: String): Pair<Message, User>
 
-    fun getChannelRecipientUser(channelId: String, onSuccess: (User) -> Unit)
+    suspend fun getChannelRecipientUser(channelId: String): User
 
-    fun getAllChannels(onSuccess: (List<Channel>) -> Unit)
+    suspend fun getAllChannels(): List<Channel>
 
-    fun deleteMessage(
-        channelId: String,
-        message: Message,
-        onSuccess: () -> Unit,
-        onError: (Exception) -> Unit
-    )
+    suspend fun deleteMessage(channelId: String, message: Message): Boolean
 
-    fun setTypingStatus(
-        channelId: String,
-        userId: String,
-        isUserTyping: Boolean,
-        onSuccess: () -> Unit
-    )
+    suspend fun setTypingStatus(channelId: String, userId: String, isUserTyping: Boolean)
 
-    fun getTypingStatus(channelId: String, participantUserId: String, onSuccess: (String) -> Unit)
+    suspend fun getTypingStatus(channelId: String, participantUserId: String): String
 
-    fun setChatBackground(
-        channelId: String,
-        backgroundUrl: String,
-        onSuccess: () -> Unit,
-        onError: (Exception) -> Unit
-    )
+    suspend fun setChatBackground(channelId: String, backgroundUrl: String)
 
-    fun getChatBackground(channelId: String, onSuccess: (String) -> Unit)
+    suspend fun getChatBackground(channelId: String): String
 
-    fun likeMessage(
-        channelId: String,
-        messageId: String,
-        onSuccess: () -> Unit,
-        onError: (Exception) -> Unit
-    )
+    suspend fun likeMessage(channelId: String, messageId: String)
 
-    fun isUserOnline(token: String, onSuccess: (Boolean, String) -> Unit)
+    suspend fun isUserOnline(token: String): Pair<Boolean, String>
 
 }

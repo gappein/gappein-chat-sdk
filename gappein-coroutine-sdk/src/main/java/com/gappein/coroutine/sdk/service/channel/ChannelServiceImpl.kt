@@ -139,35 +139,7 @@ class ChannelServiceImpl : ChannelService {
         })
     }
 
-    private fun setupRestForChannel(
-        participantUserReference: DocumentReference,
-        participantUserToken: String,
-        channelId: String
-    ) {
-        val channel = channelDatabaseReference.document(channelId)
-        val typingCollection = channel.collection(TYPING)
-        val backgroundCollection = channel.collection(CHAT_BACKGROUND)
-        val channelMap = mapOf(CHANNEL_ID to channelId)
-        val typingMap = mapOf(TYPING to "-")
-        val currentUser = ChatClient.getInstance().getUser()
-        val currentUserToken = currentUser.token
-        val currentUserReference = userDatabaseReference.document(currentUserToken)
 
-        currentUserReference.collection(CHANNEL_COLLECTION)
-            .document(participantUserToken)
-            .set(channelMap)
-        participantUserReference.collection(CHANNEL_COLLECTION)
-            .document(currentUserToken)
-            .set(channelMap)
-        typingCollection.document(participantUserToken)
-            .set(typingMap)
-        typingCollection.document(currentUserToken)
-            .set(typingMap)
-        backgroundCollection.document(channelId)
-            .set(mapOf(CHAT_BACKGROUND to "-"))
-
-
-    }
 
     override fun getUserChannels(onSuccess: (List<Channel>) -> Unit) {
         val currentUser = ChatClient.getInstance().getUser()
