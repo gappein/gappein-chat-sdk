@@ -14,9 +14,6 @@ class UserServiceImpl : UserService {
 
     private val userDatabaseReference by lazy { database.collection(USER_COLLECTION) }
 
-    private val currentUser by lazy { ChatClient.getInstance().getUser() }
-
-
     companion object {
 
         const val TRUE = "true"
@@ -75,6 +72,7 @@ class UserServiceImpl : UserService {
     }
 
     override suspend fun setUserOnline(status: Boolean): Boolean {
+        val currentUser = ChatClient.getInstance().getUser()
         return suspendCoroutine { continuation ->
             val userChannelReference = userDatabaseReference.document(currentUser.token)
             val request = Pair(IS_ONLINE, status)
@@ -91,6 +89,7 @@ class UserServiceImpl : UserService {
     }
 
     override suspend fun setUserStatus(status: String): Boolean {
+        val currentUser = ChatClient.getInstance().getUser()
         return suspendCoroutine { continuation ->
             val userChannelReference = userDatabaseReference.document(currentUser.token)
             val request = Pair(IS_ONLINE, status)
