@@ -42,15 +42,15 @@ class ChannelListFragment : Fragment(), ChatBaseView {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentChannelListBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupChannelList(view)
-        fetchChannels(view)
+        setupChannelList()
+        fetchChannels()
     }
 
     override fun onAttach(context: Context) {
@@ -62,7 +62,7 @@ class ChannelListFragment : Fragment(), ChatBaseView {
         }
     }
 
-    private fun fetchChannels(view: View) {
+    private fun fetchChannels() {
         getClient().getUserChannels {
             if (it.isNotEmpty()) {
                 adapter.addAll(it)
@@ -75,7 +75,7 @@ class ChannelListFragment : Fragment(), ChatBaseView {
         }
     }
 
-    private fun setupChannelList(view: View) {
+    private fun setupChannelList() {
         adapter = ChannelListAdapter(requireContext(), onUserClick = {
             onUserClick.onUserClick(it)
         }, onChannelClick = { channel, user ->
