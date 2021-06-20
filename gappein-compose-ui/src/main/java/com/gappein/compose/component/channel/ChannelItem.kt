@@ -1,0 +1,4 @@
+package com.gappein.compose.component.channel
+
+class ChannelItem {
+}
