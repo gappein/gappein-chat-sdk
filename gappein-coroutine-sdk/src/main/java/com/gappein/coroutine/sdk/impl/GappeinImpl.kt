@@ -6,10 +6,10 @@ import com.gappein.coroutine.sdk.model.User
 
 class GappeinImpl(private val client: ChatClient) : Gappein {
 
-    override fun currentUser() = client.getUser()
+    override suspend fun currentUser() = client.getUser()
 
-    override fun setUser(user: User, token: String, onSuccess: (User) -> Unit, onError: (Exception) -> Unit) {
-        client.setUser(user, token,onSuccess,onError)
+    override suspend fun setUser(user: User, token: String): User? {
+        return client.setUser(user, token).data
     }
 
 }

@@ -3,11 +3,12 @@ package com.gappein.coroutine.sdk.client
 import android.content.Context
 import android.net.Uri
 import com.gappein.coroutine.sdk.data.storage.FirebaseStorageManager
-import com.gappein.coroutine.sdk.impl.ChatClientImpl
 import com.gappein.coroutine.sdk.model.Channel
 import com.gappein.coroutine.sdk.model.Message
+import com.gappein.coroutine.sdk.model.UploadResponse
 import com.gappein.coroutine.sdk.model.User
 import com.gappein.coroutine.sdk.service.GappeinDbService
+import com.gappein.coroutine.sdk.util.BaseResponse
 
 interface ChatClient {
 
@@ -57,21 +58,21 @@ interface ChatClient {
      * @param onSuccess - Success callback
      * @param onError - Error callback
      */
-    suspend fun setUser(user: User, token: String): User
+    suspend fun setUser(user: User, token: String): BaseResponse<User>
 
     /**
      * Use to return instance of the current User detail
      *
      * @return object of User.kt
      */
-    fun getUser(): User
+    suspend fun getUser(): User
 
-    fun getApiKey(): String
+    suspend fun getApiKey(): String
 
-    fun getBackupLink(
+    suspend fun getBackupLink(
         context: Context,
         channelId: String
-    ): String
+    ): UploadResponse
 
     /**
      * Use to send text message
@@ -85,7 +86,7 @@ interface ChatClient {
     suspend fun sendMessage(
         messageText: String,
         receiver: String
-    )
+    ): Boolean
 
     /**
      * Use to send file URI
@@ -99,7 +100,7 @@ interface ChatClient {
     suspend fun sendMessage(
         fileUri: Uri,
         receiver: String
-    )
+    ): UploadResponse
 
     /**
      * Use to get User for the respective token
@@ -149,7 +150,7 @@ interface ChatClient {
      * @param channelId - String - channel id
      * @param onSuccess - Success callback
      */
-    suspend fun getChannelRecipientUser(channelId: String, onSuccess: (User) -> Unit)
+    suspend fun getChannelRecipientUser(channelId: String): User
 
     /**
      * Use to get last message in a channel
@@ -174,14 +175,14 @@ interface ChatClient {
      */
     suspend fun setUserOnline(
         status: Boolean
-    )
+    ): Boolean
 
     suspend fun getAllChannels(): List<Channel>
 
     suspend fun deleteMessage(
         channelId: String,
         message: Message
-    )
+    ): Boolean
 
     suspend fun likeMessage(
         channelId: String, messageId: String
@@ -202,9 +203,9 @@ interface ChatClient {
 
     suspend fun getChatBackground(channelId: String): String
 
-    suspend fun setUserStatus(status: String)
+    suspend fun setUserStatus(status: String):Boolean
 
     suspend fun getUserStatus(
-        token: String = getUser().token
+        token: String
     ): String
 }

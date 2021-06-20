@@ -43,8 +43,8 @@ interface Gappein {
         }
     }
 
-    fun currentUser(): User
+    suspend fun currentUser(): User
 
-    fun setUser(user: User, token: String, onSuccess: (User) -> Unit, onError: (Exception) -> Unit)
+    suspend fun setUser(user: User, token: String): User?
 
 }

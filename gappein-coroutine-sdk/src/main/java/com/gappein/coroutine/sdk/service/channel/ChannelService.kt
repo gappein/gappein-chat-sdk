@@ -36,7 +36,7 @@ interface ChannelService {
 
     suspend fun getTypingStatus(channelId: String, participantUserId: String): String
 
-    suspend fun setChatBackground(channelId: String, backgroundUrl: String)
+    suspend fun setChatBackground(channelId: String, backgroundUrl: String?)
 
     suspend fun getChatBackground(channelId: String): String
 

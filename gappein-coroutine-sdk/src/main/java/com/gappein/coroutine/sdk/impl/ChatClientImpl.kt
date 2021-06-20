@@ -7,8 +7,10 @@ import com.gappein.coroutine.sdk.client.ChatClient
 import com.gappein.coroutine.sdk.data.storage.FirebaseStorageManager
 import com.gappein.coroutine.sdk.model.Channel
 import com.gappein.coroutine.sdk.model.Message
+import com.gappein.coroutine.sdk.model.UploadResponse
 import com.gappein.coroutine.sdk.model.User
 import com.gappein.coroutine.sdk.service.GappeinDbService
+import com.gappein.coroutine.sdk.util.BaseResponse
 import com.gappein.coroutine.sdk.util.getFile
 import com.google.gson.Gson
 
@@ -20,203 +22,113 @@ class ChatClientImpl(
 
     private var currentUser = User()
 
-    override fun setUser(
-        user: User,
-        token: String,
-        onSuccess: (User) -> Unit,
-        onError: (Exception) -> Unit
-    ) {
+    override suspend fun setUser(user: User, token: String): BaseResponse<User> {
         currentUser = user
-        dbManager.userService.createUser(user, {
-            onSuccess(it)
-        }, {
-            onError(it)
-        })
+        return dbManager.userService.createUser(user)
     }
 
-    override fun getUser() = currentUser
-
-    override fun getApiKey() = apiKey
-
-    override fun getBackupLink(
-        context: Context,
-        channelId: String,
-        onSuccess: (String) -> Unit,
-        onProgress: (Int) -> Unit,
-        onError: (Exception) -> Unit
-    ) {
-        dbManager.channelService.getBackupMessages(channelId) {
-            val file = Gson().getFile(context, channelId, it)
-            storageManager.uploadBackupChat(file, channelId, onSuccess, onProgress, onError)
-        }
+    override suspend fun getUser(): User {
+        return currentUser
     }
 
-    override fun sendMessage(
-        messageText: String,
-        receiver: String,
-        onSuccess: () -> Unit,
-        onError: (Exception) -> Unit
-    ) {
-        getUserByToken(receiver, {
-            val message = Message(
-                timeStamp = System.currentTimeMillis(),
-                message = messageText,
-                isUrl = URLUtil.isValidUrl(messageText),
-                receiver = it,
-                sender = getUser()
-            )
-            dbManager.channelService.sendMessageByToken(message, getUser(), it, onSuccess, onError)
-        }, {
-            onError(it)
-        })
+    override suspend fun getApiKey(): String {
+        return apiKey
     }
 
-    override fun sendMessage(
-        fileUri: Uri,
-        receiver: String,
-        onSuccess: () -> Unit,
-        onProgress: (Int) -> Unit,
-        onError: (Exception) -> Unit
-    ) {
-
-        getUserByToken(receiver, { user ->
-            storageManager.uploadMessageImage(fileUri, user, getUser(), { message ->
-                sendMessage(message, receiver, { onSuccess() }, { onError(it) })
-            }, { progress ->
-                if (progress == 100) {
-                    onSuccess()
-                } else {
-                    onProgress(progress)
-                }
-            }, { exception -> onError(exception) })
-        }, { exception -> onError(exception) })
-
+    override suspend fun getBackupLink(context: Context, channelId: String): UploadResponse {
+        val response = dbManager.channelService.getBackupMessages(channelId)
+        val file = Gson().getFile(context, channelId, response)
+        return storageManager.uploadBackupChat(file, channelId)
     }
 
-    override fun getUserByToken(
-        token: String,
-        onSuccess: (User) -> Unit,
-        onError: (Exception) -> Unit
-    ) {
-        dbManager.userService.getUserByToken(token, onSuccess, onError)
-    }
-
-    override fun openOrCreateChannel(
-        participantUserToken: String,
-        onComplete: (channelId: String) -> Unit,
-        onError: (Exception) -> Unit
-    ) {
-        dbManager.channelService.getOrCreateNewChatChannels(
-            participantUserToken,
-            onComplete,
-            onError
+    override suspend fun sendMessage(messageText: String, receiver: String): Boolean {
+        val user = getUserByToken(receiver)
+        val message = Message(
+            timeStamp = System.currentTimeMillis(),
+            message = messageText,
+            isUrl = URLUtil.isValidUrl(messageText),
+            receiver = user,
+            sender = getUser()
         )
+        return dbManager.channelService.sendMessageByToken(message, getUser(), user)
     }
 
-    override fun getUserChannels(onSuccess: (List<Channel>) -> Unit) {
-        dbManager.channelService.getUserChannels(onSuccess)
+    override suspend fun sendMessage(fileUri: Uri, receiver: String): UploadResponse {
+        val user = getUserByToken(receiver)
+        return storageManager.uploadMessageImage(fileUri, user, getUser())
     }
 
-    override fun getMessages(channelId: String, onSuccess: (List<Message>) -> Unit) {
-        dbManager.channelService.getMessages(channelId, onSuccess)
+    override suspend fun getUserByToken(token: String): User {
+        return dbManager.userService.getUserByToken(token)
     }
 
-    override fun getChannelUsers(channelId: String, onSuccess: (List<User>) -> Unit) {
-        dbManager.channelService.getChannelUsers(channelId, onSuccess)
+    override suspend fun openOrCreateChannel(participantUserToken: String): String {
+        return dbManager.channelService.getOrCreateNewChatChannels(participantUserToken)
     }
 
-    override fun getChannelRecipientUser(channelId: String, onSuccess: (User) -> Unit) {
-        dbManager.channelService.getChannelRecipientUser(channelId, onSuccess)
+    override suspend fun getUserChannels(): List<Channel> {
+        return dbManager.channelService.getUserChannels()
     }
 
-    override fun getLastMessageFromChannel(channelId: String, onSuccess: (Message, User) -> Unit) {
-        dbManager.channelService.getLastMessageFromChannel(channelId, onSuccess)
+    override suspend fun getMessages(channelId: String): List<Message> {
+        return dbManager.channelService.getMessages(channelId)
     }
 
-    override fun isUserOnline(token: String, onSuccess: (Boolean, String) -> Unit) {
-        dbManager.channelService.isUserOnline(token, onSuccess)
+    override suspend fun getChannelUsers(channelId: String): List<User> {
+        return dbManager.channelService.getChannelUsers(channelId)
     }
 
-    override fun setUserOnline(
-        status: Boolean,
-        onSuccess: () -> Unit,
-        onError: (Exception) -> Unit
-    ) {
-        dbManager.userService.setUserOnline(status, onSuccess, onError)
+    override suspend fun getChannelRecipientUser(channelId: String): User {
+        return dbManager.channelService.getChannelRecipientUser(channelId)
     }
 
-    override fun setTypingStatus(
-        channelId: String,
-        userId: String,
-        isUserTyping: Boolean,
-        onSuccess: () -> Unit
-    ) {
-        dbManager.channelService.setTypingStatus(channelId, userId, isUserTyping, onSuccess)
+    override suspend fun getLastMessageFromChannel(channelId: String): Pair<Message, User> {
+        return dbManager.channelService.getLastMessageFromChannel(channelId)
     }
 
-    override fun setChatBackground(
-        channelId: String,
-        backgroundUrl: Uri,
-        onSuccess: () -> Unit,
-        onProgress: (Int) -> Unit,
-        onError: (Exception) -> Unit
-    ) {
-        storageManager.uploadChatBackgroundImage(backgroundUrl, channelId, {
-            dbManager.channelService.setChatBackground(channelId, it, onSuccess, onError)
-        }, {
-            onProgress(it)
-        }, {
-            onError(it)
-        })
+    override suspend fun isUserOnline(token: String): Pair<Boolean, String> {
+        return dbManager.channelService.isUserOnline(token)
     }
 
-    override fun getChatBackground(channelId: String, onSuccess: (String) -> Unit) {
-        dbManager.channelService.getChatBackground(channelId, onSuccess)
+    override suspend fun setUserOnline(status: Boolean): Boolean {
+        return dbManager.userService.setUserOnline(status)
     }
 
-    override fun setUserStatus(
-        status: String,
-        onSuccess: () -> Unit,
-        onError: (Exception) -> Unit
-    ) {
-        dbManager.userService.setUserStatus(status, onSuccess, onError)
+    override suspend fun getAllChannels(): List<Channel> {
+        return dbManager.channelService.getAllChannels()
     }
 
-    override fun getUserStatus(
-        token: String,
-        onSuccess: (String) -> Unit,
-        onError: (Exception) -> Unit
-    ) {
-        dbManager.userService.getUserStatus(token, onSuccess, onError)
+    override suspend fun deleteMessage(channelId: String, message: Message): Boolean {
+        return dbManager.channelService.deleteMessage(channelId, message)
     }
 
-    override fun getAllChannels(onSuccess: (List<Channel>) -> Unit) {
-        dbManager.channelService.getAllChannels(onSuccess)
+    override suspend fun likeMessage(channelId: String, messageId: String) {
+        return dbManager.channelService.likeMessage(channelId, messageId)
     }
 
-    override fun deleteMessage(
-        channelId: String,
-        message: Message,
-        onSuccess: () -> Unit,
-        onError: (Exception) -> Unit
-    ) {
-        dbManager.channelService.deleteMessage(channelId, message, onSuccess, onError)
+    override suspend fun getTypingStatus(channelId: String, participantUserId: String): String {
+        return dbManager.channelService.getTypingStatus(channelId, participantUserId)
     }
 
-    override fun likeMessage(
-        channelId: String,
-        messageId: String,
-        onSuccess: () -> Unit,
-        onError: (Exception) -> Unit
-    ) {
-        dbManager.channelService.likeMessage(channelId, messageId, onSuccess, onError)
+    override suspend fun setTypingStatus(channelId: String, userId: String, isUserTyping: Boolean) {
+        return dbManager.channelService.setTypingStatus(channelId, userId, isUserTyping)
     }
 
-    override fun getTypingStatus(
-        channelId: String,
-        participantUserId: String,
-        onSuccess: (String) -> Unit
-    ) {
-        dbManager.channelService.getTypingStatus(channelId, participantUserId, onSuccess)
+    override suspend fun setChatBackground(channelId: String, backgroundUrl: Uri) {
+        val response = storageManager.uploadChatBackgroundImage(backgroundUrl, channelId)
+        dbManager.channelService.setChatBackground(channelId, response.url)
     }
+
+    override suspend fun getChatBackground(channelId: String): String {
+        return dbManager.channelService.getChatBackground(channelId)
+    }
+
+    override suspend fun setUserStatus(status: String): Boolean {
+        return dbManager.userService.setUserStatus(status)
+    }
+
+    override suspend fun getUserStatus(token: String): String {
+        return dbManager.userService.getUserStatus(token)
+    }
+
 }
