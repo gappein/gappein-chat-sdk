@@ -1,7 +1,5 @@
 package com.gappein.sdk.model
 
-import com.gappein.sdk.client.ChatClient
-
 
 data class Message(
 
@@ -23,7 +21,4 @@ data class Message(
 
     val liked: Boolean = false
 )
-fun User.isCurrentUser(): Boolean {
-        return this.token == ChatClient.getInstance().getUser().token
-}
 

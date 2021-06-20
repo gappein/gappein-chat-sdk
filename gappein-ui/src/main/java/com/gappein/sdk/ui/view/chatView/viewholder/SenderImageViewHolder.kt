@@ -7,12 +7,13 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.gappein.sdk.client.ChatClient
 import com.gappein.sdk.model.Message
+import com.gappein.sdk.ui.databinding.ItemImageSentMessageBinding
 import com.gappein.sdk.ui.view.util.hide
 import com.gappein.sdk.ui.view.util.onDoubleTapListener
 import com.gappein.sdk.ui.view.util.show
-import kotlinx.android.synthetic.main.item_image_sent_message.view.*
 
-class SenderImageViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
+class SenderImageViewHolder(private val binding: ItemImageSentMessageBinding) :
+    RecyclerView.ViewHolder(binding.root) {
 
     companion object {
         private const val GIPHY = "giphy"
@@ -24,34 +25,34 @@ class SenderImageViewHolder(private val view: View) : RecyclerView.ViewHolder(vi
         onImageClick: (String) -> Unit,
         onMessageLike: (String) -> Unit
     ) {
-        view.sentImageMessage.setOnClickListener { onImageClick.invoke(message.message) }
+        binding.sentImageMessage.setOnClickListener { onImageClick.invoke(message.message) }
 
         if (message.message.contains(GIPHY)) {
             if (ChatClient.getInstance().getApiKey().isNotEmpty()) {
                 val _message = message.message
                 val listOfMessages = _message.split(SPACE_SPLITTER)
 
-                view.gifView.setMediaWithId(listOfMessages.last())
-                view.gifView.show()
-                view.sentImageMessage.hide()
+                binding.gifView.setMediaWithId(listOfMessages.last())
+                binding.gifView.show()
+                binding.sentImageMessage.hide()
             } else {
-                view.run {
+                binding.run {
                     gifView.hide()
                     sentImageMessage.hide()
                 }
             }
         } else {
-            Glide.with(view)
+            Glide.with(binding.root)
                 .load(message.message)
                 .transform(CenterCrop(), RoundedCorners(48))
-                .into(view.sentImageMessage)
-            view.sentImageMessage.show()
-            view.gifView.hide()
+                .into(binding.sentImageMessage)
+            binding.sentImageMessage.show()
+            binding.gifView.hide()
 
         }
-        view.likeImageView.visibility = if (message.liked) View.VISIBLE else View.INVISIBLE
+        binding.likeImageView.visibility = if (message.liked) View.VISIBLE else View.INVISIBLE
 
-        view.onDoubleTapListener {
+        binding.root.onDoubleTapListener {
             onMessageLike(message._id)
         }
     }

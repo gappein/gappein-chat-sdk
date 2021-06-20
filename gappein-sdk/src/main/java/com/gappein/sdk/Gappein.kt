@@ -2,8 +2,6 @@ package com.gappein.sdk
 
 import android.content.Context
 import com.gappein.sdk.client.ChatClient
-import com.gappein.sdk.data.db.FirebaseDbManager
-import com.gappein.sdk.data.db.FirebaseDbManagerImpl
 import com.gappein.sdk.data.storage.FirebaseStorageManager
 import com.gappein.sdk.data.storage.FirebaseStorageManagerImpl
 import com.gappein.sdk.impl.GappeinImpl
@@ -14,13 +12,15 @@ interface Gappein {
 
     companion object {
 
-        private val firebaseDbManager: FirebaseDbManager = FirebaseDbManagerImpl()
-        private val firebaseStorageManager: FirebaseStorageManager = FirebaseStorageManagerImpl()
+        private val firebaseStorageManager: FirebaseStorageManager by lazy { FirebaseStorageManagerImpl() }
+
         private var INSTANCE: Gappein? = null
+
         private const val EMPTY_STRING = ""
 
         @JvmStatic
-        fun getInstance(): Gappein = INSTANCE ?: throw IllegalStateException("Gappein.initialize() must be called before obtaining Gappein instance")
+        fun getInstance(): Gappein = INSTANCE
+            ?: throw IllegalStateException("Gappein.initialize() must be called before obtaining Gappein instance")
 
 
         /**
@@ -33,7 +33,6 @@ interface Gappein {
         fun initialize(context: Context, apiKey: String = EMPTY_STRING): Gappein {
             return GappeinImpl(
                 ChatClient.Builder()
-                    .setDatabaseManager(firebaseDbManager)
                     .setApiKey(apiKey)
                     .setStorageManager(firebaseStorageManager)
                     .build()
