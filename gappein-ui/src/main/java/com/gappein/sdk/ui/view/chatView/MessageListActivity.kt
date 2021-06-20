@@ -19,6 +19,7 @@ import com.gappein.sdk.model.Message
 import com.gappein.sdk.model.User
 import com.gappein.sdk.ui.R
 import com.gappein.sdk.ui.base.ChatBaseView
+import com.gappein.sdk.ui.databinding.ActivityMessageBinding
 import com.gappein.sdk.ui.view.chatView.adapter.MessageListAdapter
 import com.gappein.sdk.ui.view.chatView.attachments.AttachmentDialogFragment
 import com.gappein.sdk.ui.view.chatView.imageviewer.openImage
@@ -26,12 +27,15 @@ import com.gappein.sdk.ui.view.chatView.util.gifSelectionListener
 import com.gappein.sdk.ui.view.chatView.util.giphySettings
 import com.gappein.sdk.ui.view.util.*
 import com.giphy.sdk.ui.views.GiphyDialogFragment
-import kotlinx.android.synthetic.main.activity_message.*
 import java.io.File
 import java.io.IOException
 
 
 class MessageListActivity : AppCompatActivity(), ChatBaseView {
+
+    private var _binding: ActivityMessageBinding? = null
+    private val binding: ActivityMessageBinding
+        get() = _binding!!
 
     private var photoFile: File? = null
     private lateinit var adapter: MessageListAdapter
@@ -72,7 +76,7 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_message)
+        _binding = ActivityMessageBinding.inflate(layoutInflater)
         setupUI()
         setupRecyclerView()
         fetchMessages()
@@ -82,7 +86,7 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
     }
 
     private fun setupTextChangeListener() {
-        editTextChatBox.addTypeChangeListener { isUserTyping ->
+        binding.editTextChatBox.addTypeChangeListener { isUserTyping ->
             if (isUserTyping) {
                 ChatClient.getInstance().setTypingStatus(channelId, currentUser.token, true) {
                     //handle onSuccess
@@ -96,27 +100,27 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
     }
 
     private fun setupUI() {
-        toolbar.init {
+        binding.toolbar.init {
             channelId
         }
     }
 
     private fun setupSendMessageListener() {
-        buttonSend.setOnClickListener {
-            val message = editTextChatBox.text.toString()
+        binding.buttonSend.setOnClickListener {
+            val message = binding.editTextChatBox.text.toString()
             if (message.isNotEmpty()) {
                 ChatClient.getInstance().sendMessage(message, receiver.token, {
-                    editTextChatBox.text.clear()
+                    binding.editTextChatBox.text.clear()
                 }, {
 
                 })
             }
         }
-        toolbar.setOnBackPressed {
+        binding.toolbar.setOnBackPressed {
             onBackPressed()
         }
 
-        imageButtonAttach.setOnClickListener {
+        binding.imageButtonAttach.setOnClickListener {
             attachmentDialogFragment.show(supportFragmentManager, "AttachmentFragment")
         }
     }
@@ -134,7 +138,7 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
 
     private fun setupGifMessageListener() {
         if (currentApiKey.isNotEmpty()) {
-            gifSend.setOnClickListener {
+            binding.gifSend.setOnClickListener {
                 val gifDialog = GiphyDialogFragment.newInstance(giphySettings)
                 gifDialog.gifSelectionListener = gifSelectionListener {
                     ChatClient.getInstance().sendMessage("giphy $it", receiver.token, {
@@ -146,7 +150,7 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
                 gifDialog.show(supportFragmentManager, GIF_DIALOG)
             }
         } else {
-            gifSend.hide()
+            binding.gifSend.hide()
         }
     }
 
@@ -212,14 +216,14 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
                 //Handle Exception of Delete
             })
         }, onMessageLike = {
-            ChatClient.getInstance().likeMessage(channelId, it,{
+            ChatClient.getInstance().likeMessage(channelId, it, {
 
             }) {
 
             }
         })
-        recyclerViewMessages.layoutManager = LinearLayoutManager(this@MessageListActivity)
-        recyclerViewMessages.adapter = adapter
+        binding.recyclerViewMessages.layoutManager = LinearLayoutManager(this@MessageListActivity)
+        binding.recyclerViewMessages.adapter = adapter
 
     }
 
@@ -230,7 +234,7 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
                 addAll(it)
                 adapter.addAll(this)
                 if (this.isNotEmpty()) {
-                    recyclerViewMessages.smoothScrollToPosition(this.size - 1)
+                    binding.recyclerViewMessages.smoothScrollToPosition(this.size - 1)
                 }
             }
         }
@@ -277,15 +281,20 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
         photo?.let { file ->
             ImageCompressor(this).compressToFile(file)?.toUri()?.let {
                 ChatClient.getInstance().sendMessage(it, receiver.token, {
-                    progress.hide()
+                    binding.progress.hide()
                 }, {
-                    progress.show()
+                    binding.progress.show()
                 }, {
-                    progress.hide()
+                    binding.progress.hide()
                 })
             }
         }
     }
 
     override fun getClient() = ChatClient.getInstance()
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
 }

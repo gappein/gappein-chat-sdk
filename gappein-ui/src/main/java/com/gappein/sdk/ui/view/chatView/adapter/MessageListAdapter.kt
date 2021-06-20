@@ -7,8 +7,14 @@ import android.widget.Filterable
 import androidx.recyclerview.widget.RecyclerView
 import com.gappein.sdk.client.ChatClient
 import com.gappein.sdk.model.Message
-import com.gappein.sdk.ui.R
-import com.gappein.sdk.ui.view.chatView.viewholder.*
+import com.gappein.sdk.ui.binding.chatbinding.viewholder.ReceiverMessageListViewHolder
+import com.gappein.sdk.ui.databinding.ItemImageReceivedMessageBinding
+import com.gappein.sdk.ui.databinding.ItemImageSentMessageBinding
+import com.gappein.sdk.ui.databinding.ItemReceivedMessageBinding
+import com.gappein.sdk.ui.databinding.ItemSentMessageBinding
+import com.gappein.sdk.ui.view.chatView.viewholder.ReceiveImageViewHolder
+import com.gappein.sdk.ui.view.chatView.viewholder.SenderImageViewHolder
+import com.gappein.sdk.ui.view.chatView.viewholder.SenderMessageListViewHolder
 import java.util.*
 
 class MessageListAdapter(
@@ -30,26 +36,39 @@ class MessageListAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return if (viewType == VIEW_TYPE_SENDER_TEXT) {
-            SenderMessageListViewHolder(
-                LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_sent_message, parent, false)
-            )
-        } else if (viewType == VIEW_TYPE_SENDER_IMAGE) {
-            SenderImageViewHolder(
-                LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_image_sent_message, parent, false)
-            )
-        } else if (viewType == VIEW_TYPE_RECEIVER_IMAGE) {
-            ReceiveImageViewHolder(
-                LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_image_received_message, parent, false)
-            )
-        } else {
-            ReceiverMessageListViewHolder(
-                LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_received_message, parent, false)
-            )
+        return when (viewType) {
+            VIEW_TYPE_SENDER_TEXT -> {
+                val binding = ItemSentMessageBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+                SenderMessageListViewHolder(binding)
+            }
+            VIEW_TYPE_SENDER_IMAGE -> {
+                val binding = ItemImageSentMessageBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+                SenderImageViewHolder(binding)
+            }
+            VIEW_TYPE_RECEIVER_IMAGE -> {
+                val binding = ItemImageReceivedMessageBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+                ReceiveImageViewHolder(binding)
+            }
+            else -> {
+                val binding = ItemReceivedMessageBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+                ReceiverMessageListViewHolder(binding)
+            }
         }
     }
 
@@ -95,18 +114,18 @@ class MessageListAdapter(
 
     override fun getItemViewType(position: Int): Int {
         return if (filteredList[position].isUrl || filteredList[position].message.contains(GIPHY)) {
-                if (chatClient.getUser().token == filteredList[position].receiver.token) {
-                    VIEW_TYPE_RECEIVER_IMAGE
-                } else {
-                    VIEW_TYPE_SENDER_IMAGE
-                }
+            if (chatClient.getUser().token == filteredList[position].receiver.token) {
+                VIEW_TYPE_RECEIVER_IMAGE
             } else {
-                if (chatClient.getUser().token == filteredList[position].receiver.token) {
-                    VIEW_TYPE_RECEIVER_TEXT
-                } else {
-                    VIEW_TYPE_SENDER_TEXT
-                }
+                VIEW_TYPE_SENDER_IMAGE
             }
+        } else {
+            if (chatClient.getUser().token == filteredList[position].receiver.token) {
+                VIEW_TYPE_RECEIVER_TEXT
+            } else {
+                VIEW_TYPE_SENDER_TEXT
+            }
+        }
     }
 
     override fun getFilter(): Filter {

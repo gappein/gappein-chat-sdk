@@ -1,30 +1,36 @@
 package com.gappein.coroutine.sdk.util
 
-import com.gappein.sdk.client.ChatClient
-import com.gappein.sdk.model.Channel
-import com.gappein.sdk.model.ChannelListData
+import com.gappein.coroutine.sdk.client.ChatClient
+import com.gappein.coroutine.sdk.model.Channel
+import com.gappein.coroutine.sdk.model.ChannelListData
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
-fun Channel.toChannelList(onSuccess: (ChannelListData) -> Unit) {
+
+suspend fun Channel.toChannelList(): ChannelListData {
     val channelId = this.id
     val client = ChatClient.getInstance()
-    client.getLastMessageFromChannel(channelId) { message, user ->
+    val lastMessageFromChannel = client.getLastMessageFromChannel(channelId)
+    return suspendCoroutine { continuation ->
         val channelListData = ChannelListData(
             id = channelId,
-            user = user,
-            lastMessage = message
+            user = lastMessageFromChannel.second,
+            lastMessage = lastMessageFromChannel.first
         )
-        onSuccess(channelListData)
+        continuation.resume(channelListData)
     }
 }
 
-fun Channel.toChannelList(client: ChatClient, onSuccess: (ChannelListData) -> Unit) {
+
+suspend fun Channel.toChannelList(client: ChatClient): ChannelListData {
     val channelId = this.id
-    client.getLastMessageFromChannel(channelId) { message, user ->
+    val lastMessageFromChannel = client.getLastMessageFromChannel(channelId)
+    return suspendCoroutine { continuation ->
         val channelListData = ChannelListData(
             id = channelId,
-            user = user,
-            lastMessage = message
+            user = lastMessageFromChannel.second,
+            lastMessage = lastMessageFromChannel.first
         )
-        onSuccess(channelListData)
+        continuation.resume(channelListData)
     }
 }

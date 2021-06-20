@@ -8,17 +8,20 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gappein.sdk.client.ChatClient
-import com.gappein.sdk.ui.R
 import com.gappein.sdk.ui.base.ChatBaseView
+import com.gappein.sdk.ui.databinding.FragmentChannelListBinding
 import com.gappein.sdk.ui.view.channelview.`interface`.OnChannelClick
 import com.gappein.sdk.ui.view.channelview.adapter.ChannelListAdapter
 import com.gappein.sdk.ui.view.chatView.MessageListActivity
 import com.gappein.sdk.ui.view.util.hide
 import com.gappein.sdk.ui.view.util.show
-import kotlinx.android.synthetic.main.fragment_channel_list.view.*
 
 
 class ChannelListFragment : Fragment(), ChatBaseView {
+
+    private var _binding: FragmentChannelListBinding? = null
+    private val binding: FragmentChannelListBinding
+        get() = _binding!!
 
     companion object {
 
@@ -40,7 +43,8 @@ class ChannelListFragment : Fragment(), ChatBaseView {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_channel_list, container, false)
+        _binding = FragmentChannelListBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -62,25 +66,29 @@ class ChannelListFragment : Fragment(), ChatBaseView {
         getClient().getUserChannels {
             if (it.isNotEmpty()) {
                 adapter.addAll(it)
-                view.linearLayoutNoChatFound.hide()
-                view.recyclerViewChannel.show()
+                binding.linearLayoutNoChatFound.hide()
+                binding.recyclerViewChannel.show()
             } else {
-                view.linearLayoutNoChatFound.show()
-                view.recyclerViewChannel.hide()
+                binding.linearLayoutNoChatFound.show()
+                binding.recyclerViewChannel.hide()
             }
         }
     }
 
     private fun setupChannelList(view: View) {
-        adapter = ChannelListAdapter(onUserClick = {
+        adapter = ChannelListAdapter(requireContext(), onUserClick = {
             onUserClick.onUserClick(it)
         }, onChannelClick = { channel, user ->
             startActivity(MessageListActivity.buildIntent(requireContext(), channel.id, user))
         })
-        view.recyclerViewChannel.layoutManager = LinearLayoutManager(requireContext())
-        view.recyclerViewChannel.adapter = adapter
+        binding.recyclerViewChannel.layoutManager = LinearLayoutManager(requireContext())
+        binding.recyclerViewChannel.adapter = adapter
     }
 
     override fun getClient(): ChatClient = ChatClient.getInstance()
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }

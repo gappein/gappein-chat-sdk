@@ -7,12 +7,13 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.gappein.sdk.client.ChatClient
 import com.gappein.sdk.model.Message
+import com.gappein.sdk.ui.databinding.ItemImageReceivedMessageBinding
 import com.gappein.sdk.ui.view.util.hide
 import com.gappein.sdk.ui.view.util.onDoubleTapListener
 import com.gappein.sdk.ui.view.util.show
-import kotlinx.android.synthetic.main.item_image_received_message.view.*
 
-class ReceiveImageViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
+class ReceiveImageViewHolder(private val binding: ItemImageReceivedMessageBinding) :
+    RecyclerView.ViewHolder(binding.root) {
 
     companion object {
         private const val GIPHY = "giphy"
@@ -30,30 +31,30 @@ class ReceiveImageViewHolder(private val view: View) : RecyclerView.ViewHolder(v
                 val _message = message.message
                 val listOfMessages = _message.split(SPACE_SPLITTER)
 
-                view.gifView.setMediaWithId(listOfMessages.last())
-                view.gifView.show()
-                view.receivedImageMessage.hide()
+                binding.gifView.setMediaWithId(listOfMessages.last())
+                binding.gifView.show()
+                binding.receivedImageMessage.hide()
             } else {
-                view.run {
+                binding.run {
                     gifView.hide()
                     receivedImageMessage.hide()
                 }
             }
         } else {
-            Glide.with(view)
+            Glide.with(binding.root)
                 .load(message.message)
                 .transform(CenterCrop(), RoundedCorners(48))
-                .into(view.receivedImageMessage)
-            view.receivedImageMessage.show()
-            view.gifView.hide()
+                .into(binding.receivedImageMessage)
+            binding.receivedImageMessage.show()
+            binding.gifView.hide()
         }
 
-        view.likeImageView.visibility = if (message.liked) View.VISIBLE else View.INVISIBLE
+        binding.likeImageView.visibility = if (message.liked) View.VISIBLE else View.INVISIBLE
 
-        view.receivedImageMessage.setOnClickListener{ onImageClick.invoke(message.message) }
+        binding.receivedImageMessage.setOnClickListener { onImageClick.invoke(message.message) }
 
         if (!message.deleted) {
-            view.onDoubleTapListener {
+            binding.root.onDoubleTapListener {
                 onMessageLike(message._id)
             }
         }

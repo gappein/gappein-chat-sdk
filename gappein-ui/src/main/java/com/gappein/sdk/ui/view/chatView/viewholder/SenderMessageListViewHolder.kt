@@ -6,13 +6,14 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.gappein.sdk.model.Message
 import com.gappein.sdk.ui.R
+import com.gappein.sdk.ui.databinding.ItemSentMessageBinding
 import com.gappein.sdk.ui.view.util.DatesUtil
 import com.gappein.sdk.ui.view.util.hide
 import com.gappein.sdk.ui.view.util.onDoubleTapListener
 import com.gappein.sdk.ui.view.util.show
-import kotlinx.android.synthetic.main.item_sent_message.view.*
 
-class SenderMessageListViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
+class SenderMessageListViewHolder(private val binding: ItemSentMessageBinding) :
+    RecyclerView.ViewHolder(binding.root) {
 
     fun bind(
         position: Int,
@@ -29,30 +30,31 @@ class SenderMessageListViewHolder(private val view: View) : RecyclerView.ViewHol
 
             if (isFirstMessageByAuthor) {
                 if (index == 0) {
-                    view.sentTextMessageTime.text = DatesUtil.getTimeAgo(content.timeStamp)
-                    view.sentTextMessageTime.show()
+                    binding.sentTextMessageTime.text = DatesUtil.getTimeAgo(content.timeStamp)
+                    binding.sentTextMessageTime.show()
                 } else {
-                    view.sentTextMessageTime.hide()
+                    binding.sentTextMessageTime.hide()
                 }
             }
         }
-        view.sentTextMessage.setOnClickListener {
+        binding.sentTextMessage.setOnClickListener {
             onMessageClick(messages[position])
         }
 
         if (!messages[position].deleted) {
-            view.onDoubleTapListener { onMessageLike(messages[position]._id) }
+            binding.root.onDoubleTapListener { onMessageLike(messages[position]._id) }
         }
 
-        view.likeImageView.visibility = if (messages[position].liked) View.VISIBLE else View.INVISIBLE
+        binding.likeImageView.visibility =
+            if (messages[position].liked) View.VISIBLE else View.INVISIBLE
 
         if (messages[position].deleted) {
-            view.sentTextMessage.text = view.context.getString(R.string.delete_for_all)
-            view.sentTextMessage.setTypeface(view.sentTextMessage.typeface, Typeface.ITALIC)
-            view.sentTextMessage.setTextColor(Color.parseColor("#d3d3d3"))
-            view.sentTextMessage.setBackgroundResource(R.drawable.sent_message_deleted_background)
+            binding.sentTextMessage.text = binding.root.context.getString(R.string.delete_for_all)
+            binding.sentTextMessage.setTypeface(binding.sentTextMessage.typeface, Typeface.ITALIC)
+            binding.sentTextMessage.setTextColor(Color.parseColor("#d3d3d3"))
+            binding.sentTextMessage.setBackgroundResource(R.drawable.sent_message_deleted_background)
         } else {
-            view.sentTextMessage.text = (messages[position].message)
+            binding.sentTextMessage.text = (messages[position].message)
         }
     }
 

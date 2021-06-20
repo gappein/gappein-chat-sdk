@@ -3,6 +3,7 @@ package com.gappein.coroutine.sdk.client
 import android.content.Context
 import android.net.Uri
 import com.gappein.coroutine.sdk.data.storage.FirebaseStorageManager
+import com.gappein.coroutine.sdk.impl.ChatClientImpl
 import com.gappein.coroutine.sdk.model.Channel
 import com.gappein.coroutine.sdk.model.Message
 import com.gappein.coroutine.sdk.model.UploadResponse
@@ -203,7 +204,7 @@ interface ChatClient {
 
     suspend fun getChatBackground(channelId: String): String
 
-    suspend fun setUserStatus(status: String):Boolean
+    suspend fun setUserStatus(status: String): Boolean
 
     suspend fun getUserStatus(
         token: String
