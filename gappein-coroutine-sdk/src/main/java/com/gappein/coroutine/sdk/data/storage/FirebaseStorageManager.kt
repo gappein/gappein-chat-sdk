@@ -11,14 +11,8 @@ interface FirebaseStorageManager {
 
     suspend fun uploadMessageImage(file: Uri, receiver: User, sender: User): UploadResponse
 
-    suspend fun uploadChatBackgroundImage(
-        file: Uri,
-        channelId: String
-    ): UploadResponse
+    suspend fun uploadChatBackgroundImage(file: Uri, channelId: String): UploadResponse
 
-    suspend fun uploadBackupChat(
-        file: File,
-        channelId: String,
-    ): UploadResponse
+    suspend fun uploadBackupChat(file: File, channelId: String): UploadResponse
 
 }
