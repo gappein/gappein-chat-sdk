@@ -120,7 +120,11 @@ interface ChatClient {
      * @param participantUserToken - String - token of the User you want to open channel with
      * @param onComplete - on Complete callback
      */
-    fun openOrCreateChannel(participantUserToken: String, onComplete: (channelId: String) -> Unit, onError: (Exception) -> Unit)
+    fun openOrCreateChannel(
+        participantUserToken: String,
+        onComplete: (channelId: String) -> Unit,
+        onError: (Exception) -> Unit
+    )
 
     /**
      * Use to get all channels of the current user

@@ -112,9 +112,9 @@ class ChannelServiceImpl : ChannelService {
         onError: (Exception) -> Unit
     ) {
         val participantUserReference = userDatabaseReference.document(participantUserToken)
-         val currentUser = ChatClient.getInstance().getUser()
+        val currentUser = ChatClient.getInstance().getUser()
 
-         val currentUserToken = currentUser.token
+        val currentUserToken = currentUser.token
         val userList = listOf(participantUserToken, currentUserToken)
 
         val channelId = userList.sorted().toString()

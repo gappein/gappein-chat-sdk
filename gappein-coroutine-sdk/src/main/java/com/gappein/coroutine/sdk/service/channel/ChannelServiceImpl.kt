@@ -16,7 +16,8 @@ class ChannelServiceImpl : ChannelService {
 
     private val database: FirebaseFirestore = FirebaseFirestore.getInstance()
 
-    private val channelDatabaseReference: CollectionReference = database.collection(CHANNEL_COLLECTION)
+    private val channelDatabaseReference: CollectionReference =
+        database.collection(CHANNEL_COLLECTION)
 
     private val userDatabaseReference by lazy {
         database.collection(

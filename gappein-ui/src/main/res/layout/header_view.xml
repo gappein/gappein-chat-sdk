@@ -46,15 +46,14 @@
             android:textSize="16sp"
             android:textStyle="bold"
             app:fontFamily="@font/nunito_bold"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/typingStatus"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/avatarImageView"
             app:layout_constraintTop_toTopOf="@+id/imageViewBack" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/typingStatus"
             android:layout_width="0dp"
-            tools:text="dsfsdf"
             android:layout_height="0dp"
             android:layout_gravity="center_vertical"
             android:alpha="0.7"
@@ -63,10 +62,11 @@
             android:textSize="14sp"
             android:textStyle="bold"
             app:fontFamily="@font/nunito_bold"
-            app:layout_constraintTop_toBottomOf="@+id/titleToolbar"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/titleToolbar"
-            app:layout_constraintStart_toStartOf="@+id/titleToolbar" />
+            app:layout_constraintStart_toStartOf="@+id/titleToolbar"
+            app:layout_constraintTop_toBottomOf="@+id/titleToolbar"
+            tools:text="dsfsdf" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

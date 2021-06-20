@@ -12,8 +12,6 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.gappein.sdk.client.ChatClient
 import com.gappein.sdk.ui.R
 import com.gappein.sdk.ui.base.ChatBaseView
-import com.gappein.sdk.ui.view.util.hide
-import com.gappein.sdk.ui.view.util.show
 import kotlinx.android.synthetic.main.header_view.view.*
 
 class GappeinHeader : LinearLayout, ChatBaseView {

@@ -1,34 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:paddingStart="@dimen/space_x"
-    android:paddingEnd="@dimen/space_2x"
     android:paddingTop="@dimen/space_4x"
-    android:paddingBottom="@dimen/space_3x"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:paddingEnd="@dimen/space_2x"
+    android:paddingBottom="@dimen/space_3x">
 
     <ImageView
+        android:id="@+id/iv_attachment_option"
         android:layout_width="@dimen/options_image_size"
         android:layout_height="@dimen/options_image_size"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/tv_attachment_option_name"
         android:layout_marginBottom="4dp"
-        android:id="@+id/iv_attachment_option"
-        tools:ignore="contentDescription"/>
+        app:layout_constraintBottom_toTopOf="@id/tv_attachment_option_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="contentDescription" />
 
     <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_attachment_option_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/space_x"
         android:fontFamily="@font/nunito_regular"
         android:textColor="@android:color/black"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/iv_attachment_option"
-        android:id="@+id/tv_attachment_option_name"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv_attachment_option" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -19,5 +19,5 @@ interface UserService {
 
     suspend fun setUserStatus(status: String): Boolean
 
-    suspend fun getUserStatus(token: String):String
+    suspend fun getUserStatus(token: String): String
 }
