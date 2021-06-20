@@ -34,16 +34,19 @@ interface ChatClient {
         fun setStorageManager(storageManager: FirebaseStorageManager) =
             apply { this.storageManager = storageManager }
 
+
         /**
          * Use this to use the methods of ChatClient
          *
          * @return Instance of ChatClient
          */
-        fun build(): ChatClient = storageManager?.let { storageManager ->
-            ChatClientImpl(storageManager, gappeinDbService, apiKey).apply {
-                INSTANCE = this
-            }
-        } as ChatClient
+        fun build(): ChatClient {
+            return storageManager?.let { storageManager ->
+                ChatClientImpl(storageManager, gappeinDbService, apiKey).apply {
+                    INSTANCE = this
+                }
+            } as ChatClient
+        }
     }
 
     /**
@@ -120,7 +123,11 @@ interface ChatClient {
      * @param participantUserToken - String - token of the User you want to open channel with
      * @param onComplete - on Complete callback
      */
-    fun openOrCreateChannel(participantUserToken: String, onComplete: (channelId: String) -> Unit, onError: (Exception) -> Unit)
+    fun openOrCreateChannel(
+        participantUserToken: String,
+        onComplete: (channelId: String) -> Unit,
+        onError: (Exception) -> Unit
+    )
 
     /**
      * Use to get all channels of the current user

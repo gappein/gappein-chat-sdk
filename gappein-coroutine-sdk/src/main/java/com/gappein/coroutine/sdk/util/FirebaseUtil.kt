@@ -44,6 +44,18 @@ inline fun DocumentReference.updateDocument(
         }
 }
 
+suspend fun DocumentReference.updateDocument(updateValue: Pair<String, Any>): Pair<Boolean, Exception?> {
+    return suspendCoroutine { continuation ->
+        this.update(updateValue.first, updateValue.second)
+            .addOnSuccessListener {
+                continuation.resume(Pair(true, null))
+            }
+            .addOnFailureListener { exception ->
+                continuation.resumeWithException(exception)
+            }
+    }
+}
+
 
 inline fun DocumentReference.getValue(
     crossinline returnResult: (DocumentSnapshot) -> Unit,

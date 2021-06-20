@@ -1,21 +1,28 @@
 package com.gappein.coroutine.sdk.service.channel
 
-import com.gappein.sdk.client.ChatClient
-import com.gappein.sdk.model.Channel
-import com.gappein.sdk.model.Message
-import com.gappein.sdk.model.User
-import com.gappein.sdk.util.getObject
-import com.gappein.sdk.util.getValue
-import com.gappein.sdk.util.updateDocument
+import com.gappein.coroutine.sdk.client.ChatClient
+import com.gappein.coroutine.sdk.model.Channel
+import com.gappein.coroutine.sdk.model.Message
+import com.gappein.coroutine.sdk.model.User
+import com.gappein.coroutine.sdk.util.*
 import com.google.firebase.firestore.*
 import java.util.*
 import kotlin.collections.HashMap
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
-/**
- * Created by Himanshu Singh on 09-03-2021.
- * hello2himanshusingh@gmail.com
- */
 class ChannelServiceImpl : ChannelService {
+
+    private val database: FirebaseFirestore = FirebaseFirestore.getInstance()
+
+    private val channelDatabaseReference: CollectionReference = database.collection(CHANNEL_COLLECTION)
+
+    private val userDatabaseReference by lazy {
+        database.collection(
+            USER_COLLECTION
+        )
+    }
 
     companion object {
         private const val CHANNEL_COLLECTION = "channel"
@@ -47,83 +54,52 @@ class ChannelServiceImpl : ChannelService {
         private const val USER_COLLECTION = "users"
 
         private const val ID = "_id"
-
-        private val database: FirebaseFirestore = FirebaseFirestore.getInstance()
-
-        private val channelDatabaseReference: CollectionReference = database.collection(
-            CHANNEL_COLLECTION
-        )
-
-        private val userDatabaseReference by lazy {
-            database.collection(
-                USER_COLLECTION
-            )
-        }
-
     }
 
-    override fun sendMessage(
-        message: Message,
-        onSuccess: () -> Unit,
-        onError: (Exception) -> Unit
-    ) {
-        val userList = listOf(message.sender.token, message.receiver.token)
+    override suspend fun sendMessage(message: Message): Boolean {
+        return suspendCoroutine<Boolean> { continuation ->
+            val userList = listOf(message.sender.token, message.receiver.token)
 
-        val channelId = userList.sorted().toString()
+            val channelId = userList.sorted().toString()
 
-        val channel = channelDatabaseReference.document(channelId)
+            val channel = channelDatabaseReference.document(channelId)
 
-        val currentChannel = channel.collection(MESSAGES_COLLECTION)
-        currentChannel
-            .add(message)
-            .addOnSuccessListener {
-                updateMessage(
-                    currentChannel,
-                    channelId,
-                    it,
-                    onSuccess,
-                    onError
-                )
-            }
-            .addOnFailureListener { onError(it) }
-
+            val currentChannel = channel.collection(MESSAGES_COLLECTION)
+            currentChannel.add(message)
+                .addOnSuccessListener { docRef ->
+                    updateMessage(
+                        currentChannel,
+                        channelId,
+                        docRef
+                    )
+                    continuation.resume(true)
+                }
+                .addOnFailureListener { continuation.resumeWithException(it) }
+        }
     }
 
     private fun updateMessage(
         currentChannel: CollectionReference,
         channelId: String,
-        documentReference: DocumentReference,
-        onSuccess: () -> Unit,
-        onError: (Exception) -> Unit
+        documentReference: DocumentReference
     ) {
         currentChannel.document(channelId)
-            .updateDocument(Pair(ID, documentReference.id)) { isSuccessful, exception ->
-                if (isSuccessful) {
-                    onSuccess()
-                } else {
-                    exception?.let { onError(it) }
-                }
+            .updateDocument(Pair(ID, documentReference.id)) { _, _ ->
             }
+
     }
 
-    override fun getOrCreateNewChatChannels(
-        participantUserToken: String,
-        onSuccess: (channelId: String) -> Unit,
-        onError: (Exception) -> Unit
-    ) {
+    override suspend fun getOrCreateNewChatChannels(participantUserToken: String): String {
         val participantUserReference = userDatabaseReference.document(participantUserToken)
-         val currentUser = ChatClient.getInstance().getUser()
-
-         val currentUserToken = currentUser.token
+        val currentUser = ChatClient.getInstance().getUser()
+        val currentUserToken = currentUser.token
         val userList = listOf(participantUserToken, currentUserToken)
-
         val channelId = userList.sorted().toString()
-
-        val channel = channelDatabaseReference.document(channelId)
-
-        channel.getValue({ _channel ->
-            if (!_channel.exists()) {
-                onSuccess(channelId)
+        val channel: DocumentReference = channelDatabaseReference.document(channelId)
+        val result = channel.getValue()
+        return suspendCoroutine { continuation ->
+            if (!result.exists()) {
+                continuation.resume(channelId)
             } else {
                 val userMap = HashMap<String, User>()
                 getUserByToken(participantUserToken) { user ->
@@ -132,200 +108,245 @@ class ChannelServiceImpl : ChannelService {
                     channelDatabaseReference.document(channelId).set(userMap)
                 }
                 setupRestForChannel(participantUserReference, participantUserToken, channelId)
-                onSuccess(channelId)
             }
-        }, {
-            onError(it)
-        })
+        }
     }
 
+    private fun getUserByToken(
+        token: String,
+        onSuccess: (user: User) -> Unit
+    ) {
+
+        userDatabaseReference.get()
+            .addOnSuccessListener { result ->
+                val user = result.toObject<User>().find {
+                    it.getUserWithToken(token)
+                }
+                user?.let { onSuccess(it) }
+            }
+
+    }
+
+    private fun setupRestForChannel(
+        participantUserReference: DocumentReference,
+        participantUserToken: String,
+        channelId: String
+    ) {
+        val channel = channelDatabaseReference.document(channelId)
+        val typingCollection = channel.collection(TYPING)
+        val backgroundCollection = channel.collection(CHAT_BACKGROUND)
+        val channelMap = mapOf(CHANNEL_ID to channelId)
+        val typingMap = mapOf(TYPING to "-")
+        val currentUser = ChatClient.getInstance().getUser()
+        val currentUserToken = currentUser.token
+        val currentUserReference = userDatabaseReference.document(currentUserToken)
+
+        currentUserReference.collection(CHANNEL_COLLECTION)
+            .document(participantUserToken)
+            .set(channelMap)
+        participantUserReference.collection(CHANNEL_COLLECTION)
+            .document(currentUserToken)
+            .set(channelMap)
+        typingCollection.document(participantUserToken)
+            .set(typingMap)
+        typingCollection.document(currentUserToken)
+            .set(typingMap)
+        backgroundCollection.document(channelId)
+            .set(mapOf(CHAT_BACKGROUND to "-"))
 
 
-    override fun getUserChannels(onSuccess: (List<Channel>) -> Unit) {
+    }
+
+    override suspend fun getUserChannels(): List<Channel> {
         val currentUser = ChatClient.getInstance().getUser()
 
         val currentUserToken = currentUser.token
-        channelDatabaseReference.addSnapshotListener { querySnapshot: QuerySnapshot?, error: FirebaseFirestoreException? ->
-            if (error != null) {
-                return@addSnapshotListener
-            }
 
-            val channels = querySnapshot
-                ?.documents
-                ?.filter {
-                    it.id.contains(currentUserToken)
-                }?.map { channel ->
-                    val channelMapper: Map<String, User> = channel.data as Map<String, User>
-                    val channelUsers = channelMapper.values.toList()
-                    return@map Channel(id = channel.id, channelUsers)
+        return suspendCoroutine { continuation ->
+            channelDatabaseReference.addSnapshotListener { querySnapshot, exception ->
+                if (exception != null) {
+                    continuation.resumeWithException(exception)
+                } else {
+                    val channels = querySnapshot?.documents?.filter {
+                        it.id.contains(currentUserToken)
+                    }?.map { channel ->
+                        val channelMapper: Map<String, User> = channel.data as Map<String, User>
+                        val channelUsers = channelMapper.values.toList()
+                        return@map Channel(id = channel.id, channelUsers)
+                    }
+                    continuation.resumeNullable(channels)
                 }
-            channels?.let { onSuccess(it) }
+            }
         }
     }
 
-    override fun sendMessageByToken(
+    override suspend fun sendMessageByToken(
         message: Message,
         sender: User,
-        receiver: User,
-        onSuccess: () -> Unit,
-        onError: (Exception) -> Unit
-    ) {
-        sendMessage(message, onSuccess, onError)
+        receiver: User
+    ): Boolean {
+        return sendMessage(message)
     }
 
-    override fun getMessages(channelId: String, onSuccess: (List<Message>) -> Unit) {
-        channelDatabaseReference.document(channelId)
+    override suspend fun getMessages(channelId: String): List<Message> {
+        val collection = channelDatabaseReference.document(channelId)
             .collection(MESSAGES_COLLECTION)
-            .addSnapshotListener { querySnapshot: QuerySnapshot?, _: FirebaseFirestoreException? ->
-                val messages = mutableListOf<Message>()
-                val data = querySnapshot?.documents
-                    ?.map {
-                        return@map it.toObject(Message::class.java)
-                    }?.sortedBy {
-                        it?.timeStamp
-                    } as List<Message>
+        return suspendCoroutine { continuation ->
+            collection.addSnapshotListener { querySnapshot, exception ->
+                if (exception != null) {
+                    continuation.resumeWithException(exception)
+                } else {
+                    val messages = mutableListOf<Message>()
+                    val data = querySnapshot?.documents
+                        ?.map {
+                            return@map it.toObject(Message::class.java)
+                        }?.sortedBy {
+                            it?.timeStamp
+                        } as List<Message>
 
-                messages.run {
-                    clear()
-                    addAll(data)
-                    onSuccess(this)
-                }
-            }
-    }
-
-    override fun getBackupMessages(channelId: String, onSuccess: (List<Message>) -> Unit) {
-        channelDatabaseReference.document(channelId)
-            .collection(MESSAGES_COLLECTION)
-            .addSnapshotListener { querySnapshot: QuerySnapshot?, _: FirebaseFirestoreException? ->
-                val messages = mutableListOf<Message>()
-                val data = querySnapshot?.documents
-                    ?.map {
-                        return@map it.toObject(Message::class.java)
-                    }?.sortedBy {
-                        it?.timeStamp
-                    } as List<Message>
-                messages.clear()
-                data.forEach {
-                    messages.add(
-                        Message(
-                            _id = it._id,
-                            deleted = it.deleted,
-                            isUrl = it.isUrl,
-                            liked = it.liked,
-                            message = it.message,
-                            receiver = it.receiver.copy(token = ""),
-                            sender = it.sender.copy(token = ""),
-                            timeStamp = it.timeStamp,
-                            typing = ""
-                        )
-                    )
-                }
-                onSuccess(messages)
-            }
-    }
-
-    override fun getChannelUsers(channelId: String, onSuccess: (List<User>) -> Unit) {
-        channelDatabaseReference.document(channelId)
-            .get()
-            .addOnSuccessListener {
-                val userData = it.data
-                val userList = userData
-                    ?.flatMap { user ->
-                        listOf(user.value as HashMap<String, Any>)
-                    }?.map { userMap ->
-                        return@map User(
-                            token = userMap[TOKEN] as String,
-                            name = userMap[NAME] as String,
-                            profileImageUrl = userMap[IMAGE_URL] as String,
-                        )
+                    messages.run {
+                        clear()
+                        addAll(data)
+                        continuation.resume(this)
                     }
-                userList?.let { users -> onSuccess(users) }
-            }
-    }
-
-    override fun getLastMessageFromChannel(channelId: String, onSuccess: (Message, User) -> Unit) {
-        getMessages(channelId) {
-            if (it.isNotEmpty()) {
-                val users = mutableListOf<User>().apply {
-                    add(it.first().receiver)
-                    add(it.first().sender)
-                    filter { user -> user.token == ChatClient.getInstance().getUser().token }
-                }
-                onSuccess(it.last(), users.first())
-            } else {
-                getChannelUsers(channelId) { userList ->
-                    val user = userList.filter { user ->
-                        user.token != ChatClient.getInstance().getUser().token
-                    }
-                    onSuccess(Message(), user.first())
                 }
             }
         }
     }
 
-    override fun getChannelRecipientUser(channelId: String, onSuccess: (User) -> Unit) {
-        channelDatabaseReference.document(channelId)
-            .get()
-            .addOnSuccessListener {
-                val userData = it.data
-                userData
-                    ?.flatMap { user ->
-                        listOf(user.value as HashMap<String, Any>)
-                    }?.map { userMap ->
-                        return@map User(
-                            token = userMap[TOKEN] as String,
-                            name = userMap[NAME] as String,
-                            profileImageUrl = userMap[IMAGE_URL] as String,
+    override suspend fun getBackupMessages(channelId: String): List<Message> {
+        val collection = channelDatabaseReference.document(channelId)
+            .collection(MESSAGES_COLLECTION)
+        return suspendCoroutine { continuation ->
+            collection.addSnapshotListener { querySnapshot, exception ->
+                if (exception != null) {
+                    continuation.resumeWithException(exception)
+                } else {
+                    val messages = mutableListOf<Message>()
+                    val data = querySnapshot?.documents
+                        ?.map {
+                            return@map it.toObject(Message::class.java)
+                        }?.sortedBy {
+                            it?.timeStamp
+                        } as List<Message>
+                    messages.clear()
+                    data.forEach {
+                        messages.add(
+                            Message(
+                                _id = it._id,
+                                deleted = it.deleted,
+                                isUrl = it.isUrl,
+                                liked = it.liked,
+                                message = it.message,
+                                receiver = it.receiver.copy(token = ""),
+                                sender = it.sender.copy(token = ""),
+                                timeStamp = it.timeStamp,
+                                typing = ""
+                            )
                         )
-                    }?.forEach { user ->
-                        if (user.token != ChatClient.getInstance().getUser().token) {
-                            onSuccess(user)
+                    }
+                    continuation.resume(messages)
+                }
+            }
+        }
+    }
+
+    override suspend fun getChannelUsers(channelId: String): List<User> {
+        val databaseRef = channelDatabaseReference.document(channelId)
+        return suspendCoroutine { continuation ->
+            databaseRef.get()
+                .addOnSuccessListener {
+                    val userData = it.data
+                    val userList = userData
+                        ?.flatMap { user ->
+                            listOf(user.value as HashMap<String, Any>)
+                        }?.map { userMap ->
+                            return@map User(
+                                token = userMap[TOKEN] as String,
+                                name = userMap[NAME] as String,
+                                profileImageUrl = userMap[IMAGE_URL] as String,
+                            )
                         }
-                    }
-            }
-    }
-
-    override fun getAllChannels(onSuccess: (List<Channel>) -> Unit) {
-
-        channelDatabaseReference.addSnapshotListener { querySnapshot: QuerySnapshot?, error: FirebaseFirestoreException? ->
-            if (error != null) {
-                return@addSnapshotListener
-            }
-            val channels = querySnapshot
-                ?.documents
-                ?.map { channel ->
-                    val channelMapper: Map<String, User> = channel.data as Map<String, User>
-                    val channelUsers = channelMapper.values.toList()
-                    return@map Channel(id = channel.id, channelUsers)
+                    continuation.resumeNullable(userList)
+                }.addOnFailureListener { exception ->
+                    continuation.resumeWithException(exception)
                 }
-            channels?.let { onSuccess(it) }
+        }
+
+    }
+
+    override suspend fun getLastMessageFromChannel(channelId: String): Pair<Message, User> {
+        val messages = getMessages(channelId)
+        return suspendCoroutine { continuation ->
+            val users = mutableListOf<User>().apply {
+                add(messages.first().receiver)
+                add(messages.first().sender)
+                filter { user -> user.token == ChatClient.getInstance().getUser().token }
+            }
+            continuation.resume(Pair(messages.last(), users.first()))
         }
     }
 
-    override fun deleteMessage(
-        channelId: String,
-        message: Message,
-        onSuccess: () -> Unit,
-        onError: (Exception) -> Unit
-    ) {
-        if (message.sender.isCurrentUser()) {
-            channelDatabaseReference.document(channelId)
-                .collection(MESSAGES_COLLECTION)
-                .document(message._id)
-                .update(DELETED, true)
-                .addOnSuccessListener { onSuccess() }
-                .addOnFailureListener { onError(it) }
-        } else {
-            onError(Exception("You don't have permission to delete this message"))
+    override suspend fun getChannelRecipientUser(channelId: String): User {
+        val document = channelDatabaseReference.document(channelId)
+        return suspendCoroutine { continuation ->
+            document.get()
+                .addOnSuccessListener {
+                    val userData = it.data
+                    userData
+                        ?.flatMap { user ->
+                            listOf(user.value as HashMap<String, Any>)
+                        }?.map { userMap ->
+                            return@map User(
+                                token = userMap[TOKEN] as String,
+                                name = userMap[NAME] as String,
+                                profileImageUrl = userMap[IMAGE_URL] as String,
+                            )
+                        }?.forEach { user ->
+                            if (user.token != ChatClient.getInstance().getUser().token) {
+                                continuation.resume(user)
+                            }
+                        }
+                }
         }
     }
 
-    override fun setTypingStatus(
-        channelId: String,
-        userId: String,
-        isUserTyping: Boolean,
-        onSuccess: () -> Unit
-    ) {
+    override suspend fun getAllChannels(): List<Channel> {
+        return suspendCoroutine { continuation ->
+            channelDatabaseReference.addSnapshotListener { querySnapshot: QuerySnapshot?, error: FirebaseFirestoreException? ->
+                if (error != null) {
+                    return@addSnapshotListener
+                }
+                val channels = querySnapshot
+                    ?.documents
+                    ?.map { channel ->
+                        val channelMapper: Map<String, User> = channel.data as Map<String, User>
+                        val channelUsers = channelMapper.values.toList()
+                        return@map Channel(id = channel.id, channelUsers)
+                    }
+                if (channels != null) {
+                    continuation.resume(channels)
+                }
+            }
+        }
+    }
+
+    override suspend fun deleteMessage(channelId: String, message: Message): Boolean {
+        return suspendCoroutine { continuation ->
+            if (message.sender.isCurrentUser()) {
+                channelDatabaseReference.document(channelId)
+                    .collection(MESSAGES_COLLECTION)
+                    .document(message._id)
+                    .update(DELETED, true)
+                    .addOnSuccessListener { continuation.resume(true) }
+                    .addOnFailureListener { continuation.resumeWithException(it) }
+            } else {
+                continuation.resumeWithException(Exception("You don't have permission to delete this message"))
+            }
+        }
+    }
+
+    override suspend fun setTypingStatus(channelId: String, userId: String, isUserTyping: Boolean) {
         val currentUser = ChatClient.getInstance().getUser()
         updateTypingStatus(currentUser, isUserTyping, channelId)
     }
@@ -343,87 +364,75 @@ class ChannelServiceImpl : ChannelService {
         }
     }
 
-    override fun getTypingStatus(
-        channelId: String,
-        participantUserId: String,
-        onSuccess: (String) -> Unit
-    ) {
-        channelDatabaseReference.document(channelId)
+    override suspend fun getTypingStatus(channelId: String, participantUserId: String): String {
+        val document = channelDatabaseReference.document(channelId)
             .collection(TYPING)
             .document(participantUserId)
-            .addSnapshotListener { value, _ ->
-                onSuccess(value?.get(TYPING).toString())
-            }
-    }
-
-    override fun setChatBackground(
-        channelId: String,
-        backgroundUrl: String,
-        onSuccess: () -> Unit,
-        onError: (Exception) -> Unit
-    ) {
-        channelDatabaseReference.document(channelId)
-            .collection(CHAT_BACKGROUND)
-            .document(channelId)
-            .update(CHAT_BACKGROUND, backgroundUrl)
-            .addOnSuccessListener { onSuccess() }
-            .addOnFailureListener { onError(it) }
-    }
-
-    override fun getChatBackground(channelId: String, onSuccess: (String) -> Unit) {
-        channelDatabaseReference.document(channelId)
-            .collection(CHAT_BACKGROUND)
-            .document(channelId)
-            .addSnapshotListener { value, _ ->
-                onSuccess(value?.data?.get(CHAT_BACKGROUND).toString())
-            }
-    }
-
-    override fun likeMessage(
-        channelId: String,
-        messageId: String,
-        onSuccess: () -> Unit,
-        onError: (Exception) -> Unit
-    ) {
-        channelDatabaseReference.document(channelId)
-            .collection(MESSAGES_COLLECTION)
-            .document(messageId)
-            .updateDocument(Pair(LIKED, true)) { isSuccessful, exception ->
-                if (isSuccessful) {
-                    onSuccess()
+        return suspendCoroutine { continuation ->
+            document.addSnapshotListener { response, exception ->
+                if (exception != null) {
+                    continuation.resumeWithExceptionNullable(exception)
                 } else {
-                    exception?.let { onError(it) }
-                }
-            }
-    }
-
-    private fun getUserByToken(
-        token: String,
-        onSuccess: (user: User) -> Unit
-    ) {
-
-        userDatabaseReference.get()
-            .addOnSuccessListener { result ->
-                val user = result.getObject<User>().find {
-                    it.getUser(token)
-                }
-                user?.let { onSuccess(it) }
-            }
-
-    }
-
-    override fun isUserOnline(token: String, onSuccess: (Boolean, String) -> Unit) {
-        val userChannelReference = userDatabaseReference.document(token)
-        userChannelReference.addSnapshotListener { value, _ ->
-            if (value != null && value.data != null) {
-                val userData = value.data as Map<String, User>
-                if (userData[IS_ONLINE].toString() == TRUE) {
-                    onSuccess(true, "")
-                } else {
-                    onSuccess(false, userData[LAST_ONLINE_AT].toString())
+                    continuation.resumeNullable(response?.get(TYPING).toString())
                 }
             }
         }
     }
 
+    override suspend fun setChatBackground(channelId: String, backgroundUrl: String) {
+        val document = channelDatabaseReference.document(channelId)
+            .collection(CHAT_BACKGROUND)
+            .document(channelId)
+        return suspendCoroutine { continuation ->
+            document.update(CHAT_BACKGROUND, backgroundUrl)
+                .addOnSuccessListener { continuation.resume(Unit) }
+                .addOnFailureListener { continuation.resumeWithExceptionNullable(it) }
+        }
+    }
+
+    override suspend fun getChatBackground(channelId: String): String {
+        val document = channelDatabaseReference.document(channelId)
+            .collection(CHAT_BACKGROUND)
+            .document(channelId)
+        return suspendCoroutine { continuation ->
+            document.addSnapshotListener { response, exception ->
+                if (exception != null) {
+                    continuation.resumeWithExceptionNullable(exception)
+                } else {
+                    continuation.resumeNullable(response?.data?.get(CHAT_BACKGROUND).toString())
+                }
+            }
+        }
+    }
+
+    override suspend fun likeMessage(channelId: String, messageId: String) {
+        val collection = channelDatabaseReference.document(channelId)
+            .collection(MESSAGES_COLLECTION)
+        val isSuccessful = collection.document(messageId).updateDocument(Pair(LIKED, true))
+        return suspendCoroutine { continuation ->
+            if (isSuccessful.first) {
+                continuation.resume(Unit)
+            } else {
+                continuation.resumeWithExceptionNullable(isSuccessful.second)
+            }
+        }
+    }
+
+    override suspend fun isUserOnline(token: String): Pair<Boolean, String> {
+        val userChannelReference = userDatabaseReference.document(token)
+        return suspendCoroutine { continuation ->
+            userChannelReference.addSnapshotListener { value, _ ->
+                if (value != null && value.data != null) {
+                    val userData = value.data as Map<String, User>
+                    if (userData[IS_ONLINE].toString() == TRUE) {
+                        continuation.resume(Pair(true, ""))
+                    } else {
+                        continuation.resume(Pair(false, userData[LAST_ONLINE_AT].toString()))
+                    }
+                }
+            }
+        }
+    }
 }
+
+

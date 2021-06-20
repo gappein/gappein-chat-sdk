@@ -10,9 +10,6 @@ import com.gappein.coroutine.sdk.service.user.UserServiceImpl
  * hello2himanshusingh@gmail.com
  */
 data class GappeinDbService(
-
     val userService: UserService = UserServiceImpl(),
-
     val channelService: ChannelService = ChannelServiceImpl()
-
 )
