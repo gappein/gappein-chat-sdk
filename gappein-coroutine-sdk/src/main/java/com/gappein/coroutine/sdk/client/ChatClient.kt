@@ -57,7 +57,7 @@ interface ChatClient {
      * @param onSuccess - Success callback
      * @param onError - Error callback
      */
-    fun setUser(user: User, token: String, onSuccess: (User) -> Unit, onError: (Exception) -> Unit)
+    suspend fun setUser(user: User, token: String): User
 
     /**
      * Use to return instance of the current User detail
@@ -70,11 +70,8 @@ interface ChatClient {
 
     fun getBackupLink(
         context: Context,
-        channelId: String,
-        onSuccess: (String) -> Unit,
-        onProgress: (Int) -> Unit,
-        onError: (Exception) -> Unit
-    )
+        channelId: String
+    ): String
 
     /**
      * Use to send text message
@@ -84,11 +81,10 @@ interface ChatClient {
      * @param onSuccess - Success callback
      * @param onError - Error callback
      */
-    fun sendMessage(
+
+    suspend fun sendMessage(
         messageText: String,
-        receiver: String,
-        onSuccess: () -> Unit,
-        onError: (Exception) -> Unit
+        receiver: String
     )
 
     /**
@@ -100,12 +96,9 @@ interface ChatClient {
      * @param onProgress - File upload progress callback
      * @param onError - Error callback
      */
-    fun sendMessage(
+    suspend fun sendMessage(
         fileUri: Uri,
-        receiver: String,
-        onSuccess: () -> Unit,
-        onProgress: (Int) -> Unit,
-        onError: (Exception) -> Unit
+        receiver: String
     )
 
     /**
@@ -115,7 +108,7 @@ interface ChatClient {
      * @param onSuccess - Success callback
      * @param onError - Error callback
      */
-    fun getUserByToken(token: String, onSuccess: (User) -> Unit, onError: (Exception) -> Unit)
+    suspend fun getUserByToken(token: String): User
 
     /**
      * Use to open/create a channel with given User
@@ -123,18 +116,16 @@ interface ChatClient {
      * @param participantUserToken - String - token of the User you want to open channel with
      * @param onComplete - on Complete callback
      */
-    fun openOrCreateChannel(
-        participantUserToken: String,
-        onComplete: (channelId: String) -> Unit,
-        onError: (Exception) -> Unit
-    )
+    suspend fun openOrCreateChannel(
+        participantUserToken: String
+    ): String
 
     /**
      * Use to get all channels of the current user
      *
      * @param onSuccess - Success callback
      */
-    fun getUserChannels(onSuccess: (List<Channel>) -> Unit)
+    suspend fun getUserChannels(): List<Channel>
 
     /**
      * Use to get Messages for given channel
@@ -142,7 +133,7 @@ interface ChatClient {
      * @param channelId - String - channel id
      * @param onSuccess - Success callback
      */
-    fun getMessages(channelId: String, onSuccess: (List<Message>) -> Unit)
+    suspend fun getMessages(channelId: String): List<Message>
 
     /**
      * Use to get Users for given channel
@@ -150,7 +141,7 @@ interface ChatClient {
      * @param channelId - String - channel id
      * @param onSuccess - Success callback
      */
-    fun getChannelUsers(channelId: String, onSuccess: (List<User>) -> Unit)
+    suspend fun getChannelUsers(channelId: String): List<User>
 
     /**
      * Use to get the recipient User of a channel
@@ -158,7 +149,7 @@ interface ChatClient {
      * @param channelId - String - channel id
      * @param onSuccess - Success callback
      */
-    fun getChannelRecipientUser(channelId: String, onSuccess: (User) -> Unit)
+    suspend fun getChannelRecipientUser(channelId: String, onSuccess: (User) -> Unit)
 
     /**
      * Use to get last message in a channel
@@ -166,7 +157,7 @@ interface ChatClient {
      * @param channelId - String - channel id
      * @param onSuccess - Success callback
      */
-    fun getLastMessageFromChannel(channelId: String, onSuccess: (Message, User) -> Unit)
+    suspend fun getLastMessageFromChannel(channelId: String): Pair<Message, User>
 
     /**
      * Use to check whether a particular User is online
@@ -174,57 +165,46 @@ interface ChatClient {
      * @param token - String - token of the User you want to check
      * @param onSuccess - Success callback
      */
-    fun isUserOnline(token: String, onSuccess: (Boolean, String) -> Unit)
+    suspend fun isUserOnline(token: String): Pair<Boolean, String>
 
     /**
      * Use to set the User online
      *
      * @param token - String - token of the User you want to show online
      */
-    fun setUserOnline(
-        status: Boolean,
-        onSuccess: () -> Unit,
-        onError: (Exception) -> Unit
+    suspend fun setUserOnline(
+        status: Boolean
     )
 
-    fun getAllChannels(onSuccess: (List<Channel>) -> Unit)
+    suspend fun getAllChannels(): List<Channel>
 
-    fun deleteMessage(
+    suspend fun deleteMessage(
         channelId: String,
-        message: Message,
-        onSuccess: () -> Unit,
-        onError: (Exception) -> Unit
+        message: Message
     )
 
-    fun likeMessage(
-        channelId: String, messageId: String, onSuccess: () -> Unit,
-        onError: (Exception) -> Unit
+    suspend fun likeMessage(
+        channelId: String, messageId: String
     )
 
-    fun getTypingStatus(channelId: String, participantUserId: String, onSuccess: (String) -> Unit)
+    suspend fun getTypingStatus(channelId: String, participantUserId: String): String
 
-    fun setTypingStatus(
+    suspend fun setTypingStatus(
         channelId: String,
         userId: String,
-        isUserTyping: Boolean,
-        onSuccess: () -> Unit
+        isUserTyping: Boolean
     )
 
-    fun setChatBackground(
+    suspend fun setChatBackground(
         channelId: String,
-        backgroundUrl: Uri,
-        onSuccess: () -> Unit,
-        onProgress: (Int) -> Unit,
-        onError: (Exception) -> Unit
+        backgroundUrl: Uri
     )
 
-    fun getChatBackground(channelId: String, onSuccess: (String) -> Unit)
+    suspend fun getChatBackground(channelId: String): String
 
-    fun setUserStatus(status: String, onSuccess: () -> Unit, onError: (Exception) -> Unit)
+    suspend fun setUserStatus(status: String)
 
-    fun getUserStatus(
-        token: String = getUser().token,
-        onSuccess: (String) -> Unit,
-        onError: (Exception) -> Unit
-    )
+    suspend fun getUserStatus(
+        token: String = getUser().token
+    ): String
 }
