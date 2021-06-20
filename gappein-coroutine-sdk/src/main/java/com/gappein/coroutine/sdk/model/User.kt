@@ -24,7 +24,7 @@ data class User(
     fun isCurrentUser(): Boolean {
         return this.token == ChatClient.getInstance().getUser().token
     }
-    fun getUser(token: String): Boolean {
+    fun getUserWithToken(token: String): Boolean {
         return this.token == token
     }
 

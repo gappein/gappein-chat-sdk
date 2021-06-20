@@ -46,7 +46,7 @@ class UserServiceImpl : UserService {
             userDatabaseReference.get()
                 .addOnSuccessListener { result ->
                     val user = result.toObject<User>().find {
-                        it.getUser(token)
+                        it.getUserWithToken(token)
                     }
                     user?.let { continuation.resume(it) }
                 }
