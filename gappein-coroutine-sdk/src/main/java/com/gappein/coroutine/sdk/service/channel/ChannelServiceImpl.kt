@@ -108,7 +108,12 @@ class ChannelServiceImpl : ChannelService {
                     userMap[currentUserToken] = currentUser
                     channelDatabaseReference.document(channelId).set(userMap)
                 }
-                setupRestForChannel(participantUserReference, participantUserToken, channelId)
+                setupRestForChannel(
+                    participantUserReference,
+                    participantUserToken,
+                    channelId,
+                    currentUser
+                )
             }
         }
     }
@@ -131,14 +136,14 @@ class ChannelServiceImpl : ChannelService {
     private fun setupRestForChannel(
         participantUserReference: DocumentReference,
         participantUserToken: String,
-        channelId: String
+        channelId: String,
+        currentUser: User
     ) {
         val channel = channelDatabaseReference.document(channelId)
         val typingCollection = channel.collection(TYPING)
         val backgroundCollection = channel.collection(CHAT_BACKGROUND)
         val channelMap = mapOf(CHANNEL_ID to channelId)
         val typingMap = mapOf(TYPING to "-")
-        val currentUser = ChatClient.getInstance().getUser()
         val currentUserToken = currentUser.token
         val currentUserReference = userDatabaseReference.document(currentUserToken)
 
@@ -278,11 +283,12 @@ class ChannelServiceImpl : ChannelService {
 
     override suspend fun getLastMessageFromChannel(channelId: String): Pair<Message, User> {
         val messages = getMessages(channelId)
+        val currentUser = ChatClient.getInstance().getUser()
         return suspendCoroutine { continuation ->
             val users = mutableListOf<User>().apply {
                 add(messages.first().receiver)
                 add(messages.first().sender)
-                filter { user -> user.token == ChatClient.getInstance().getUser().token }
+                filter { user -> user.token == currentUser.token }
             }
             continuation.resume(Pair(messages.last(), users.first()))
         }
@@ -290,6 +296,7 @@ class ChannelServiceImpl : ChannelService {
 
     override suspend fun getChannelRecipientUser(channelId: String): User {
         val document = channelDatabaseReference.document(channelId)
+        val currentUser = ChatClient.getInstance().getUser()
         return suspendCoroutine { continuation ->
             document.get()
                 .addOnSuccessListener {
@@ -304,7 +311,7 @@ class ChannelServiceImpl : ChannelService {
                                 profileImageUrl = userMap[IMAGE_URL] as String,
                             )
                         }?.forEach { user ->
-                            if (user.token != ChatClient.getInstance().getUser().token) {
+                            if (user.token != currentUser.token) {
                                 continuation.resume(user)
                             }
                         }
@@ -380,7 +387,7 @@ class ChannelServiceImpl : ChannelService {
         }
     }
 
-    override suspend fun setChatBackground(channelId: String, backgroundUrl: String) {
+    override suspend fun setChatBackground(channelId: String, backgroundUrl: String?) {
         val document = channelDatabaseReference.document(channelId)
             .collection(CHAT_BACKGROUND)
             .document(channelId)
