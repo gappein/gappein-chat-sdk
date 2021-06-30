@@ -1,41 +1,16 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
-apply plugin: 'com.jfrog.bintray'
-
-ext {
-    bintrayRepo = 'Gappein'
-    bintrayName = 'Gappein-UI-SDK'
-    org = 'gappein'
-
-    publishedGroupId = 'com.gappein.sdk'
-    libraryName = 'Gappein-UI-SDK'
-    artifact = 'gappein-ui'
-    libraryDescription = 'A plug and play modular toolkit for integrating the Chat feature on top of Firebase!'
-
-    siteUrl = 'https://www.gappein.com/'
-    gitUrl = 'https://github.com/Gappein/Gappein-Chat-SDK.git'
-
-    libraryVersion = '1.0.0-beta3'
-
-    developerId = 'hi-manshu'
-    developerName = 'Himanshu Singh'
-    developerEmail = 'hello2himanshusingh@gmail.com'
-
-    licenseName = 'MIT License'
-    licenseUrl = 'https://opensource.org/licenses/MIT'
-    allLicenses = ["MIT"]
-}
 
 android {
     compileSdkVersion 30
-    buildToolsVersion "30.0.2"
+    buildToolsVersion "30.0.3"
 
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 2
-        versionName "1.0.0-beta3"
+        versionCode 1
+        versionName "1.0.0-alpha01"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -61,58 +36,20 @@ android {
     }
 }
 
-version = libraryVersion
-group = publishedGroupId
-
-
-task sourcesJar(type: Jar) {
-    classifier = 'sources'
-    from android.sourceSets.main.java.srcDirs
-}
-
-artifacts {
-    archives sourcesJar
-}
-
-Properties properties = new Properties()
-properties.load(project.rootProject.file('local.properties').newDataInputStream())
-
-bintray {
-    user = properties.getProperty("bintray.user")
-    key = properties.getProperty("bintray.apikey")
-
-    configurations = ['archives']
-    pkg {
-        repo = bintrayRepo
-        name = bintrayName
-        userOrg = org
-        desc = libraryDescription
-        websiteUrl = siteUrl
-        vcsUrl = gitUrl
-        licenses = allLicenses
-        dryRun = false
-        publish = true
-        override = false
-        publicDownloadNumbers = true
-        version {
-            desc = libraryDescription
-        }
-    }
-}
 
 dependencies {
-    def activity_version = "1.2.2"
+    def activity_version = "1.2.3"
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation 'androidx.core:core-ktx:1.3.2'
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'com.google.android.material:material:1.2.1'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.2'
+    implementation 'androidx.core:core-ktx:1.5.0'
+    implementation 'androidx.appcompat:appcompat:1.3.0'
+    implementation 'com.google.android.material:material:1.3.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    testImplementation 'junit:junit:4.13'
+    testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-    implementation "androidx.recyclerview:recyclerview:1.1.0"
+    implementation "androidx.recyclerview:recyclerview:1.2.1"
     implementation 'com.giphy.sdk:ui:2.0.3'
     implementation project(':gappein-sdk')
     implementation "androidx.activity:activity-ktx:$activity_version"
