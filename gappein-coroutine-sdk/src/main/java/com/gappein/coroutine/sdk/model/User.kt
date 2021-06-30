@@ -19,7 +19,7 @@ data class User(
     val isOnline: Boolean = false,
 
     val textStatus: String = ""
-) :Parcelable{
+) : Parcelable {
 
     suspend fun isCurrentUser(): Boolean {
         return this.token == ChatClient.getInstance().getUser().token

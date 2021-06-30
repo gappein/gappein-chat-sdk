@@ -8,7 +8,6 @@ import com.gappein.app.R
 import com.gappein.app.data.AppPreference
 import com.gappein.app.ui.chat.ChatActivity
 import com.gappein.sdk.Gappein
-import com.gappein.sdk.client.ChatClient
 import com.gappein.sdk.model.User
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -40,7 +39,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun checkIfUserIsNotRegistered() {
         val user = AppPreference.getUser()
-        Log.d("ppppppppppppppppp",user.toString())
+        Log.d("ppppppppppppppppp", user.toString())
         if (user != null) {
             goToNext(user)
         }

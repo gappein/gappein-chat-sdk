@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:padding="2dp"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:padding="2dp">
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/sentTextMessage"
@@ -12,11 +12,11 @@
         android:layout_height="wrap_content"
         android:background="@drawable/sent_message_background"
         android:padding="12dp"
-        app:layout_constrainedWidth="true"
-        android:textColor="@android:color/white"
         android:text="dsfsdjfsdfjkdsjkfhsddsfh"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:textColor="@android:color/white"
         app:fontFamily="@font/nunito_bold"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/guideline"
         app:layout_constraintTop_toBottomOf="@+id/sentTextMessageTime" />
@@ -28,13 +28,13 @@
         android:paddingStart="12dp"
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
-        android:visibility="visible"
         android:textColor="#9FA2A2"
         android:textSize="12sp"
+        android:visibility="visible"
         app:fontFamily="@font/nunito_regular"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.96"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintVertical_bias="1.0" />
 
     <ImageView

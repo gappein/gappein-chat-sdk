@@ -30,7 +30,7 @@ fun SearchView.addFilter(menuItem: MenuItem, onQueryChange: (String) -> Unit) {
     })
 }
 
-fun View.onDoubleTapListener(onDoubleTapListener: ()->Unit) {
+fun View.onDoubleTapListener(onDoubleTapListener: () -> Unit) {
     val view = this
     view.setOnTouchListener(object : View.OnTouchListener {
         val gestureDetector =

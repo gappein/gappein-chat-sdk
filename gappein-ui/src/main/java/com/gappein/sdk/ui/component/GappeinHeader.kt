@@ -32,7 +32,7 @@ class GappeinHeader : LinearLayout, ChatBaseView {
         attrs,
         defStyleAttr
     ) {
-        
+
     }
 
     init { // inflate binding and add as view

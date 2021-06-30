@@ -1,6 +1,5 @@
 package com.gappein.sdk.model
 
-import android.os.Parcel
 import android.os.Parcelable
 import com.gappein.sdk.client.ChatClient
 import kotlinx.parcelize.Parcelize
@@ -20,7 +19,7 @@ data class User(
     val isOnline: Boolean = false,
 
     val textStatus: String = ""
-) :Parcelable{
+) : Parcelable {
 
     fun isCurrentUser(): Boolean {
         return this.token == ChatClient.getInstance().getUser().token
