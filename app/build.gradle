@@ -58,7 +58,6 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     implementation project(':gappein-sdk')
-    implementation project(':gappein-compose-ui')
     implementation project(':gappein-ui')
 //    implementation 'com.gappein.sdk:gappein-sdk:1.0.0-beta1'
 //    implementation 'com.gappein.sdk:gappein-ui:1.0.0-beta1'

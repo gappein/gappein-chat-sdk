@@ -3,4 +3,3 @@ include ':gappein-sdk'
 include ':app'
 rootProject.name = "app"
 include ':gappein-coroutine-sdk'
-include ':gappein-compose-ui'

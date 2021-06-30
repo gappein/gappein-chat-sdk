@@ -100,9 +100,9 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
     }
 
     private fun setupUI() {
-//        binding.toolbar.init {
-//            channelId
-//        }
+        binding.toolbar.init {
+            channelId
+        }
     }
 
     private fun setupSendMessageListener() {
