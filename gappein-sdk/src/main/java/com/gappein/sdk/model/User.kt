@@ -2,7 +2,7 @@ package com.gappein.sdk.model
 
 import android.os.Parcelable
 import com.gappein.sdk.client.ChatClient
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import java.util.*
 
 @Parcelize
@@ -28,5 +28,4 @@ data class User(
     fun getUser(token: String): Boolean {
         return this.token == token
     }
-
 }

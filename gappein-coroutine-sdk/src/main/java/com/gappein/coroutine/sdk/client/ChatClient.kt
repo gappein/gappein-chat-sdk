@@ -66,7 +66,7 @@ interface ChatClient {
      *
      * @return object of User.kt
      */
-    suspend fun getUser(): User
+    fun getUser(): User
 
     suspend fun getApiKey(): String
 

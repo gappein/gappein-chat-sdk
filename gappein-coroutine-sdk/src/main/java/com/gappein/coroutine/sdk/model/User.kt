@@ -2,7 +2,7 @@ package com.gappein.coroutine.sdk.model
 
 import android.os.Parcelable
 import com.gappein.coroutine.sdk.client.ChatClient
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import java.util.*
 
 @Parcelize
@@ -21,7 +21,7 @@ data class User(
     val textStatus: String = ""
 ) : Parcelable {
 
-    fun isCurrentUser(): Boolean {
+    suspend fun isCurrentUser(): Boolean {
         return this.token == ChatClient.getInstance().getUser().token
     }
 

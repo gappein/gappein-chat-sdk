@@ -27,7 +27,7 @@ class ChatClientImpl(
         return dbManager.userService.createUser(user)
     }
 
-    override suspend fun getUser(): User {
+    override fun getUser(): User {
         return currentUser
     }
 

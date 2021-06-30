@@ -340,8 +340,9 @@ class ChannelServiceImpl : ChannelService {
     }
 
     override suspend fun deleteMessage(channelId: String, message: Message): Boolean {
+        val isCurrentUser = message.sender.isCurrentUser()
         return suspendCoroutine { continuation ->
-            if (message.sender.isCurrentUser()) {
+            if (isCurrentUser) {
                 channelDatabaseReference.document(channelId)
                     .collection(MESSAGES_COLLECTION)
                     .document(message._id)

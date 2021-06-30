@@ -116,9 +116,9 @@ class MessageListActivity : AppCompatActivity(), ChatBaseView {
                 })
             }
         }
-        binding.toolbar.setOnBackPressed {
-            onBackPressed()
-        }
+//        binding.toolbar.setOnBackPressed {
+//            onBackPressed()
+//        }
 
         binding.imageButtonAttach.setOnClickListener {
             attachmentDialogFragment.show(supportFragmentManager, "AttachmentFragment")

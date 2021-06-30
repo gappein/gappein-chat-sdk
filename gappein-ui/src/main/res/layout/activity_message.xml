@@ -4,8 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="#0C9175"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#0C9175">
 
     <com.gappein.sdk.ui.component.GappeinHeader
         android:id="@+id/toolbar"
@@ -20,12 +20,12 @@
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:indeterminate="true"
-        android:visibility="gone"
-        android:max="100"
         android:background="#0C9175"
-        android:progressTint="@android:color/white"
+        android:indeterminate="true"
+        android:max="100"
         android:progress="45"
+        android:progressTint="@android:color/white"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar" />
@@ -33,9 +33,9 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewMessages"
         android:layout_width="0dp"
+        android:layout_height="0dp"
         android:background="@drawable/white_curved_background"
         android:padding="4dp"
-        android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/container"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
