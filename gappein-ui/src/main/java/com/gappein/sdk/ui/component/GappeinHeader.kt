@@ -12,7 +12,6 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.gappein.sdk.client.ChatClient
 import com.gappein.sdk.ui.R
 import com.gappein.sdk.ui.base.ChatBaseView
-import kotlinx.android.synthetic.main.header_view.view.*
 
 class GappeinHeader : LinearLayout, ChatBaseView {
 
@@ -35,38 +34,38 @@ class GappeinHeader : LinearLayout, ChatBaseView {
     private fun initViews() {
         view = inflate(context, R.layout.header_view, this)
     }
-
-    fun init(channelId: String) {
-        getClient().getChannelRecipientUser(channelId) {
-            getClient().getTypingStatus(channelId, it.token) { typingStatus ->
-                if (typingStatus != "-") {
-                    view.typingStatus.show()
-                    view.typingStatus.text = typingStatus
-                } else {
-                    view.typingStatus.hide()
-                }
-            }
-            view.titleToolbar.text = it.name
-
-            Glide.with(view)
-                .load(it.profileImageUrl)
-                .placeholder(R.drawable.ic_user_placeholder)
-                .transform(CenterCrop(), RoundedCorners(16))
-                .into(view.avatarImageView)
-        }
-    }
-
-    fun init(channelId: () -> String) {
-        init(channelId.invoke())
-    }
-
-    fun setMenu(@MenuRes menu: Int) {
-        view.toolbar.inflateMenu(menu)
-    }
-
-    fun setOnBackPressed(onBackPress: () -> Unit) {
-        view.imageViewBack.setOnClickListener { onBackPress.invoke() }
-    }
+//
+//    fun init(channelId: String) {
+//        getClient().getChannelRecipientUser(channelId) {
+//            getClient().getTypingStatus(channelId, it.token) { typingStatus ->
+//                if (typingStatus != "-") {
+//                    view.typingStatus.show()
+//                    view.typingStatus.text = typingStatus
+//                } else {
+//                    view.typingStatus.hide()
+//                }
+//            }
+//            view.titleToolbar.text = it.name
+//
+//            Glide.with(view)
+//                .load(it.profileImageUrl)
+//                .placeholder(R.drawable.ic_user_placeholder)
+//                .transform(CenterCrop(), RoundedCorners(16))
+//                .into(view.avatarImageView)
+//        }
+//    }
+//
+//    fun init(channelId: () -> String) {
+//        init(channelId.invoke())
+//    }
+//
+//    fun setMenu(@MenuRes menu: Int) {
+//        view.toolbar.inflateMenu(menu)
+//    }
+//
+//    fun setOnBackPressed(onBackPress: () -> Unit) {
+//        view.imageViewBack.setOnClickListener { onBackPress.invoke() }
+//    }
 
     override fun getClient() = ChatClient.getInstance()
 

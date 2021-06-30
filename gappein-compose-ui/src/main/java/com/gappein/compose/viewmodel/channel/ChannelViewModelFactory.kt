@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.gappein.coroutine.sdk.client.ChatClient
 
 @Suppress("UNCHECKED_CAST")
-class ChannelViewModelFactory(private val chatClient: ChatClient) : ViewModelProvider.Factory {
+class ChannelViewModelFactory(private val chatClient: ChatClient = ChatClient.getInstance()) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(ChannelViewModel::class.java)) {

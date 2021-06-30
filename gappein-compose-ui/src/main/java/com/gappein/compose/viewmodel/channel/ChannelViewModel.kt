@@ -10,13 +10,13 @@ import kotlinx.coroutines.launch
 
 class ChannelViewModel(private val chatClient: ChatClient) : ViewModel() {
 
-    private val _messageList = MutableStateFlow<List<Channel>>(emptyList())
-    val messageList: StateFlow<List<Channel>>
-        get() = _messageList
+    private val _channelList = MutableStateFlow<List<Channel>>(emptyList())
+    val channelList: StateFlow<List<Channel>>
+        get() = _channelList
 
     fun fetchChannel() {
         viewModelScope.launch {
-            _messageList.value = chatClient.getUserChannels()
+            _channelList.value = chatClient.getUserChannels()
         }
     }
 }

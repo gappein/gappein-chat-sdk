@@ -1,6 +1,8 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'com.jfrog.bintray'
+apply plugin: 'kotlin-parcelize'
+
 
 ext {
     bintrayRepo = 'Gappein'
